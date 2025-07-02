@@ -27,17 +27,14 @@ It helps users track income, expenses, budgets, and savings goals through a clea
 
 ---
 
-## 📸 Screenshots (Recommended)
-
-> *(Add a screenshot of the dashboard and budget UI here using markdown:)*  
-`![Dashboard Screenshot](link-to-screenshot.png)`
+![image](https://github.com/user-attachments/assets/2336b6ad-61f5-40d1-87b8-931b0af3d8c9)
 
 ---
 
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/yourusername/obe-finance-tracker.git
+git clone https://github.com/obedav/obe-finance-tracker.git
 cd obe-finance-tracker
 npm install
 npm run dev
