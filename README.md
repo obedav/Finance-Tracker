@@ -1,23 +1,43 @@
-# Vue 3 + Vite
+# Obe Finance Tracker – Vue 3 + Vite
 
-Obe Finance Tracker
-Obe Finance Tracker is a modern personal finance management web application built with Vue.js. It helps users track their income, expenses, budgets, and savings goals with an intuitive and visually appealing dashboard.
+**Obe Finance Tracker** is a modern personal finance management web application built with **Vue 3**, **Vite**, and **Tailwind CSS**.  
+It helps users track income, expenses, budgets, and savings goals through a clean and intuitive dashboard.
 
-Features
-User Authentication: Secure login, registration, and password management (supports both real and mock APIs).
-Dashboard: Overview of balances, recent transactions, and financial health.
-Transactions: Add, edit, delete, filter, and export transactions.
-Budgets: Create and monitor budgets by category and period (monthly, weekly, yearly).
-Responsive Design: Works well on desktop and mobile devices.
-Data Persistence: Uses local storage for mock/demo mode; supports real API endpoints.
-Notifications: User-friendly feedback for actions and errors.
-Tech Stack
-Frontend: Vue 3, Pinia, Composition API
-Styling: Tailwind CSS
-State Management: Pinia
-API: Axios (with support for both mock and real APIs)
+---
 
+## 🔐 Features
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+- **User Authentication**: Secure login, registration, and password management (supports real & mock APIs)
+- **Dashboard**: View balances, recent transactions, and overall financial health
+- **Transactions**: Add, edit, delete, filter, and export transaction records
+- **Budget Management**: Create budgets by category and set periods (monthly, weekly, yearly)
+- **Responsive Design**: Fully functional across desktop and mobile devices
+- **Data Persistence**: Local storage and real API support
+- **Notifications**: User-friendly feedback for actions & errors
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Vue 3 (Composition API), Vite, Tailwind CSS  
+- **State Management**: Pinia  
+- **API Handling**: Axios (with support for mock and real APIs)  
+- **Build Tools**: Vite  
+- **Deployment Ready**: Built for production with a responsive UI
+
+---
+
+## 📸 Screenshots (Recommended)
+
+> *(Add a screenshot of the dashboard and budget UI here using markdown:)*  
+`![Dashboard Screenshot](link-to-screenshot.png)`
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/yourusername/obe-finance-tracker.git
+cd obe-finance-tracker
+npm install
+npm run dev
