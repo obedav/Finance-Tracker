@@ -327,9 +327,18 @@
   overflow: hidden;
 }
 
+.dark .dashboard-card {
+  background: linear-gradient(135deg, rgba(38, 38, 38, 0.8), rgba(38, 38, 38, 0.6));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .dashboard-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
+}
+
+.dark .dashboard-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
 .card-interactive {
@@ -356,12 +365,23 @@
   box-shadow: var(--shadow-xs);
 }
 
+.dark .form-input {
+  background: rgba(38, 38, 38, 0.95);
+  color: var(--color-neutral-50);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 .form-input:focus {
   outline: none;
   border-color: var(--color-primary-500);
   background: white;
   transform: translateY(-1px);
   box-shadow: var(--shadow-primary);
+}
+
+.dark .form-input:focus {
+  background: rgba(23, 23, 23, 1);
+  border-color: var(--color-primary-400);
 }
 
 .form-label {
@@ -393,6 +413,10 @@
   padding: var(--space-4);
 }
 
+.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
 .modal-content {
   background: var(--gradient-glass-medium);
   backdrop-filter: blur(var(--blur-2xl));
@@ -406,6 +430,11 @@
   overflow-y: auto;
   position: relative;
   z-index: var(--z-modal);
+}
+
+.dark .modal-content {
+  background: linear-gradient(135deg, rgba(38, 38, 38, 0.95), rgba(38, 38, 38, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Transaction Items */
@@ -422,10 +451,20 @@
   overflow: hidden;
 }
 
+.dark .transaction-item {
+  background: rgba(38, 38, 38, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .transaction-item:hover {
   transform: translateX(8px);
   box-shadow: var(--shadow-lg);
   border-color: rgba(16, 185, 129, 0.3);
+}
+
+.dark .transaction-item:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 /* Focus Ring Utility */
@@ -591,18 +630,66 @@
   }
 }
 
-/* Dark mode support */
+/* ================================
+   DARK MODE SUPPORT
+   ================================ */
+
+/* System preference dark mode */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --color-background: var(--color-neutral-900);
     --color-surface: var(--color-neutral-800);
+    --color-surface-elevated: var(--color-neutral-700);
     --color-text-primary: var(--color-neutral-50);
     --color-text-secondary: var(--color-neutral-200);
     --color-text-tertiary: var(--color-neutral-400);
     --color-border-light: var(--color-neutral-700);
     --color-border-medium: var(--color-neutral-600);
-    
+    --color-border-strong: var(--color-neutral-500);
+
     --gradient-glass-light: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
     --gradient-glass-medium: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    --gradient-glass-strong: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+
+    /* Adjust shadows for dark mode */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
   }
+}
+
+/* Manual dark mode toggle (overrides system preference) */
+:root.dark {
+  --color-background: var(--color-neutral-900);
+  --color-surface: var(--color-neutral-800);
+  --color-surface-elevated: var(--color-neutral-700);
+  --color-text-primary: var(--color-neutral-50);
+  --color-text-secondary: var(--color-neutral-200);
+  --color-text-tertiary: var(--color-neutral-400);
+  --color-border-light: var(--color-neutral-700);
+  --color-border-medium: var(--color-neutral-600);
+  --color-border-strong: var(--color-neutral-500);
+
+  --gradient-glass-light: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  --gradient-glass-medium: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  --gradient-glass-strong: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+
+  /* Adjust shadows for dark mode */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Manual light mode toggle (overrides system preference) */
+:root.light {
+  /* Light mode uses default variables, just ensure they're applied */
+  --color-background: var(--bg-cream);
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FEFEFE;
 }

@@ -1,9 +1,9 @@
 <!-- UPDATED AppLayout.vue - With Transaction Store Integration -->
 <template>
-  <div class="min-h-screen bg-cream">
+  <div class="min-h-screen bg-cream dark:bg-neutral-900 transition-colors duration-200">
     <!-- Skip to main content for accessibility -->
-    <a 
-      href="#main-content" 
+    <a
+      href="#main-content"
       class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 sm:top-4 sm:left-4 bg-emerald-600 text-white px-3 py-2 sm:px-4 rounded-lg z-50 text-sm"
     >
       Skip to main content
@@ -36,9 +36,9 @@
         :aria-label="currentPageTitle"
       >
         <!-- Breadcrumbs - Responsive -->
-        <nav 
+        <nav
           v-if="showBreadcrumbs && breadcrumbs.length > 1"
-          class="bg-white border-b border-gray-200 px-3 py-3 sm:px-6 sm:py-4"
+          class="bg-white dark:bg-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-3 py-3 sm:px-6 sm:py-4 transition-colors"
           aria-label="Breadcrumb"
         >
           <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm overflow-x-auto">
@@ -47,22 +47,22 @@
                 <router-link
                   v-if="!crumb.active"
                   :to="crumb.path"
-                  class="text-slate-500 hover:text-emerald-600 transition-colors"
+                  class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                 >
                   {{ crumb.title }}
                 </router-link>
-                <span 
+                <span
                   v-else
-                  class="text-slate-700 font-medium"
+                  class="text-slate-700 dark:text-slate-200 font-medium"
                   aria-current="page"
                 >
                   {{ crumb.title }}
                 </span>
-                <svg 
+                <svg
                   v-if="index < breadcrumbs.length - 1"
-                  class="w-3 h-3 sm:w-4 sm:h-4 text-slate-400 mx-1 sm:mx-2 flex-shrink-0" 
-                  fill="none" 
-                  stroke="currentColor" 
+                  class="w-3 h-3 sm:w-4 sm:h-4 text-slate-400 dark:text-slate-500 mx-1 sm:mx-2 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -75,15 +75,15 @@
         <!-- Page Content -->
         <div class="flex-1 relative">
           <!-- Loading Overlay - Responsive -->
-          <div 
-            v-if="isLoading" 
-            class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-40 p-4"
+          <div
+            v-if="isLoading"
+            class="absolute inset-0 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm flex items-center justify-center z-40 p-4 transition-colors"
             role="status"
             aria-label="Loading"
           >
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 text-center sm:text-left">
               <div class="loading-spinner"></div>
-              <span class="text-slate-700 font-medium text-sm sm:text-base">{{ loadingMessage }}</span>
+              <span class="text-slate-700 dark:text-slate-200 font-medium text-sm sm:text-base">{{ loadingMessage }}</span>
             </div>
           </div>
 
@@ -130,65 +130,65 @@
     ></div>
 
     <!-- Keyboard Shortcuts Modal - Responsive -->
-    <div 
+    <div
       v-if="showKeyboardShortcuts"
       class="modal-overlay"
       @click="showKeyboardShortcuts = false"
     >
-      <div class="modal-content w-full max-w-xs sm:max-w-2xl mx-4" @click.stop>
+      <div class="modal-content w-full max-w-xs sm:max-w-2xl mx-4 bg-white dark:bg-neutral-800 border dark:border-neutral-700 transition-colors" @click.stop>
         <div class="p-4 sm:p-6">
           <div class="flex items-center justify-between mb-4 sm:mb-6">
-            <h2 class="text-lg sm:text-xl font-bold text-slate-700">Keyboard Shortcuts</h2>
-            <button 
+            <h2 class="text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-200">Keyboard Shortcuts</h2>
+            <button
               @click="showKeyboardShortcuts = false"
-              class="text-slate-400 hover:text-slate-600 transition-colors p-1"
+              class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1"
             >
               <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
           </div>
-          
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <h3 class="font-semibold text-slate-700 mb-3 text-sm sm:text-base">Navigation</h3>
+              <h3 class="font-semibold text-slate-700 dark:text-slate-200 mb-3 text-sm sm:text-base">Navigation</h3>
               <div class="space-y-2">
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">Dashboard</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">Dashboard</span>
                   <kbd class="keyboard-shortcut">Alt + D</kbd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">Transactions</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">Transactions</span>
                   <kbd class="keyboard-shortcut">Alt + T</kbd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">Reports</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">Reports</span>
                   <kbd class="keyboard-shortcut">Alt + R</kbd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">Settings</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">Settings</span>
                   <kbd class="keyboard-shortcut">Alt + S</kbd>
                 </div>
               </div>
             </div>
-            
+
             <div>
-              <h3 class="font-semibold text-slate-700 mb-3 text-sm sm:text-base">Actions</h3>
+              <h3 class="font-semibold text-slate-700 dark:text-slate-200 mb-3 text-sm sm:text-base">Actions</h3>
               <div class="space-y-2">
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">New Transaction</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">New Transaction</span>
                   <kbd class="keyboard-shortcut">Ctrl + N</kbd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">Search</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">Search</span>
                   <kbd class="keyboard-shortcut">Ctrl + K</kbd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">Help</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">Help</span>
                   <kbd class="keyboard-shortcut">?</kbd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-slate-600 text-xs sm:text-sm">This Menu</span>
+                  <span class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">This Menu</span>
                   <kbd class="keyboard-shortcut">Ctrl + /</kbd>
                 </div>
               </div>
@@ -516,7 +516,7 @@ defineExpose({
 
 /* Keyboard shortcut styling */
 .keyboard-shortcut {
-  @apply px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded;
+  @apply px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-mono bg-gray-100 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded text-slate-700 dark:text-slate-200;
 }
 
 /* Screen reader only utility */

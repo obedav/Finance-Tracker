@@ -21,6 +21,12 @@ app.use(createPinia())
 // Setup Vue Router
 app.use(router)
 
+// Initialize Sentry error tracking (optional - requires configuration)
+// Uncomment after setting VITE_SENTRY_DSN in .env
+// import('./plugins/sentry.ts').then(({ initSentry }) => {
+//   initSentry(app, router)
+// }).catch(err => console.warn('Sentry initialization skipped:', err.message))
+
 // Function to setup toast notifications
 async function setupToastNotifications() {
   try {
@@ -433,17 +439,50 @@ function addCustomToastStyles() {
   document.head.appendChild(style)
 }
 
+// Initialize dark mode early
+function initDarkMode() {
+  try {
+    const DARK_MODE_KEY = 'finance-tracker-dark-mode'
+    const stored = localStorage.getItem(DARK_MODE_KEY)
+
+    // Determine if dark mode should be active
+    let isDark = false
+    if (stored === 'dark') {
+      isDark = true
+    } else if (stored === 'light') {
+      isDark = false
+    } else if (stored === 'system' || !stored) {
+      // Check system preference
+      isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    }
+
+    // Apply dark mode class immediately to prevent flash
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+
+    console.log('%c🌓 Dark mode initialized:', 'color: #F59E0B; font-weight: bold;', isDark ? 'Dark' : 'Light')
+  } catch (error) {
+    console.warn('Failed to initialize dark mode:', error)
+  }
+}
+
 // Initialize the app
 async function initApp() {
   try {
     console.log('%c⚡ Initializing FinanceTracker...', 'color: #10B981; font-weight: bold;')
-    
+
+    // Initialize dark mode before mounting
+    initDarkMode()
+
     // Add custom toast styles
     addCustomToastStyles()
-    
+
     // Setup toast notifications
     await setupToastNotifications()
-    
+
     // Mount the app
     app.mount('#app')
     

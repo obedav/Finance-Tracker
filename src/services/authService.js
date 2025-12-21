@@ -3,7 +3,7 @@ import { apiHelpers, mockApiHelpers } from './api.js'
 import { API_ENDPOINTS, STORAGE_KEYS } from '../utils/constants.js'
 
 // Flag to use mock API or real API
-const USE_MOCK_API = false
+const USE_MOCK_API = false  // Changed to use real Laravel API
 
 class AuthService {
   constructor() {
@@ -58,8 +58,8 @@ class AuthService {
       }
 
       const response = await apiHelpers.post(API_ENDPOINTS.AUTH.REGISTER, {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        first_name: userData.firstName,
+        last_name: userData.lastName,
         email: userData.email,
         password: userData.password,
         phone: userData.phone || null
@@ -380,14 +380,28 @@ class AuthService {
    * Mock API Methods (for development)
    */
 
+  // Simple hash function for mock mode (NOT for production use)
+  mockHashPassword(password) {
+    // This is a simple hash for demo purposes only
+    // In a real app, password hashing should only be done server-side
+    let hash = 0
+    for (let i = 0; i < password.length; i++) {
+      const char = password.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash
+    }
+    return hash.toString(36)
+  }
+
   async mockLogin(credentials) {
     await mockApiHelpers.delay(800)
-    
+
     // Get stored users from localStorage (for registered users)
     const storedUsers = JSON.parse(localStorage.getItem('mock_users') || '[]')
-    
+
     // Check demo account first
-    if (credentials.email === 'demo@example.com' && credentials.password === 'password123') {
+    const demoPasswordHash = this.mockHashPassword('password123')
+    if (credentials.email === 'demo@example.com' && this.mockHashPassword(credentials.password) === demoPasswordHash) {
       const mockUser = {
         id: 1,
         firstName: 'John',
@@ -415,8 +429,9 @@ class AuthService {
       }
     }
     
-    // Check registered users
-    const user = storedUsers.find(u => u.email === credentials.email && u.password === credentials.password)
+    // Check registered users (compare hashed passwords)
+    const hashedPassword = this.mockHashPassword(credentials.password)
+    const user = storedUsers.find(u => u.email === credentials.email && u.passwordHash === hashedPassword)
     
     if (user) {
       // Create user object without password
@@ -468,7 +483,7 @@ class AuthService {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
-      password: userData.password, // Store password for mock login
+      passwordHash: this.mockHashPassword(userData.password), // Store hashed password for mock login
       phone: userData.phone || null,
       avatar: null,
       createdAt: new Date(),
@@ -542,11 +557,13 @@ class AuthService {
 
   async mockChangePassword(currentPassword, newPassword) {
     await mockApiHelpers.delay(600)
-    
-    if (currentPassword !== 'password123') {
+
+    // In mock mode, just verify current password is not empty
+    if (!currentPassword || currentPassword.length < 6) {
       throw new Error('Current password is incorrect')
     }
-    
+
+    // In a real implementation, this would update the password hash
     return {
       success: true,
       message: 'Password changed successfully'

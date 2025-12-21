@@ -203,6 +203,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useDarkMode } from '@/composables/useDarkMode'
 
 // Get current year for copyright
 const currentYear = new Date().getFullYear()
@@ -210,62 +211,8 @@ const currentYear = new Date().getFullYear()
 // App version - could be imported from a config file
 const appVersion = ref('1.2.0')
 
-// Dark mode toggle functionality
-const isDarkMode = ref(false)
-
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value
-  
-  // Apply theme to document
-  if (isDarkMode.value) {
-    document.documentElement.classList.add('dark')
-    localStorage.setItem('theme', 'dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-    localStorage.setItem('theme', 'light')
-  }
-  
-  // Dispatch custom event for other components
-  window.dispatchEvent(new CustomEvent('theme-changed', { 
-    detail: { theme: isDarkMode.value ? 'dark' : 'light' } 
-  }))
-}
-
-// Initialize theme on component mount
-const initializeTheme = () => {
-  const savedTheme = localStorage.getItem('theme')
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  
-  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-    isDarkMode.value = true
-    document.documentElement.classList.add('dark')
-  } else {
-    isDarkMode.value = false
-    document.documentElement.classList.remove('dark')
-  }
-}
-
-// Listen for system theme changes
-const handleSystemThemeChange = (e) => {
-  if (!localStorage.getItem('theme')) {
-    isDarkMode.value = e.matches
-    if (e.matches) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }
-}
-
-onMounted(() => {
-  initializeTheme()
-  
-  // Listen for system preference changes
-  if (typeof window !== 'undefined') {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    mediaQuery.addEventListener('change', handleSystemThemeChange)
-  }
-})
+// Use the shared dark mode composable
+const { isDark: isDarkMode, toggle: toggleDarkMode } = useDarkMode()
 </script>
 
 <style scoped>

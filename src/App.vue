@@ -1,19 +1,19 @@
 <!-- src/App.vue - Using AppLayout System -->
 <template>
-  <div id="app">
+  <div id="app" class="min-h-screen bg-cream dark:bg-neutral-900 transition-colors duration-200">
     <!-- Use the AppLayout component for authenticated routes -->
     <AppLayout v-if="showLayout" />
-    
+
     <!-- Show router-view directly for auth pages -->
     <router-view v-else />
-    
+
     <Toast />
 
     <!-- Global Loading Overlay -->
     <div v-if="isLoading" class="modal-overlay">
-      <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
+      <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 flex items-center space-x-3 border border-gray-200 dark:border-neutral-700">
         <div class="loading-spinner"></div>
-        <span class="text-slate-700 font-medium">Loading...</span>
+        <span class="text-slate-700 dark:text-slate-200 font-medium">Loading...</span>
       </div>
     </div>
   </div>

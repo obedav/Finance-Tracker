@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from '../utils/constants.js'
 import { validateCategory } from '../utils/validators.js'
 
 // Flag to use mock API or real API
-const USE_MOCK_API = process.env.VUE_APP_USE_MOCK_API === 'true' || true
+const USE_MOCK_API = false  // Changed to use real Laravel API
 
 class CategoryService {
   constructor() {

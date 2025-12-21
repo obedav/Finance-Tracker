@@ -1,6 +1,6 @@
 <!-- Transactions.vue - Complete and Fixed -->
 <template>
-  <div class="min-h-screen bg-cream relative overflow-hidden">
+  <div class="min-h-screen bg-cream dark:bg-neutral-900 relative overflow-hidden transition-colors duration-200">
     <!-- Animated Background Elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-400/10 to-emerald-600/10 blur-3xl animate-float"></div>
@@ -11,7 +11,7 @@
       <!-- Enhanced Header with Dynamic Title -->
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 animate-fade-in">
         <div>
-          <h1 class="text-4xl font-bold text-slate-700 mb-2 flex items-center gap-3">
+          <h1 class="text-4xl font-bold text-slate-700 dark:text-slate-100 mb-2 flex items-center gap-3 transition-colors">
             <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
@@ -19,7 +19,7 @@
             </div>
             {{ pageTitle }}
           </h1>
-          <p class="text-slate-500 text-lg">{{ pageDescription }}</p>
+          <p class="text-slate-500 dark:text-slate-400 text-lg transition-colors">{{ pageDescription }}</p>
           
           <!-- Breadcrumb for filtered views -->
           <div v-if="currentFilter" class="mt-2 flex items-center gap-2 text-sm">

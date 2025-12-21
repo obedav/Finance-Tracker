@@ -160,12 +160,12 @@ export const STORAGE_KEYS = {
   THEME: 'finance_theme'
 }
 
-// API Endpoints (Updated to match backend on port 3001)
+// API Endpoints (Updated to match Laravel backend on port 8000)
 export const API_ENDPOINTS = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
-  
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api',
+
   // Health Check
-  HEALTH: 'http://localhost:3001/health',
+  HEALTH: 'http://127.0.0.1:8000/api/health',
   
   // Authentication Endpoints
   AUTH: {
@@ -222,6 +222,16 @@ export const API_ENDPOINTS = {
     RESTORE: '/categories/:id/restore'
   },
   
+  // Budget Endpoints
+  BUDGETS: {
+    BASE: '/budgets',
+    LIST: '/budgets',
+    CREATE: '/budgets',
+    GET: '/budgets/:id',
+    UPDATE: '/budgets/:id',
+    DELETE: '/budgets/:id'
+  },
+
   // Report Endpoints
   REPORTS: {
     MONTHLY: '/reports/monthly',

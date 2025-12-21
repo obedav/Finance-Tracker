@@ -1,6 +1,6 @@
 <!-- src/views/Budgets.vue - Real Data Only -->
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-neutral-900 dark:to-neutral-800 relative overflow-hidden transition-colors duration-200">
     <!-- Animated Background Elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-green-400/20 to-emerald-600/20 blur-3xl animate-float"></div>

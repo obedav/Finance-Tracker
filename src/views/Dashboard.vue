@@ -1,10 +1,10 @@
 <!-- Enhanced Dashboard.vue with Mobile-First Responsive Design -->
 <template>
-  <div class="min-h-screen bg-cream relative overflow-hidden">
+  <div class="min-h-screen bg-cream dark:bg-neutral-900 relative overflow-hidden transition-colors duration-200">
     <!-- Animated Background Elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 blur-3xl animate-float"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-gradient-to-br from-gold-400/20 to-gold-600/20 blur-3xl animate-float" style="animation-delay: -3s;"></div>
+      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 dark:from-emerald-400/10 dark:to-emerald-600/10 blur-3xl animate-float"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-gradient-to-br from-gold-400/20 to-gold-600/20 dark:from-gold-400/10 dark:to-gold-600/10 blur-3xl animate-float" style="animation-delay: -3s;"></div>
     </div>
 
     <div class="container-app relative z-10 p-3 sm:p-4 lg:p-6">
@@ -12,14 +12,14 @@
       <div class="mb-6 sm:mb-8 animate-fade-in">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
           <div>
-            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-700 mb-1 sm:mb-2">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-700 dark:text-slate-100 mb-1 sm:mb-2 transition-colors">
               Welcome back! 👋
             </h1>
-            <p class="text-slate-500 text-sm sm:text-base lg:text-lg">Here's your financial overview</p>
+            <p class="text-slate-500 dark:text-slate-400 text-sm sm:text-base lg:text-lg transition-colors">Here's your financial overview</p>
           </div>
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-            <div class="glass-strong px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
-              <span class="text-xs sm:text-sm text-slate-600">Last updated: {{ lastUpdated }}</span>
+            <div class="glass-strong px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/50 dark:bg-neutral-800/50 backdrop-blur-md">
+              <span class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 transition-colors">Last updated: {{ lastUpdated }}</span>
             </div>
             <button 
               @click="refreshData"

@@ -1,6 +1,6 @@
 <!-- Categories.vue - Mobile-First Responsive Design -->
 <template>
-  <div class="min-h-screen bg-cream relative overflow-hidden">
+  <div class="min-h-screen bg-cream dark:bg-neutral-900 relative overflow-hidden transition-colors duration-200">
     <!-- Animated Background Elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 blur-3xl animate-float"></div>

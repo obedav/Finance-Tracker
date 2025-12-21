@@ -135,6 +135,7 @@
                   <li :class="{ 'text-green-600': passwordChecks.uppercase }">One uppercase letter</li>
                   <li :class="{ 'text-green-600': passwordChecks.lowercase }">One lowercase letter</li>
                   <li :class="{ 'text-green-600': passwordChecks.number }">One number</li>
+                  <li :class="{ 'text-green-600': passwordChecks.specialChar }">One special character (@$!%*?&#)</li>
                 </ul>
               </div>
               
@@ -309,20 +310,21 @@ export default {
         length: password.length >= 8,
         uppercase: /[A-Z]/.test(password),
         lowercase: /[a-z]/.test(password),
-        number: /\d/.test(password)
+        number: /\d/.test(password),
+        specialChar: /[@$!%*?&#]/.test(password)
       }
     },
-    
+
     passwordStrength() {
       const checks = this.passwordChecks
       return Object.values(checks).filter(Boolean).length
     },
     
     passwordStrengthText() {
-      const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
+      const texts = ['Very Weak', 'Weak', 'Weak', 'Fair', 'Good', 'Strong']
       return this.form.password ? texts[this.passwordStrength] || 'Very Weak' : ''
     },
-    
+
     isFormValid() {
       return this.form.firstName.trim() &&
              this.form.lastName.trim() &&
@@ -330,7 +332,7 @@ export default {
              this.form.password &&
              this.form.confirmPassword &&
              this.form.acceptTerms &&
-             this.passwordStrength >= 3 &&
+             this.passwordStrength === 5 &&  // All 5 requirements must be met
              this.form.password === this.form.confirmPassword &&
              /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)
     }
@@ -338,8 +340,8 @@ export default {
   methods: {
     getPasswordStrengthColor(index) {
       if (this.passwordStrength >= index) {
-        const colors = ['bg-red-300', 'bg-orange-300', 'bg-yellow-300', 'bg-green-400']
-        return colors[this.passwordStrength - 1] || 'bg-red-300'
+        const colors = ['bg-red-400', 'bg-red-300', 'bg-orange-300', 'bg-yellow-400', 'bg-green-500']
+        return colors[this.passwordStrength - 1] || 'bg-red-400'
       }
       return 'bg-gray-200'
     },
@@ -381,8 +383,8 @@ export default {
             this.errors.password = 'Password is required'
           } else if (this.form.password.length < 8) {
             this.errors.password = 'Password must be at least 8 characters'
-          } else if (this.passwordStrength < 3) {
-            this.errors.password = 'Password is too weak. Please include uppercase, lowercase, and numbers'
+          } else if (this.passwordStrength < 5) {
+            this.errors.password = 'Password must include uppercase, lowercase, number, and special character'
           }
           break
 
@@ -428,13 +430,11 @@ export default {
       try {
         // Prepare registration data
         const registrationData = {
-          firstName: this.form.firstName.trim(),
-          lastName: this.form.lastName.trim(),
+          first_name: this.form.firstName.trim(),
+          last_name: this.form.lastName.trim(),
           email: this.form.email.trim().toLowerCase(),
           password: this.form.password,
-          // Add any additional fields your API might expect
-          fullName: `${this.form.firstName.trim()} ${this.form.lastName.trim()}`,
-          name: `${this.form.firstName.trim()} ${this.form.lastName.trim()}`
+          password_confirmation: this.form.confirmPassword
         }
 
         // Debug information
