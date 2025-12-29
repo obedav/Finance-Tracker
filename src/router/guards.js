@@ -1,6 +1,6 @@
 // src/router/guards.js
-import authService from '../services/authService.js'
-import { STORAGE_KEYS } from '../utils/constants.js'
+import authService from '../services/authService'
+import { STORAGE_KEYS } from '../utils/constants'
 
 /**
  * Authentication Guard

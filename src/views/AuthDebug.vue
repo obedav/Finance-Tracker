@@ -90,9 +90,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import authService from '@/services/authService.js'
-import { apiHelpers } from '@/services/api.ts'
-import { API_ENDPOINTS } from '@/utils/constants.js'
+import authService from '@/services/authService'
+import { apiHelpers } from '@/services/api'
+import { API_ENDPOINTS } from '@/utils/constants'
 
 const isAuth = ref(false)
 const hasUser = ref(false)

@@ -5,7 +5,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useTransactionStore } from '../transactions'
-import transactionService from '@/services/transactionService.js'
+import transactionService from '@/services/transactionService'
 
 // Mock transactionService
 vi.mock('@/services/transactionService.js', () => ({

@@ -1,12 +1,119 @@
-// src/services/categoryService.js
-import { apiHelpers, mockApiHelpers } from './api.js'
-import { API_ENDPOINTS } from '../utils/constants.js'
-import { validateCategory } from '../utils/validators.js'
+// src/services/categoryService.ts
+import { apiHelpers, mockApiHelpers } from './api'
+import { API_ENDPOINTS } from '../utils/constants'
+import { validateCategory, ValidationResult } from '../utils/validators'
 
-// Flag to use mock API or real API
-const USE_MOCK_API = false  // Changed to use real Laravel API
+/**
+ * Type Definitions for Category Service
+ */
+
+export interface Category {
+  id: number
+  name: string
+  type: 'income' | 'expense'
+  description?: string
+  icon: string
+  color: string
+  isDefault: boolean
+  user_id?: number
+  createdAt: Date | string
+  updatedAt: Date | string
+  usageCount?: number
+  totalAmount?: number
+}
+
+export interface CategoryData {
+  name: string
+  type: 'income' | 'expense'
+  description?: string
+  icon: string
+  color: string
+}
+
+export interface CategoryFilters {
+  type?: 'income' | 'expense' | string | null
+  search?: string
+  isDefault?: boolean
+}
+
+export interface CategoryResponse {
+  success: boolean
+  data?: Category
+  category?: Category
+  categories?: Category[]
+  total?: number
+  message?: string
+  code?: string
+  errors?: Record<string, string>
+}
+
+export interface CategoryStats {
+  categoryId: number
+  period: string
+  totalAmount: number
+  transactionCount: number
+  averageAmount: number
+  percentageOfTotal: number
+  trend: 'increasing' | 'decreasing'
+  trendPercentage: number
+}
+
+export interface CategoryStatsResponse {
+  success: boolean
+  stats?: CategoryStats
+  message?: string
+  code?: string
+}
+
+export interface CategoryTrend {
+  month: string
+  amount: number
+  transactionCount: number
+}
+
+export interface CategoryTrendsResponse {
+  success: boolean
+  categoryId?: number
+  trends?: CategoryTrend[]
+  months?: number
+  message?: string
+  code?: string
+}
+
+export interface MostUsedResponse {
+  success: boolean
+  categories?: Category[]
+  type?: string | null
+  limit?: number
+  message?: string
+  code?: string
+}
+
+export interface ImportResponse {
+  success: boolean
+  importedCount?: number
+  skippedCount?: number
+  message?: string
+  code?: string
+}
+
+export interface ExportResponse {
+  success: boolean
+  message?: string
+  code?: string
+}
+
+interface CacheEntry<T> {
+  data: T
+  timestamp: number
+}
+
+const USE_MOCK_API = false  // Use real Laravel API
 
 class CategoryService {
+  private cache: Map<string, CacheEntry<any>>
+  private cacheTimeout: number
+
   constructor() {
     this.cache = new Map()
     this.cacheTimeout = 10 * 60 * 1000 // 10 minutes (categories change less frequently)
@@ -17,11 +124,11 @@ class CategoryService {
    */
 
   // Get all categories
-  async getCategories(type = null) {
+  async getCategories(type: string | null = null): Promise<CategoryResponse> {
     try {
       const cacheKey = this.generateCacheKey('categories', { type })
-      const cached = this.getFromCache(cacheKey)
-      
+      const cached = this.getFromCache<CategoryResponse>(cacheKey)
+
       if (cached) {
         return cached
       }
@@ -33,11 +140,11 @@ class CategoryService {
       }
 
       const queryParams = type ? `?type=${type}` : ''
-      const response = await apiHelpers.get(`${API_ENDPOINTS.CATEGORIES.LIST}${queryParams}`)
-      
+      const response = await apiHelpers.get<CategoryResponse>(`${API_ENDPOINTS.CATEGORIES.LIST}${queryParams}`)
+
       this.setCache(cacheKey, response)
       return response
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to fetch categories',
@@ -47,11 +154,11 @@ class CategoryService {
   }
 
   // Get single category by ID
-  async getCategory(id) {
+  async getCategory(id: number): Promise<CategoryResponse> {
     try {
       const cacheKey = this.generateCacheKey('category', { id })
-      const cached = this.getFromCache(cacheKey)
-      
+      const cached = this.getFromCache<CategoryResponse>(cacheKey)
+
       if (cached) {
         return cached
       }
@@ -62,11 +169,11 @@ class CategoryService {
         return result
       }
 
-      const response = await apiHelpers.get(`${API_ENDPOINTS.CATEGORIES.LIST}/${id}`)
-      
+      const response = await apiHelpers.get<CategoryResponse>(`${API_ENDPOINTS.CATEGORIES.LIST}/${id}`)
+
       this.setCache(cacheKey, response)
       return response
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to fetch category',
@@ -76,13 +183,13 @@ class CategoryService {
   }
 
   // Create new category
-  async createCategory(categoryData) {
+  async createCategory(categoryData: CategoryData): Promise<CategoryResponse> {
     try {
       // Get existing categories for validation
       const existingCategories = await this.getCategories(categoryData.type)
-      
+
       // Validate category data
-      const validation = validateCategory(categoryData, existingCategories.categories || [])
+      const validation: ValidationResult = validateCategory(categoryData, existingCategories.categories || [])
       if (!validation.isValid) {
         throw {
           success: false,
@@ -98,7 +205,7 @@ class CategoryService {
         return result
       }
 
-      const response = await apiHelpers.post(API_ENDPOINTS.CATEGORIES.CREATE, categoryData)
+      const response = await apiHelpers.post<CategoryResponse>(API_ENDPOINTS.CATEGORIES.CREATE, categoryData)
 
       this.clearCache() // Clear cache after creation
 
@@ -109,7 +216,7 @@ class CategoryService {
         data: response.data,  // This is the category object from backend
         message: response.message || 'Category created successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to create category',
@@ -120,14 +227,14 @@ class CategoryService {
   }
 
   // Update existing category
-  async updateCategory(id, categoryData) {
+  async updateCategory(id: number, categoryData: Partial<CategoryData>): Promise<CategoryResponse> {
     try {
       // Get existing categories for validation (excluding current category)
-      const existingCategories = await this.getCategories(categoryData.type)
+      const existingCategories = await this.getCategories(categoryData.type || null)
       const filteredCategories = existingCategories.categories?.filter(cat => cat.id !== id) || []
-      
+
       // Validate category data
-      const validation = validateCategory(categoryData, filteredCategories)
+      const validation: ValidationResult = validateCategory(categoryData, filteredCategories)
       if (!validation.isValid) {
         throw {
           success: false,
@@ -143,8 +250,8 @@ class CategoryService {
         return result
       }
 
-      const url = API_ENDPOINTS.CATEGORIES.UPDATE.replace(':id', id)
-      const response = await apiHelpers.put(url, categoryData)
+      const url = API_ENDPOINTS.CATEGORIES.UPDATE.replace(':id', String(id))
+      const response = await apiHelpers.put<CategoryResponse>(url, categoryData)
 
       this.clearCache() // Clear cache after update
 
@@ -155,7 +262,7 @@ class CategoryService {
         data: response.data,  // This is the category object from backend
         message: response.message || 'Category updated successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to update category',
@@ -166,7 +273,7 @@ class CategoryService {
   }
 
   // Delete category
-  async deleteCategory(id) {
+  async deleteCategory(id: number): Promise<CategoryResponse> {
     try {
       if (USE_MOCK_API) {
         const result = await this.mockDeleteCategory(id)
@@ -174,15 +281,15 @@ class CategoryService {
         return result
       }
 
-      const url = API_ENDPOINTS.CATEGORIES.DELETE.replace(':id', id)
-      const response = await apiHelpers.delete(url)
-      
+      const url = API_ENDPOINTS.CATEGORIES.DELETE.replace(':id', String(id))
+      const response = await apiHelpers.delete<CategoryResponse>(url)
+
       this.clearCache() // Clear cache after deletion
       return {
         success: true,
         message: response.message || 'Category deleted successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to delete category',
@@ -196,11 +303,11 @@ class CategoryService {
    */
 
   // Get category usage statistics
-  async getCategoryStats(id, period = 'month') {
+  async getCategoryStats(id: number, period: string = 'month'): Promise<CategoryStatsResponse> {
     try {
       const cacheKey = this.generateCacheKey('categoryStats', { id, period })
-      const cached = this.getFromCache(cacheKey)
-      
+      const cached = this.getFromCache<CategoryStatsResponse>(cacheKey)
+
       if (cached) {
         return cached
       }
@@ -211,11 +318,11 @@ class CategoryService {
         return result
       }
 
-      const response = await apiHelpers.get(`/categories/${id}/stats?period=${period}`)
-      
+      const response = await apiHelpers.get<CategoryStatsResponse>(`/categories/${id}/stats?period=${period}`)
+
       this.setCache(cacheKey, response)
       return response
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to fetch category statistics',
@@ -225,11 +332,11 @@ class CategoryService {
   }
 
   // Get most used categories
-  async getMostUsedCategories(type = null, limit = 10) {
+  async getMostUsedCategories(type: string | null = null, limit: number = 10): Promise<MostUsedResponse> {
     try {
       const cacheKey = this.generateCacheKey('mostUsed', { type, limit })
-      const cached = this.getFromCache(cacheKey)
-      
+      const cached = this.getFromCache<MostUsedResponse>(cacheKey)
+
       if (cached) {
         return cached
       }
@@ -242,13 +349,13 @@ class CategoryService {
 
       const queryParams = new URLSearchParams()
       if (type) queryParams.append('type', type)
-      queryParams.append('limit', limit)
+      queryParams.append('limit', String(limit))
 
-      const response = await apiHelpers.get(`/categories/most-used?${queryParams.toString()}`)
-      
+      const response = await apiHelpers.get<MostUsedResponse>(`/categories/most-used?${queryParams.toString()}`)
+
       this.setCache(cacheKey, response)
       return response
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to fetch most used categories',
@@ -258,11 +365,11 @@ class CategoryService {
   }
 
   // Get category spending trends
-  async getCategoryTrends(id, months = 6) {
+  async getCategoryTrends(id: number, months: number = 6): Promise<CategoryTrendsResponse> {
     try {
       const cacheKey = this.generateCacheKey('categoryTrends', { id, months })
-      const cached = this.getFromCache(cacheKey)
-      
+      const cached = this.getFromCache<CategoryTrendsResponse>(cacheKey)
+
       if (cached) {
         return cached
       }
@@ -273,11 +380,11 @@ class CategoryService {
         return result
       }
 
-      const response = await apiHelpers.get(`/categories/${id}/trends?months=${months}`)
-      
+      const response = await apiHelpers.get<CategoryTrendsResponse>(`/categories/${id}/trends?months=${months}`)
+
       this.setCache(cacheKey, response)
       return response
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to fetch category trends',
@@ -291,15 +398,15 @@ class CategoryService {
    */
 
   // Get default categories for initialization
-  async getDefaultCategories() {
+  async getDefaultCategories(): Promise<CategoryResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockGetDefaultCategories()
       }
 
-      const response = await apiHelpers.get('/categories/defaults')
+      const response = await apiHelpers.get<CategoryResponse>('/categories/defaults')
       return response
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to fetch default categories',
@@ -309,7 +416,7 @@ class CategoryService {
   }
 
   // Reset categories to defaults
-  async resetToDefaults() {
+  async resetToDefaults(): Promise<CategoryResponse> {
     try {
       if (USE_MOCK_API) {
         const result = await this.mockResetToDefaults()
@@ -317,14 +424,14 @@ class CategoryService {
         return result
       }
 
-      const response = await apiHelpers.post('/categories/reset-defaults')
-      
+      const response = await apiHelpers.post<CategoryResponse>('/categories/reset-defaults')
+
       this.clearCache() // Clear cache after reset
       return {
         success: true,
         message: response.message || 'Categories reset to defaults successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to reset categories',
@@ -334,7 +441,7 @@ class CategoryService {
   }
 
   // Import categories from file
-  async importCategories(file) {
+  async importCategories(file: File): Promise<ImportResponse> {
     try {
       if (USE_MOCK_API) {
         const result = await this.mockImportCategories(file)
@@ -345,8 +452,8 @@ class CategoryService {
       const formData = new FormData()
       formData.append('file', file)
 
-      const response = await apiHelpers.upload('/categories/import', formData)
-      
+      const response = await apiHelpers.upload<ImportResponse>('/categories/import', formData)
+
       this.clearCache() // Clear cache after import
       return {
         success: true,
@@ -354,7 +461,7 @@ class CategoryService {
         skippedCount: response.skippedCount || 0,
         message: response.message || `${response.importedCount} categories imported successfully`
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to import categories',
@@ -364,7 +471,7 @@ class CategoryService {
   }
 
   // Export categories
-  async exportCategories(format = 'json') {
+  async exportCategories(format: 'json' | 'csv' = 'json'): Promise<ExportResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockExportCategories(format)
@@ -372,12 +479,12 @@ class CategoryService {
 
       const filename = `categories_${new Date().toISOString().split('T')[0]}.${format}`
       await apiHelpers.download(`/categories/export?format=${format}`, filename)
-      
+
       return {
         success: true,
         message: 'Categories exported successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to export categories',
@@ -391,38 +498,38 @@ class CategoryService {
    */
 
   // Generate cache key
-  generateCacheKey(operation, params = {}) {
+  private generateCacheKey(operation: string, params: Record<string, any> = {}): string {
     const paramString = Object.keys(params)
       .sort()
       .map(key => `${key}:${params[key]}`)
       .join('|')
-    
+
     return `${operation}:${paramString}`
   }
 
   // Cache management
-  setCache(key, data) {
+  private setCache<T>(key: string, data: T): void {
     this.cache.set(key, {
       data,
       timestamp: Date.now()
     })
   }
 
-  getFromCache(key) {
+  private getFromCache<T>(key: string): T | null {
     const cached = this.cache.get(key)
-    
+
     if (!cached) return null
-    
+
     // Check if cache has expired
     if (Date.now() - cached.timestamp > this.cacheTimeout) {
       this.cache.delete(key)
       return null
     }
-    
-    return cached.data
+
+    return cached.data as T
   }
 
-  clearCache() {
+  clearCache(): void {
     this.cache.clear()
   }
 
@@ -430,16 +537,16 @@ class CategoryService {
    * Mock API Methods (for development)
    */
 
-  async mockGetCategories(type = null) {
+  private async mockGetCategories(type: string | null = null): Promise<CategoryResponse> {
     await mockApiHelpers.delay(300)
-    
+
     const mockCategories = this.generateMockCategories()
-    
+
     let filtered = mockCategories
     if (type) {
       filtered = mockCategories.filter(cat => cat.type === type)
     }
-    
+
     return {
       success: true,
       categories: filtered,
@@ -447,33 +554,33 @@ class CategoryService {
     }
   }
 
-  async mockGetCategory(id) {
+  private async mockGetCategory(id: number): Promise<CategoryResponse> {
     await mockApiHelpers.delay(200)
-    
+
     const mockCategories = this.generateMockCategories()
-    const category = mockCategories.find(cat => cat.id === parseInt(id))
-    
+    const category = mockCategories.find(cat => cat.id === id)
+
     if (!category) {
       throw new Error('Category not found')
     }
-    
+
     return {
       success: true,
       category
     }
   }
 
-  async mockCreateCategory(categoryData) {
+  private async mockCreateCategory(categoryData: CategoryData): Promise<CategoryResponse> {
     await mockApiHelpers.delay(400)
-    
-    const newCategory = {
+
+    const newCategory: Category = {
       id: Date.now(),
       ...categoryData,
       isDefault: false,
       createdAt: new Date(),
       updatedAt: new Date()
     }
-    
+
     return {
       success: true,
       category: newCategory,
@@ -481,45 +588,45 @@ class CategoryService {
     }
   }
 
-  async mockUpdateCategory(id, categoryData) {
+  private async mockUpdateCategory(id: number, categoryData: Partial<CategoryData>): Promise<CategoryResponse> {
     await mockApiHelpers.delay(400)
-    
-    const updatedCategory = {
-      id: parseInt(id),
+
+    const updatedCategory: Partial<Category> = {
+      id,
       ...categoryData,
       updatedAt: new Date()
     }
-    
+
     return {
       success: true,
-      category: updatedCategory,
+      category: updatedCategory as Category,
       message: 'Category updated successfully'
     }
   }
 
-  async mockDeleteCategory(id) {
+  private async mockDeleteCategory(id: number): Promise<CategoryResponse> {
     await mockApiHelpers.delay(300)
-    
+
     // Simulate checking if category is in use
     const hasTransactions = Math.random() > 0.7
-    
+
     if (hasTransactions) {
       throw new Error('Cannot delete category that has associated transactions')
     }
-    
+
     return {
       success: true,
       message: 'Category deleted successfully'
     }
   }
 
-  async mockGetCategoryStats(id, period) {
+  private async mockGetCategoryStats(id: number, period: string): Promise<CategoryStatsResponse> {
     await mockApiHelpers.delay(400)
-    
+
     return {
       success: true,
       stats: {
-        categoryId: parseInt(id),
+        categoryId: id,
         period,
         totalAmount: Math.random() * 1000 + 100,
         transactionCount: Math.floor(Math.random() * 20) + 5,
@@ -531,23 +638,23 @@ class CategoryService {
     }
   }
 
-  async mockGetMostUsedCategories(type, limit) {
+  private async mockGetMostUsedCategories(type: string | null, limit: number): Promise<MostUsedResponse> {
     await mockApiHelpers.delay(300)
-    
+
     const mockCategories = this.generateMockCategories()
     let filtered = type ? mockCategories.filter(cat => cat.type === type) : mockCategories
-    
+
     // Add usage stats
     filtered = filtered.map(cat => ({
       ...cat,
       usageCount: Math.floor(Math.random() * 50) + 5,
       totalAmount: Math.random() * 2000 + 100
     }))
-    
+
     // Sort by usage count and limit
-    filtered.sort((a, b) => b.usageCount - a.usageCount)
+    filtered.sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0))
     filtered = filtered.slice(0, limit)
-    
+
     return {
       success: true,
       categories: filtered,
@@ -556,12 +663,12 @@ class CategoryService {
     }
   }
 
-  async mockGetCategoryTrends(id, months) {
+  private async mockGetCategoryTrends(id: number, months: number): Promise<CategoryTrendsResponse> {
     await mockApiHelpers.delay(400)
-    
-    const trends = []
+
+    const trends: CategoryTrend[] = []
     const now = new Date()
-    
+
     for (let i = months - 1; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
       trends.push({
@@ -570,40 +677,40 @@ class CategoryService {
         transactionCount: Math.floor(Math.random() * 10) + 2
       })
     }
-    
+
     return {
       success: true,
-      categoryId: parseInt(id),
+      categoryId: id,
       trends,
       months
     }
   }
 
-  async mockGetDefaultCategories() {
+  private async mockGetDefaultCategories(): Promise<CategoryResponse> {
     await mockApiHelpers.delay(200)
-    
+
     return {
       success: true,
       categories: this.generateDefaultCategories()
     }
   }
 
-  async mockResetToDefaults() {
+  private async mockResetToDefaults(): Promise<CategoryResponse> {
     await mockApiHelpers.delay(600)
-    
+
     return {
       success: true,
       message: 'Categories reset to defaults successfully',
-      categoriesCount: this.generateDefaultCategories().length
+      total: this.generateDefaultCategories().length
     }
   }
 
-  async mockImportCategories(file) {
+  private async mockImportCategories(file: File): Promise<ImportResponse> {
     await mockApiHelpers.delay(1500)
-    
+
     const importedCount = Math.floor(Math.random() * 10) + 5
     const skippedCount = Math.floor(Math.random() * 3)
-    
+
     return {
       success: true,
       importedCount,
@@ -612,12 +719,12 @@ class CategoryService {
     }
   }
 
-  async mockExportCategories(format) {
+  private async mockExportCategories(format: 'json' | 'csv'): Promise<ExportResponse> {
     await mockApiHelpers.delay(800)
-    
+
     const categories = this.generateMockCategories()
     let content = ''
-    
+
     if (format === 'json') {
       content = JSON.stringify(categories, null, 2)
     } else if (format === 'csv') {
@@ -631,7 +738,7 @@ class CategoryService {
       ])
       content = [headers, ...rows].map(row => row.join(',')).join('\n')
     }
-    
+
     // Simulate file download
     const blob = new Blob([content], { type: 'text/plain' })
     const url = window.URL.createObjectURL(blob)
@@ -642,7 +749,7 @@ class CategoryService {
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
-    
+
     return {
       success: true,
       message: 'Categories exported successfully'
@@ -650,7 +757,7 @@ class CategoryService {
   }
 
   // Generate mock category data
-  generateMockCategories() {
+  private generateMockCategories(): Category[] {
     return [
       ...this.generateDefaultCategories(),
       // Add some custom categories
@@ -680,7 +787,7 @@ class CategoryService {
   }
 
   // Generate default categories
-  generateDefaultCategories() {
+  private generateDefaultCategories(): Category[] {
     return [
       // Income Categories
       {
@@ -727,7 +834,7 @@ class CategoryService {
         createdAt: new Date('2024-01-01'),
         updatedAt: new Date('2024-01-01')
       },
-      
+
       // Expense Categories
       {
         id: 5,

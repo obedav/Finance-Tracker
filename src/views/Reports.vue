@@ -771,8 +771,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTransactionStore } from '../stores/transactions'
 import { readFileAsText } from '../utils/helpers'
-import { FEATURES, API_ENDPOINTS } from '../utils/constants.js'
-import { generateTransactionReportPDF } from '../utils/pdfGenerator.js'
+import { FEATURES, API_ENDPOINTS } from '../utils/constants'
+import { generateTransactionReportPDF } from '../utils/pdfGenerator'
 // ADDED: Import the chart component
 import ExpensePieChart from '../components/charts/ExpensePieChart.vue'
 

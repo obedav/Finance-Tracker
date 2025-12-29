@@ -1,27 +1,81 @@
-// src/services/authService.js
-import { apiHelpers, mockApiHelpers } from './api.js'
-import { API_ENDPOINTS, STORAGE_KEYS } from '../utils/constants.js'
+// src/services/authService.ts
+import { apiHelpers, mockApiHelpers } from './api'
+import { API_ENDPOINTS, STORAGE_KEYS } from '../utils/constants'
+import type { User, AuthResponse, LoginCredentials } from '../types'
+
+/**
+ * Type Definitions for Auth Service
+ */
+
+export interface RegisterUserData {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  phone?: string
+}
+
+export interface ProfileData {
+  firstName?: string
+  lastName: string
+  email?: string
+  phone?: string
+  avatar?: string | null
+  preferences?: Record<string, any>
+}
+
+export interface TokenData {
+  token: string
+  expiresIn: number
+}
+
+export interface AuthServiceResponse {
+  success: boolean
+  message: string
+  user?: User
+  token?: string
+  expiresIn?: number
+}
+
+export interface MockUser {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash?: string
+  phone: string | null
+  avatar: string | null
+  createdAt: Date | string
+  preferences: {
+    currency: string
+    dateFormat: string
+    theme: string
+    language: string
+  }
+}
 
 // Flag to use mock API or real API
 const USE_MOCK_API = false  // Changed to use real Laravel API
 
 class AuthService {
+  private currentUser: User | null
+  private token: string | null
+  private refreshTokenTimeout: ReturnType<typeof setTimeout> | null
+
   constructor() {
     this.currentUser = null
     this.token = null
     this.refreshTokenTimeout = null
   }
 
-
-
   // Login user
-  async login(credentials) {
+  async login(credentials: LoginCredentials): Promise<AuthServiceResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockLogin(credentials)
       }
 
-      const response = await apiHelpers.post(API_ENDPOINTS.AUTH.LOGIN, {
+      const response = await apiHelpers.post<AuthResponse>(API_ENDPOINTS.AUTH.LOGIN, {
         email: credentials.email,
         password: credentials.password,
         remember: credentials.remember || false
@@ -40,7 +94,7 @@ class AuthService {
       }
 
       throw new Error(response.message || 'Invalid response from server')
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Login failed',
@@ -50,13 +104,13 @@ class AuthService {
   }
 
   // Register new user
-  async register(userData) {
+  async register(userData: RegisterUserData): Promise<AuthServiceResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockRegister(userData)
       }
 
-      const response = await apiHelpers.post(API_ENDPOINTS.AUTH.REGISTER, {
+      const response = await apiHelpers.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, {
         first_name: userData.firstName,
         last_name: userData.lastName,
         email: userData.email,
@@ -78,7 +132,7 @@ class AuthService {
       }
 
       throw new Error(response.message || 'Invalid response from server')
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Registration failed',
@@ -88,7 +142,7 @@ class AuthService {
   }
 
   // Logout user
-  async logout() {
+  async logout(): Promise<AuthServiceResponse> {
     try {
       if (!USE_MOCK_API && this.token) {
         await apiHelpers.post(API_ENDPOINTS.AUTH.LOGOUT)
@@ -105,7 +159,7 @@ class AuthService {
       // Clear data even if API call fails
       this.clearAuthData()
       this.stopRefreshTokenTimer()
-      
+
       return {
         success: true,
         message: 'Logout completed'
@@ -114,20 +168,21 @@ class AuthService {
   }
 
   // Refresh authentication token
-  async refreshToken() {
+  async refreshToken(): Promise<{ success: boolean; token?: string }> {
     try {
       if (USE_MOCK_API) {
         return await this.mockRefreshToken()
       }
 
-      const response = await apiHelpers.post(API_ENDPOINTS.AUTH.REFRESH, {
-        refreshToken: this.getRefreshToken()
-      })
+      const response = await apiHelpers.post<{ token?: string; user?: User; expiresIn?: number }>(
+        API_ENDPOINTS.AUTH.REFRESH,
+        { refreshToken: this.getRefreshToken() }
+      )
 
       if (response.token) {
-        this.setAuthData(response.token, response.user || this.currentUser)
+        this.setAuthData(response.token, response.user || this.currentUser!)
         this.startRefreshTokenTimer(response.expiresIn)
-        
+
         return {
           success: true,
           token: response.token
@@ -142,13 +197,13 @@ class AuthService {
   }
 
   // Forgot password
-  async forgotPassword(email) {
+  async forgotPassword(email: string): Promise<AuthServiceResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockForgotPassword(email)
       }
 
-      const response = await apiHelpers.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.REQUEST_RESET, {
         email
       })
 
@@ -156,7 +211,7 @@ class AuthService {
         success: true,
         message: response.message || 'Password reset email sent'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to send reset email',
@@ -166,13 +221,13 @@ class AuthService {
   }
 
   // Reset password
-  async resetPassword(token, newPassword) {
+  async resetPassword(token: string, newPassword: string): Promise<AuthServiceResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockResetPassword(token, newPassword)
       }
 
-      const response = await apiHelpers.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.RESET_PASSWORD, {
         token,
         password: newPassword
       })
@@ -181,7 +236,7 @@ class AuthService {
         success: true,
         message: response.message || 'Password reset successful'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to reset password',
@@ -191,13 +246,13 @@ class AuthService {
   }
 
   // Change password
-  async changePassword(currentPassword, newPassword) {
+  async changePassword(currentPassword: string, newPassword: string): Promise<AuthServiceResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockChangePassword(currentPassword, newPassword)
       }
 
-      const response = await apiHelpers.post('/user/change-password', {
+      const response = await apiHelpers.post<{ message?: string }>('/user/change-password', {
         currentPassword,
         newPassword
       })
@@ -206,7 +261,7 @@ class AuthService {
         success: true,
         message: response.message || 'Password changed successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to change password',
@@ -220,15 +275,15 @@ class AuthService {
    */
 
   // Get current user profile
-  async getCurrentUser() {
+  async getCurrentUser(): Promise<User> {
     try {
       if (USE_MOCK_API) {
-        return this.currentUser
+        return this.currentUser!
       }
 
-      const response = await apiHelpers.get(API_ENDPOINTS.USER.PROFILE)
+      const response = await apiHelpers.get<{ user: User }>(API_ENDPOINTS.USER.PROFILE)
       this.currentUser = response.user
-      
+
       return response.user
     } catch (error) {
       throw error
@@ -236,16 +291,19 @@ class AuthService {
   }
 
   // Update user profile
-  async updateProfile(profileData) {
+  async updateProfile(profileData: ProfileData): Promise<AuthServiceResponse> {
     try {
       if (USE_MOCK_API) {
         return await this.mockUpdateProfile(profileData)
       }
 
-      const response = await apiHelpers.put(API_ENDPOINTS.USER.PROFILE, profileData)
-      
+      const response = await apiHelpers.put<{ user?: User; message?: string }>(
+        API_ENDPOINTS.USER.PROFILE,
+        profileData
+      )
+
       if (response.user) {
-        this.currentUser = { ...this.currentUser, ...response.user }
+        this.currentUser = { ...this.currentUser!, ...response.user }
         this.saveUserToStorage(this.currentUser)
       }
 
@@ -254,7 +312,7 @@ class AuthService {
         user: response.user,
         message: response.message || 'Profile updated successfully'
       }
-    } catch (error) {
+    } catch (error: any) {
       throw {
         success: false,
         message: error.message || 'Failed to update profile',
@@ -268,7 +326,7 @@ class AuthService {
    */
 
   // Set authentication data
-  setAuthData(token, user) {
+  setAuthData(token: string, user: User): void {
     this.token = token
     this.currentUser = user
 
@@ -277,7 +335,7 @@ class AuthService {
   }
 
   // Clear authentication data
-  clearAuthData() {
+  clearAuthData(): void {
     this.token = null
     this.currentUser = null
 
@@ -286,18 +344,18 @@ class AuthService {
   }
 
   // Save user to storage
-  saveUserToStorage(user) {
+  saveUserToStorage(user: User): void {
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user))
   }
 
   // Get stored token
-  getStoredToken() {
+  getStoredToken(): null {
     // Tokens are now stored in httpOnly cookies, not in localStorage
     return null
   }
 
   // Get stored user
-  getStoredUser() {
+  getStoredUser(): User | null {
     try {
       const userData = localStorage.getItem(STORAGE_KEYS.USER)
       return userData ? JSON.parse(userData) : null
@@ -307,24 +365,24 @@ class AuthService {
   }
 
   // Get refresh token
-  getRefreshToken() {
+  getRefreshToken(): null {
     // Refresh token is now handled by httpOnly cookies on the server side
     return null
   }
 
   // Check if user is authenticated
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     // Check for user data instead of token (tokens are in httpOnly cookies)
     return !!(this.currentUser || this.getStoredUser())
   }
 
   // Get current user
-  getCurrentUserData() {
+  getCurrentUserData(): User | null {
     return this.currentUser || this.getStoredUser()
   }
 
   // Initialize auth state from storage
-  initializeAuth() {
+  initializeAuth(): boolean {
     const user = this.getStoredUser()
 
     if (user) {
@@ -341,10 +399,10 @@ class AuthService {
    */
 
   // Start automatic token refresh
-  startRefreshTokenTimer(expiresIn = 3600) {
+  startRefreshTokenTimer(expiresIn: number = 3600): void {
     // Refresh token 5 minutes before it expires
     const refreshTime = (expiresIn - 300) * 1000
-    
+
     this.stopRefreshTokenTimer()
     this.refreshTokenTimeout = setTimeout(async () => {
       try {
@@ -356,7 +414,7 @@ class AuthService {
   }
 
   // Stop token refresh timer
-  stopRefreshTokenTimer() {
+  stopRefreshTokenTimer(): void {
     if (this.refreshTokenTimeout) {
       clearTimeout(this.refreshTokenTimeout)
       this.refreshTokenTimeout = null
@@ -368,7 +426,7 @@ class AuthService {
    */
 
   // Simple hash function for mock mode (NOT for production use)
-  mockHashPassword(password) {
+  private mockHashPassword(password: string): string {
     // This is a simple hash for demo purposes only
     // In a real app, password hashing should only be done server-side
     let hash = 0
@@ -380,33 +438,41 @@ class AuthService {
     return hash.toString(36)
   }
 
-  async mockLogin(credentials) {
+  private async mockLogin(credentials: LoginCredentials): Promise<AuthServiceResponse> {
     await mockApiHelpers.delay(800)
 
     // Get stored users from localStorage (for registered users)
-    const storedUsers = JSON.parse(localStorage.getItem('mock_users') || '[]')
+    const storedUsers: MockUser[] = JSON.parse(localStorage.getItem('mock_users') || '[]')
 
     // Check demo account first
     const demoPasswordHash = this.mockHashPassword('password123')
     if (credentials.email === 'demo@example.com' && this.mockHashPassword(credentials.password) === demoPasswordHash) {
-      const mockUser = {
+      const mockUser: User = {
         id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
+        name: 'John Doe',
         email: credentials.email,
-        avatar: null,
-        createdAt: new Date('2024-01-01'),
-        preferences: {
+        email_verified_at: new Date('2024-01-01').toISOString(),
+        profile_picture: null,
+        settings: {
           currency: 'USD',
-          dateFormat: 'MM/DD/YYYY',
+          language: 'en',
+          timezone: 'UTC',
           theme: 'light',
-          language: 'en'
-        }
+          notifications: {
+            email: true,
+            push: false,
+            budget_alerts: true,
+            transaction_reminders: false
+          }
+        },
+        created_at: new Date('2024-01-01').toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted_at: null
       }
-      
+
       const mockToken = 'mock-jwt-token-' + Date.now()
       this.setAuthData(mockToken, mockUser)
-      
+
       return {
         success: true,
         user: mockUser,
@@ -415,32 +481,28 @@ class AuthService {
         message: 'Login successful'
       }
     }
-    
+
     // Check registered users (compare hashed passwords)
     const hashedPassword = this.mockHashPassword(credentials.password)
     const user = storedUsers.find(u => u.email === credentials.email && u.passwordHash === hashedPassword)
-    
+
     if (user) {
       // Create user object without password
-      const userWithoutPassword = {
+      const userWithoutPassword: User = {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        name: `${user.firstName} ${user.lastName}`,
         email: user.email,
-        phone: user.phone || null,
-        avatar: null,
-        createdAt: user.createdAt,
-        preferences: user.preferences || {
-          currency: 'USD',
-          dateFormat: 'MM/DD/YYYY',
-          theme: 'light',
-          language: 'en'
-        }
+        email_verified_at: null,
+        profile_picture: user.avatar,
+        settings: user.preferences as any,
+        created_at: new Date(user.createdAt).toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted_at: null
       }
-      
+
       const mockToken = 'mock-jwt-token-' + Date.now()
       this.setAuthData(mockToken, userWithoutPassword)
-      
+
       return {
         success: true,
         user: userWithoutPassword,
@@ -449,23 +511,23 @@ class AuthService {
         message: 'Login successful'
       }
     }
-    
+
     throw new Error('Invalid email or password')
   }
 
-  async mockRegister(userData) {
+  private async mockRegister(userData: RegisterUserData): Promise<AuthServiceResponse> {
     await mockApiHelpers.delay(1000)
-    
+
     // Get existing users
-    const storedUsers = JSON.parse(localStorage.getItem('mock_users') || '[]')
-    
+    const storedUsers: MockUser[] = JSON.parse(localStorage.getItem('mock_users') || '[]')
+
     // Check if user already exists
     const existingUser = storedUsers.find(u => u.email === userData.email)
     if (existingUser) {
       throw new Error('User with this email already exists')
     }
-    
-    const mockUser = {
+
+    const mockUser: MockUser = {
       id: Date.now(),
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -481,26 +543,27 @@ class AuthService {
         language: 'en'
       }
     }
-    
+
     // Store user in mock database
     storedUsers.push(mockUser)
     localStorage.setItem('mock_users', JSON.stringify(storedUsers))
-    
+
     // Create user object without password for return
-    const userWithoutPassword = {
+    const userWithoutPassword: User = {
       id: mockUser.id,
-      firstName: mockUser.firstName,
-      lastName: mockUser.lastName,
+      name: `${mockUser.firstName} ${mockUser.lastName}`,
       email: mockUser.email,
-      phone: mockUser.phone,
-      avatar: mockUser.avatar,
-      createdAt: mockUser.createdAt,
-      preferences: mockUser.preferences
+      email_verified_at: null,
+      profile_picture: mockUser.avatar,
+      settings: mockUser.preferences as any,
+      created_at: new Date(mockUser.createdAt).toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted_at: null
     }
-    
+
     const mockToken = 'mock-jwt-token-' + Date.now()
     this.setAuthData(mockToken, userWithoutPassword)
-    
+
     return {
       success: true,
       user: userWithoutPassword,
@@ -510,7 +573,7 @@ class AuthService {
     }
   }
 
-  async mockRefreshToken() {
+  private async mockRefreshToken(): Promise<{ success: boolean; token: string; expiresIn: number }> {
     await mockApiHelpers.delay(300)
 
     const newToken = 'mock-jwt-token-' + Date.now()
@@ -524,25 +587,25 @@ class AuthService {
     }
   }
 
-  async mockForgotPassword(email) {
+  private async mockForgotPassword(email: string): Promise<AuthServiceResponse> {
     await mockApiHelpers.delay(1000)
-    
+
     return {
       success: true,
       message: `Password reset email sent to ${email}`
     }
   }
 
-  async mockResetPassword(token, newPassword) {
+  private async mockResetPassword(token: string, newPassword: string): Promise<AuthServiceResponse> {
     await mockApiHelpers.delay(800)
-    
+
     return {
       success: true,
       message: 'Password reset successful'
     }
   }
 
-  async mockChangePassword(currentPassword, newPassword) {
+  private async mockChangePassword(currentPassword: string, newPassword: string): Promise<AuthServiceResponse> {
     await mockApiHelpers.delay(600)
 
     // In mock mode, just verify current password is not empty
@@ -557,18 +620,18 @@ class AuthService {
     }
   }
 
-  async mockUpdateProfile(profileData) {
+  private async mockUpdateProfile(profileData: ProfileData): Promise<AuthServiceResponse> {
     await mockApiHelpers.delay(500)
-    
-    const updatedUser = {
-      ...this.currentUser,
+
+    const updatedUser: User = {
+      ...this.currentUser!,
       ...profileData,
-      updatedAt: new Date()
-    }
-    
+      updated_at: new Date().toISOString()
+    } as User
+
     this.currentUser = updatedUser
     this.saveUserToStorage(updatedUser)
-    
+
     return {
       success: true,
       user: updatedUser,
@@ -577,7 +640,7 @@ class AuthService {
   }
 
   // Get redirect URL after login
-  getRedirectAfterLogin() {
+  getRedirectAfterLogin(): string {
     const intendedRoute = localStorage.getItem('intended_route')
     if (intendedRoute && intendedRoute !== '/login') {
       localStorage.removeItem('intended_route')
@@ -589,9 +652,9 @@ class AuthService {
   /**
    * Token Verification
    */
-  
+
   // Verify if the current token is valid
-  async verifyToken() {
+  async verifyToken(): Promise<boolean> {
     try {
       // Check if user data exists (tokens are in httpOnly cookies)
       if (!this.currentUser && !this.getStoredUser()) {
@@ -604,7 +667,7 @@ class AuthService {
       }
 
       // For real API, verify with backend (token is in httpOnly cookie, server side)
-      const response = await apiHelpers.get(API_ENDPOINTS.AUTH.VERIFY_TOKEN)
+      const response = await apiHelpers.get<{ valid: boolean }>(API_ENDPOINTS.AUTH.VERIFY_2FA)
       return response.valid === true
     } catch (error) {
       return false

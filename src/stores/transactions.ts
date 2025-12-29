@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-import transactionService from '../services/transactionService.js'
+import transactionService from '../services/transactionService'
 import type { Transaction, TransactionFormData, TransactionFilters } from '@/types'
 
 interface TransactionFiltersState {

@@ -299,7 +299,7 @@ import { useUserStore } from '@/stores/userStore'
 import { useTransactionStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import authService from '@/services/authService'
-import { FEATURES } from '@/utils/constants.js'
+import { FEATURES } from '@/utils/constants'
 
 // Initialize stores and composables
 const userStore = useUserStore()

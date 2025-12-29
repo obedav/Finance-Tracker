@@ -1,6 +1,6 @@
 // src/router/index.js - Updated with Analytics route
 import { createRouter, createWebHistory } from 'vue-router'
-import authService from '../services/authService.js'
+import authService from '../services/authService'
 
 // Lazy load components for better performance
 const Dashboard = () => import('../views/Dashboard.vue')

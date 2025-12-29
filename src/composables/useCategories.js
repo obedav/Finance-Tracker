@@ -1,7 +1,7 @@
 // src/composables/useCategories.js
 import { ref, computed, watch } from 'vue'
-import { useLocalStorage } from './useLocalStorage.js'
-import { DEFAULT_CATEGORIES, TRANSACTION_TYPES } from '../utils/constants.js'
+import { useLocalStorage } from './useLocalStorage'
+import { DEFAULT_CATEGORIES, TRANSACTION_TYPES } from '../utils/constants'
 
 export function useCategories() {
   const { data: cachedCategories } = useLocalStorage('categories', [])

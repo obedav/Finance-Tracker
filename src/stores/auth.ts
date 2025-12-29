@@ -1,8 +1,8 @@
 // src/stores/auth.ts
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import authService from '@/services/authService.js'
-import { STORAGE_KEYS } from '@/utils/constants.js'
+import authService from '@/services/authService'
+import { STORAGE_KEYS } from '@/utils/constants'
 import type { User, UserLogin, UserRegistration, AuthResponse } from '@/types'
 
 // Sentry user tracking (optional - only if Sentry is configured)

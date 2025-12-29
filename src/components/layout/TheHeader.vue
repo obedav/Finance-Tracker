@@ -123,8 +123,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import authService from '@/services/authService.js'
-import { STORAGE_KEYS } from '@/utils/constants.js'
+import authService from '@/services/authService'
+import { STORAGE_KEYS } from '@/utils/constants'
 import DarkModeToggle from '@/components/common/DarkModeToggle.vue'
 
 // Define emits

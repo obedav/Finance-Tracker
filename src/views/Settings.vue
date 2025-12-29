@@ -668,7 +668,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { useToast } from '@/composables/useToast'
 import userService from '@/services/userService'
 import settingsService from '@/services/settingsService'
-import { FEATURES } from '@/utils/constants.js'
+import { FEATURES } from '@/utils/constants'
 
 
 // Initialize stores and composables

@@ -1,10 +1,10 @@
 // src/composables/useTransactions.js
 import { ref, computed, watch, nextTick } from 'vue'
-import transactionService from '../services/transactionService.js'
-import { useLocalStorage } from './useLocalStorage.js'
-import { validateTransaction } from '../utils/validators.js'
-import { formatCurrency, formatDate } from '../utils/formatters.js'
-import { groupBy, sortBy } from '../utils/helpers.js'
+import transactionService from '../services/transactionService'
+import { useLocalStorage } from './useLocalStorage'
+import { validateTransaction } from '../utils/validators'
+import { formatCurrency, formatDate } from '../utils/formatters'
+import { groupBy, sortBy } from '../utils/helpers'
 
 export function useTransactions() {
   const { getItem, setItem } = useLocalStorage()

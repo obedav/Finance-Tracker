@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-import categoryService from '../services/categoryService.js'
+import categoryService from '../services/categoryService'
 import type { Category, CategoryFormData, ApiResponse } from '@/types'
 
 interface CategoryStats {

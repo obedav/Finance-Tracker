@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-import budgetService from '../services/budgetService.js'
+import budgetService from '../services/budgetService'
 import type { Budget, BudgetFormData, BudgetPeriod } from '@/types'
 
 interface BudgetStats {

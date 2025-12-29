@@ -163,7 +163,7 @@
 <script setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import authService from '@/services/authService.js' // Fix: Remove the destructuring
+import authService from '@/services/authService' // Fix: Remove the destructuring
 // Remove the toast import if you don't have vue-toastification installed
 // import { useToast } from 'vue-toastification'
 

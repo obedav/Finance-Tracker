@@ -12,9 +12,9 @@ import {
   formatCategoryData,
   formatTrendData,
   generateCategoryColors
-} from '../utils/chartConfig.js'
-import { formatCurrency } from '../utils/formatters.js'
-import { groupBy } from '../utils/helpers.js'
+} from '../utils/chartConfig'
+import { formatCurrency } from '../utils/formatters'
+import { groupBy } from '../utils/helpers'
 
 export function useCharts() {
   // State

@@ -1,7 +1,7 @@
 // src/services/api.ts
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import type { InternalAxiosRequestConfig } from 'axios'
-import { API_ENDPOINTS, ERROR_MESSAGES, STORAGE_KEYS, HTTP_STATUS, REQUEST_TIMEOUT } from '../utils/constants.js'
+import { API_ENDPOINTS, ERROR_MESSAGES, STORAGE_KEYS, HTTP_STATUS, REQUEST_TIMEOUT } from '../utils/constants'
 import type { User, Transaction, Category, Budget, AuthResponse, UserRegistration } from '@/types'
 
 // Extended types for axios config with metadata

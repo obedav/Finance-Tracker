@@ -1,8 +1,8 @@
 // src/composables/useAuth.js
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import authService from '../services/authService.js'
-import { useLocalStorage } from './useLocalStorage.js'
+import authService from '../services/authService'
+import { useLocalStorage } from './useLocalStorage'
 
 // Global auth state (shared across all instances)
 const isAuthenticated = ref(false)
