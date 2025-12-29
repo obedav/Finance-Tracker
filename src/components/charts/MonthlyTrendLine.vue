@@ -66,7 +66,6 @@ const createChart = () => {
   
   // Check if we have valid data
   if (!props.data || props.data.length === 0) {
-    console.log('No data provided to MonthlyTrendLine')
     return
   }
   
@@ -201,9 +200,7 @@ const createChart = () => {
   // Create chart
   try {
     chartInstance.value = new Chart(ctx, config)
-    console.log('MonthlyTrendLine chart created successfully')
   } catch (error) {
-    console.error('Error creating MonthlyTrendLine chart:', error)
   }
 }
 </script>

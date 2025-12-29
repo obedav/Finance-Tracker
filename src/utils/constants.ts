@@ -1,51 +1,189 @@
-// src/utils/constants.js
+// src/utils/constants.ts
+// Type-safe application constants
 
-// Application Information
-export const APP_INFO = {
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
+export interface AppInfo {
+  name: string
+  version: string
+  description: string
+  author: string
+  website: string
+}
+
+export interface ColorPalette {
+  primary: string
+  secondary: string
+  background: string
+  text: string
+  border: string
+  success: string
+  warning: string
+  error: string
+  info: string
+  primaryLight: string
+  secondaryLight: string
+  successLight: string
+  warningLight: string
+  errorLight: string
+}
+
+export interface Currency {
+  code: string
+  name: string
+  symbol: string
+}
+
+export interface Language {
+  code: string
+  name: string
+  flag: string
+}
+
+export interface PasswordRule {
+  MIN_LENGTH: number
+  PATTERN: RegExp
+}
+
+export interface AmountRule {
+  MIN: number
+  MAX: number
+  PATTERN: RegExp
+}
+
+export interface LengthRule {
+  MIN_LENGTH?: number
+  MAX_LENGTH?: number
+  PATTERN?: RegExp
+}
+
+export interface ValidationRules {
+  EMAIL: RegExp
+  PHONE: RegExp
+  PASSWORD: PasswordRule
+  AMOUNT: AmountRule
+  DESCRIPTION: LengthRule
+  CATEGORY_NAME: LengthRule
+  NAME: LengthRule
+}
+
+export interface FileTypes {
+  IMAGES: string[]
+  DOCUMENTS: string[]
+  EXPORTS: string[]
+}
+
+export interface FileLimits {
+  MAX_SIZE: number
+  ALLOWED_TYPES: FileTypes
+}
+
+export interface ToastDuration {
+  SHORT: number
+  MEDIUM: number
+  LONG: number
+}
+
+export interface ToastPosition {
+  TOP_RIGHT: string
+  TOP_LEFT: string
+  BOTTOM_RIGHT: string
+  BOTTOM_LEFT: string
+  TOP_CENTER: string
+  BOTTOM_CENTER: string
+}
+
+export interface ToastSettings {
+  DURATION: ToastDuration
+  POSITION: ToastPosition
+}
+
+export interface NotificationSettings {
+  email: boolean
+  budgetAlerts: boolean
+  monthlyReports: boolean
+  goalReminders: boolean
+}
+
+export interface PrivacySettings {
+  dataSharing: boolean
+  analytics: boolean
+  marketingEmails: boolean
+  autoBackup: boolean
+}
+
+export interface DefaultSettings {
+  CURRENCY: string
+  DATE_FORMAT: string
+  THEME: string
+  LANGUAGE: string
+  NOTIFICATIONS: NotificationSettings
+  PRIVACY: PrivacySettings
+}
+
+// ============================================================================
+// APPLICATION INFORMATION
+// ============================================================================
+
+export const APP_INFO: AppInfo = {
   name: 'FinanceTracker',
   version: '1.0.0',
   description: 'Personal Finance Management Application',
   author: 'Your Name',
   website: 'https://financetracker.app'
-}
+} as const
 
-// Color Palette
-export const COLORS = {
+// ============================================================================
+// COLOR PALETTE
+// ============================================================================
+
+export const COLORS: ColorPalette = {
   primary: '#10B981',      // Emerald Green
   secondary: '#F59E0B',    // Gold/Amber
   background: '#FAF9F6',   // Cream White
   text: '#334155',         // Slate Gray
   border: '#E5E7EB',       // Light Gray
-  
+
   // Status Colors
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
   info: '#3B82F6',
-  
+
   // Opacity Variants
   primaryLight: '#10B98120',
   secondaryLight: '#F59E0B20',
   successLight: '#10B98110',
   warningLight: '#F59E0B10',
   errorLight: '#EF444410'
-}
+} as const
 
-// Transaction Types
+// ============================================================================
+// TRANSACTION ENUMS
+// ============================================================================
+
 export const TRANSACTION_TYPES = {
   INCOME: 'INCOME',
   EXPENSE: 'EXPENSE'
-}
+} as const
 
-// Transaction Status
+export type TransactionType = typeof TRANSACTION_TYPES[keyof typeof TRANSACTION_TYPES]
+
 export const TRANSACTION_STATUS = {
   PENDING: 'pending',
   COMPLETED: 'completed',
   CANCELLED: 'cancelled',
   FAILED: 'failed'
-}
+} as const
 
-// Default Categories
+export type TransactionStatus = typeof TRANSACTION_STATUS[keyof typeof TRANSACTION_STATUS]
+
+// ============================================================================
+// DEFAULT CATEGORIES
+// ============================================================================
+
 export const DEFAULT_CATEGORIES = {
   INCOME: [
     'Salary',
@@ -54,7 +192,7 @@ export const DEFAULT_CATEGORIES = {
     'Investment',
     'Gift',
     'Other'
-  ],
+  ] as const,
   EXPENSE: [
     'Food & Dining',
     'Transportation',
@@ -64,11 +202,14 @@ export const DEFAULT_CATEGORIES = {
     'Healthcare',
     'Education',
     'Other'
-  ]
-}
+  ] as const
+} as const
 
-// Currency Options
-export const CURRENCIES = [
+// ============================================================================
+// CURRENCY OPTIONS
+// ============================================================================
+
+export const CURRENCIES: readonly Currency[] = [
   { code: 'USD', name: 'US Dollar', symbol: '$' },
   { code: 'EUR', name: 'Euro', symbol: '€' },
   { code: 'GBP', name: 'British Pound', symbol: '£' },
@@ -79,19 +220,27 @@ export const CURRENCIES = [
   { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
   { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
   { code: 'MXN', name: 'Mexican Peso', symbol: '$' }
-]
+] as const
 
-// Date Formats
+// ============================================================================
+// DATE FORMATS
+// ============================================================================
+
 export const DATE_FORMATS = {
   'MM/DD/YYYY': 'MM/DD/YYYY',
   'DD/MM/YYYY': 'DD/MM/YYYY',
   'YYYY-MM-DD': 'YYYY-MM-DD',
   'DD MMM YYYY': 'DD MMM YYYY',
   'MMM DD, YYYY': 'MMM DD, YYYY'
-}
+} as const
 
-// Language Options
-export const LANGUAGES = [
+export type DateFormat = typeof DATE_FORMATS[keyof typeof DATE_FORMATS]
+
+// ============================================================================
+// LANGUAGE OPTIONS
+// ============================================================================
+
+export const LANGUAGES: readonly Language[] = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
@@ -102,16 +251,24 @@ export const LANGUAGES = [
   { code: 'ja', name: '日本語', flag: '🇯🇵' },
   { code: 'ko', name: '한국어', flag: '🇰🇷' },
   { code: 'ar', name: 'العربية', flag: '🇸🇦' }
-]
+] as const
 
-// Theme Options
+// ============================================================================
+// THEME OPTIONS
+// ============================================================================
+
 export const THEMES = {
   LIGHT: 'light',
   DARK: 'dark',
   SYSTEM: 'system'
-}
+} as const
 
-// Time Periods
+export type Theme = typeof THEMES[keyof typeof THEMES]
+
+// ============================================================================
+// TIME PERIODS
+// ============================================================================
+
 export const TIME_PERIODS = {
   TODAY: 'today',
   YESTERDAY: 'yesterday',
@@ -125,9 +282,14 @@ export const TIME_PERIODS = {
   LAST_YEAR: 'last_year',
   ALL_TIME: 'all_time',
   CUSTOM: 'custom'
-}
+} as const
 
-// Chart Types
+export type TimePeriod = typeof TIME_PERIODS[keyof typeof TIME_PERIODS]
+
+// ============================================================================
+// CHART TYPES
+// ============================================================================
+
 export const CHART_TYPES = {
   LINE: 'line',
   BAR: 'bar',
@@ -135,17 +297,27 @@ export const CHART_TYPES = {
   DOUGHNUT: 'doughnut',
   AREA: 'area',
   RADAR: 'radar'
-}
+} as const
 
-// Notification Types
+export type ChartType = typeof CHART_TYPES[keyof typeof CHART_TYPES]
+
+// ============================================================================
+// NOTIFICATION TYPES
+// ============================================================================
+
 export const NOTIFICATION_TYPES = {
   SUCCESS: 'success',
   WARNING: 'warning',
   ERROR: 'error',
   INFO: 'info'
-}
+} as const
 
-// Local Storage Keys
+export type NotificationType = typeof NOTIFICATION_TYPES[keyof typeof NOTIFICATION_TYPES]
+
+// ============================================================================
+// LOCAL STORAGE KEYS
+// ============================================================================
+
 export const STORAGE_KEYS = {
   USER: 'finance_user',
   TOKEN: 'finance_token',
@@ -158,15 +330,18 @@ export const STORAGE_KEYS = {
   BUDGET: 'finance_budget',
   GOALS: 'finance_goals',
   THEME: 'finance_theme'
-}
+} as const
 
-// API Endpoints (Updated to match Laravel backend on port 8000)
+// ============================================================================
+// API ENDPOINTS
+// ============================================================================
+
 export const API_ENDPOINTS = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
 
   // Health Check
-  HEALTH: 'http://127.0.0.1:8000/api/health',
-  
+  HEALTH: 'http://localhost:8000/api/health',
+
   // Authentication Endpoints
   AUTH: {
     LOGIN: '/auth/login',
@@ -178,14 +353,12 @@ export const API_ENDPOINTS = {
     CHANGE_PASSWORD: '/auth/change-password',
     REQUEST_RESET: '/auth/request-reset',
     RESET_PASSWORD: '/auth/reset-password',
-    
-    // Add these missing 2FA endpoints:
     ENABLE_2FA: '/auth/enable-2fa',
     DISABLE_2FA: '/auth/disable-2fa',
     VERIFY_2FA: '/auth/verify-2fa'
   },
 
-    SETTINGS: {
+  SETTINGS: {
     GET: '/user/preferences',
     UPDATE_PREFERENCES: '/user/preferences',
     UPDATE_NOTIFICATIONS: '/user/notifications',
@@ -193,7 +366,7 @@ export const API_ENDPOINTS = {
     DELETE_ALL_DATA: '/user/data',
     UPDATE_AUTO_BACKUP: '/user/auto-backup'
   },
-  
+
   // Transaction Endpoints
   TRANSACTIONS: {
     BASE: '/transactions',
@@ -205,10 +378,13 @@ export const API_ENDPOINTS = {
     BULK_DELETE: '/transactions',
     STATISTICS: '/transactions/statistics',
     TRENDS: '/transactions/trends',
+    EXPORT_CSV: '/transactions/export/csv',
+    IMPORT_CSV: '/transactions/import/csv',
+    DOWNLOAD_TEMPLATE: '/transactions/import/template',
     IMPORT: '/transactions/import',
     EXPORT: '/transactions/export'
   },
-  
+
   // Category Endpoints
   CATEGORIES: {
     BASE: '/categories',
@@ -221,7 +397,7 @@ export const API_ENDPOINTS = {
     DEFAULTS: '/categories/defaults',
     RESTORE: '/categories/:id/restore'
   },
-  
+
   // Budget Endpoints
   BUDGETS: {
     BASE: '/budgets',
@@ -239,17 +415,20 @@ export const API_ENDPOINTS = {
     CATEGORY: '/reports/category',
     EXPORT: '/reports/export'
   },
-  
-  // User Management (if needed later)
+
+  // User Management
   USER: {
     PROFILE: '/auth/profile',
     PREFERENCES: '/user/preferences',
     NOTIFICATIONS: '/user/notifications',
     PRIVACY: '/user/privacy'
   }
-}
+} as const
 
-// HTTP Status Codes
+// ============================================================================
+// HTTP STATUS CODES
+// ============================================================================
+
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
@@ -264,10 +443,13 @@ export const HTTP_STATUS = {
   BAD_GATEWAY: 502,
   SERVICE_UNAVAILABLE: 503,
   GATEWAY_TIMEOUT: 504
-}
+} as const
 
-// Validation Rules
-export const VALIDATION_RULES = {
+// ============================================================================
+// VALIDATION RULES
+// ============================================================================
+
+export const VALIDATION_RULES: ValidationRules = {
   EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   PHONE: /^[\+]?[1-9][\d]{0,15}$/,
   PASSWORD: {
@@ -291,27 +473,36 @@ export const VALIDATION_RULES = {
     MAX_LENGTH: 50,
     PATTERN: /^[a-zA-Z\s]+$/
   }
-}
+} as const
 
-// File Upload Limits
-export const FILE_LIMITS = {
+// ============================================================================
+// FILE UPLOAD LIMITS
+// ============================================================================
+
+export const FILE_LIMITS: FileLimits = {
   MAX_SIZE: 5 * 1024 * 1024, // 5MB
   ALLOWED_TYPES: {
     IMAGES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
     DOCUMENTS: ['text/csv', 'application/json', 'text/plain'],
     EXPORTS: ['application/pdf', 'text/csv', 'application/json']
   }
-}
+} as const
 
-// Pagination
+// ============================================================================
+// PAGINATION
+// ============================================================================
+
 export const PAGINATION = {
   DEFAULT_PAGE_SIZE: 15,
-  PAGE_SIZE_OPTIONS: [10, 15, 25, 50, 100],
+  PAGE_SIZE_OPTIONS: [10, 15, 25, 50, 100] as const,
   MAX_PAGE_SIZE: 100
-}
+} as const
 
-// Toast Notification Settings
-export const TOAST_SETTINGS = {
+// ============================================================================
+// TOAST NOTIFICATION SETTINGS
+// ============================================================================
+
+export const TOAST_SETTINGS: ToastSettings = {
   DURATION: {
     SHORT: 3000,
     MEDIUM: 5000,
@@ -325,40 +516,58 @@ export const TOAST_SETTINGS = {
     TOP_CENTER: 'top-center',
     BOTTOM_CENTER: 'bottom-center'
   }
-}
+} as const
 
-// Animation Durations
+// ============================================================================
+// ANIMATION DURATIONS
+// ============================================================================
+
 export const ANIMATION_DURATIONS = {
   FAST: 150,
   NORMAL: 300,
   SLOW: 500,
   EXTRA_SLOW: 1000
-}
+} as const
 
-// Breakpoints (matching Tailwind CSS)
+// ============================================================================
+// BREAKPOINTS (matching Tailwind CSS)
+// ============================================================================
+
 export const BREAKPOINTS = {
   SM: 640,
   MD: 768,
   LG: 1024,
   XL: 1280,
   '2XL': 1536
-}
+} as const
 
-// Feature Flags
+// ============================================================================
+// FEATURE FLAGS
+// ============================================================================
+
 export const FEATURES = {
+  // ✅ Implemented and Working
   DARK_MODE: true,
-  EXPORT_PDF: true,
-  IMPORT_CSV: true,
   BUDGET_ALERTS: true,
-  GOAL_TRACKING: true,
-  MULTI_CURRENCY: true,
   CATEGORIES_MANAGEMENT: true,
   ADVANCED_REPORTS: true,
-  TWO_FACTOR_AUTH: false, // Not implemented yet
-  REAL_TIME_SYNC: false   // Not implemented yet
-}
+  IMPORT_CSV: true,
+  EXPORT_CSV: true,
+  EXPORT_PDF: true,
 
-// Error Messages
+  // ❌ Not Implemented
+  GOAL_TRACKING: false,
+  MULTI_CURRENCY: false,
+  RECEIPT_UPLOAD: false,
+  TWO_FACTOR_AUTH: false,
+  REAL_TIME_SYNC: false,
+  BANK_INTEGRATION: false
+} as const
+
+// ============================================================================
+// ERROR MESSAGES
+// ============================================================================
+
 export const ERROR_MESSAGES = {
   NETWORK_ERROR: 'Network error. Please check your connection.',
   UNAUTHORIZED: 'You are not authorized to perform this action.',
@@ -376,9 +585,12 @@ export const ERROR_MESSAGES = {
   INVALID_AMOUNT: 'Please enter a valid amount.',
   FILE_TOO_LARGE: 'File size exceeds the maximum limit of 5MB.',
   INVALID_FILE_TYPE: 'Invalid file type. Please upload a supported file.'
-}
+} as const
 
-// Success Messages
+// ============================================================================
+// SUCCESS MESSAGES
+// ============================================================================
+
 export const SUCCESS_MESSAGES = {
   LOGIN_SUCCESS: 'Welcome back! Login successful.',
   LOGOUT_SUCCESS: 'You have been logged out successfully.',
@@ -398,15 +610,21 @@ export const SUCCESS_MESSAGES = {
   DATA_IMPORTED: 'Data imported successfully!',
   PASSWORD_RESET_SENT: 'Password reset link sent to your email.',
   PASSWORD_RESET_SUCCESS: 'Password reset successfully! Please log in with your new password.'
-}
+} as const
 
-// Budget Alert Thresholds
+// ============================================================================
+// BUDGET ALERT THRESHOLDS
+// ============================================================================
+
 export const BUDGET_THRESHOLDS = {
   WARNING: 80,  // 80% of budget
   DANGER: 100   // 100% of budget (exceeded)
-}
+} as const
 
-// Goal Types
+// ============================================================================
+// GOAL TYPES
+// ============================================================================
+
 export const GOAL_TYPES = {
   SAVINGS: 'savings',
   DEBT_PAYOFF: 'debt_payoff',
@@ -415,27 +633,43 @@ export const GOAL_TYPES = {
   VACATION: 'vacation',
   PURCHASE: 'purchase',
   OTHER: 'other'
-}
+} as const
 
-// Export/Import Formats
+export type GoalType = typeof GOAL_TYPES[keyof typeof GOAL_TYPES]
+
+// ============================================================================
+// EXPORT/IMPORT FORMATS
+// ============================================================================
+
 export const EXPORT_FORMATS = {
   JSON: 'json',
   CSV: 'csv',
   PDF: 'pdf'
-}
+} as const
 
-// Request Timeout (in milliseconds)
-export const REQUEST_TIMEOUT = 30000
+export type ExportFormat = typeof EXPORT_FORMATS[keyof typeof EXPORT_FORMATS]
 
-// Rate Limiting
+// ============================================================================
+// REQUEST TIMEOUT
+// ============================================================================
+
+export const REQUEST_TIMEOUT = 30000 as const
+
+// ============================================================================
+// RATE LIMITING
+// ============================================================================
+
 export const RATE_LIMITS = {
   API_REQUESTS_PER_MINUTE: 100,
   AUTH_REQUESTS_PER_MINUTE: 10,
   FILE_UPLOADS_PER_HOUR: 20
-}
+} as const
 
-// Default Settings
-export const DEFAULT_SETTINGS = {
+// ============================================================================
+// DEFAULT SETTINGS
+// ============================================================================
+
+export const DEFAULT_SETTINGS: DefaultSettings = {
   CURRENCY: 'USD',
   DATE_FORMAT: 'MM/DD/YYYY',
   THEME: 'light',
@@ -452,7 +686,11 @@ export const DEFAULT_SETTINGS = {
     marketingEmails: false,
     autoBackup: true
   }
-}
+} as const
+
+// ============================================================================
+// DEFAULT EXPORT
+// ============================================================================
 
 export default {
   APP_INFO,
@@ -485,4 +723,4 @@ export default {
   REQUEST_TIMEOUT,
   RATE_LIMITS,
   DEFAULT_SETTINGS
-}
+} as const

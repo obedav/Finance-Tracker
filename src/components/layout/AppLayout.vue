@@ -293,7 +293,6 @@ const getMainContentClasses = computed(() => {
 
 // Methods
 const toggleSidebar = () => {
-  console.log('📱 Sidebar toggle from layout')
   sidebarOpen.value = !sidebarOpen.value
 }
 
@@ -309,7 +308,6 @@ const handleLogout = async () => {
     await authService.logout()
     router.push('/login')
   } catch (error) {
-    console.error('Logout error:', error)
   } finally {
     isLoading.value = false
   }
@@ -462,7 +460,6 @@ onMounted(() => {
   
   // Global error handler for uncaught errors
   window.addEventListener('error', (event) => {
-    console.error('Global error:', event.error)
     addNotification({
       type: 'error',
       title: 'Error',

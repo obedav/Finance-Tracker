@@ -295,7 +295,6 @@ const fetchDashboardSummary = async () => {
     const response = await reportService.getDashboardSummary(selectedPeriod.value)
     dashboardData.value = response
   } catch (error) {
-    console.error('Error fetching dashboard summary:', error)
     // You could emit an error event here or use a notification system
   } finally {
     isLoading.value = false

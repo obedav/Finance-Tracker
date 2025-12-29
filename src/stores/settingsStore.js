@@ -49,10 +49,8 @@ export const useSettingsStore = defineStore('settings', () => {
 const fetchSettings = async () => {
   try {
     loading.value = true
-    console.log('Fetching settings from API...')
     
     const response = await settingsService.getSettings()
-    console.log('Settings response:', response)
     
     // Handle both response formats
     let settingsData
@@ -97,10 +95,8 @@ const fetchSettings = async () => {
     }
     
     isLoaded.value = true
-    console.log('Settings loaded successfully:', allSettings.value)
     
   } catch (error) {
-    console.error('Error fetching settings:', error)
     
     // Use defaults if fetch fails
     preferences.value = { ...defaultSettings }
@@ -116,15 +112,12 @@ const fetchSettings = async () => {
  const updatePreferences = async (newPreferences) => {
   try {
     loading.value = true
-    console.log('Store: Updating preferences:', newPreferences)
     
     // Call the service
     const response = await settingsService.updatePreferences(newPreferences)
-    console.log('Store: Service response:', response)
     
     // Update local state regardless of response format
     Object.assign(preferences.value, newPreferences)
-    console.log('Store: Updated local preferences:', preferences.value)
     
     return {
       success: true,
@@ -132,7 +125,6 @@ const fetchSettings = async () => {
     }
     
   } catch (error) {
-    console.error('Store: Error updating preferences:', error)
     return {
     success: false,
     message: 'Failed to update preferences',
@@ -146,16 +138,13 @@ const fetchSettings = async () => {
   const updateNotifications = async (newNotifications) => {
     try {
       loading.value = true
-      console.log('Updating notifications:', newNotifications)
       
       const response = await settingsService.updateNotifications(newNotifications)
-      console.log('Update notifications response:', response)
       
       if (response && (response.success !== false)) {
         // Update local state immediately
         Object.assign(notifications.value, newNotifications)
         
-        console.log('Notifications updated successfully:', notifications.value)
         
         return {
           success: true,
@@ -165,7 +154,6 @@ const fetchSettings = async () => {
         throw new Error(response?.message || 'Failed to update notifications')
       }
     } catch (error) {
-      console.error('Error updating notifications:', error)
       
       return {
         success: false,

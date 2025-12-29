@@ -38,7 +38,6 @@ class TransactionService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get transactions error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch transactions',
@@ -68,7 +67,6 @@ class TransactionService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get transaction error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch transaction',
@@ -98,15 +96,17 @@ class TransactionService {
       }
 
       const response = await apiHelpers.post(API_ENDPOINTS.TRANSACTIONS.CREATE, transactionData)
-      
+
       this.clearCache() // Clear cache after creation
+
+      // Backend returns { success, message, data }
+      // apiHelpers.post already extracts response.data, so response IS the backend JSON
       return {
-        success: true,
-        transaction: response.transaction,
+        success: response.success ?? true,
+        data: response.data,  // This is the transaction object from backend
         message: response.message || 'Transaction created successfully'
       }
     } catch (error) {
-      console.error('Create transaction error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to create transaction',
@@ -138,15 +138,17 @@ class TransactionService {
 
       const url = API_ENDPOINTS.TRANSACTIONS.UPDATE.replace(':id', id)
       const response = await apiHelpers.put(url, transactionData)
-      
+
       this.clearCache() // Clear cache after update
+
+      // Backend returns { success, message, data }
+      // apiHelpers.put already extracts response.data, so response IS the backend JSON
       return {
-        success: true,
-        transaction: response.transaction,
+        success: response.success ?? true,
+        data: response.data,  // This is the transaction object from backend
         message: response.message || 'Transaction updated successfully'
       }
     } catch (error) {
-      console.error('Update transaction error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to update transaction',
@@ -174,7 +176,6 @@ class TransactionService {
         message: response.message || 'Transaction deleted successfully'
       }
     } catch (error) {
-      console.error('Delete transaction error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to delete transaction',
@@ -201,7 +202,6 @@ class TransactionService {
         message: response.message || `${response.deletedCount} transactions deleted successfully`
       }
     } catch (error) {
-      console.error('Bulk delete transactions error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to delete transactions',
@@ -228,7 +228,6 @@ class TransactionService {
       const response = await apiHelpers.upload(API_ENDPOINTS.TRANSACTIONS.IMPORT, formData, 
         (progressEvent) => {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          console.log(`Upload progress: ${percentCompleted}%`)
         }
       )
 
@@ -241,7 +240,6 @@ class TransactionService {
         message: response.message || `${response.importedCount} transactions imported successfully`
       }
     } catch (error) {
-      console.error('Import transactions error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to import transactions',
@@ -267,7 +265,6 @@ class TransactionService {
         message: 'Transactions exported successfully'
       }
     } catch (error) {
-      console.error('Export transactions error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to export transactions',
@@ -301,7 +298,6 @@ class TransactionService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get transaction stats error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch transaction statistics',
@@ -332,7 +328,6 @@ class TransactionService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get transactions by category error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch category statistics',
@@ -362,7 +357,6 @@ class TransactionService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get monthly trends error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch monthly trends',

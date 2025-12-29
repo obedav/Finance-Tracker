@@ -93,7 +93,6 @@ const handleForgotPassword = async () => {
     
     emailSent.value = true
   } catch (error) {
-    console.error('Forgot password error:', error)
   } finally {
     isLoading.value = false
   }

@@ -225,7 +225,6 @@ export function useAuth() {
         }
       }
     } catch (err) {
-      console.error('Auth status check failed:', err)
       await logout()
     } finally {
       loading.value = false
@@ -244,7 +243,6 @@ export function useAuth() {
       await logout()
       return false
     } catch (err) {
-      console.error('Token refresh failed:', err)
       await logout()
       return false
     }

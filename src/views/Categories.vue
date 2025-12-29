@@ -213,7 +213,7 @@
                   <div 
                     :class="[
                       'w-3 h-3 sm:w-4 sm:h-4 rounded-full mr-2 sm:mr-3 transition-all duration-300 group-hover:scale-125 flex-shrink-0',
-                      category.type === 'income' ? 'bg-emerald-500' : 'bg-gold-500'
+                      category.type?.toUpperCase() === 'INCOME' ? 'bg-emerald-500' : 'bg-gold-500'
                     ]"
                   ></div>
                   <div class="flex-1 min-w-0">
@@ -456,20 +456,24 @@ const averagePerCategory = computed(() => {
 
 // Utility functions
 const getTransactionCount = (categoryName, type) => {
-  return transactionStore.transactions.filter(t => 
-    t.category === categoryName && t.type === type
-  ).length
+  return transactionStore.transactions.filter(t => {
+    const tCategoryName = t.category?.name || t.category
+    return tCategoryName === categoryName && t.type?.toUpperCase() === type?.toUpperCase()
+  }).length
 }
 
 const getTotalAmount = (categoryName, type) => {
   return transactionStore.transactions
-    .filter(t => t.category === categoryName && t.type === type)
+    .filter(t => {
+      const tCategoryName = t.category?.name || t.category
+      return tCategoryName === categoryName && t.type?.toUpperCase() === type?.toUpperCase()
+    })
     .reduce((sum, t) => sum + t.amount, 0)
 }
 
 const getPercentage = (categoryName, type) => {
   const categoryTotal = getTotalAmount(categoryName, type)
-  const typeTotal = type === 'income' ? transactionStore.totalIncome : transactionStore.totalExpenses
+  const typeTotal = type?.toUpperCase() === 'INCOME' ? transactionStore.totalIncome : transactionStore.totalExpenses
   
   if (typeTotal === 0) return 0
   return Math.round((categoryTotal / typeTotal) * 100)
@@ -497,7 +501,6 @@ const editCategory = (category) => {
 
 const deleteCategory = (category) => {
   if (confirm(`Are you sure you want to delete the "${category.name}" category? This action cannot be undone.`)) {
-    console.log('Deleting category:', category.name)
     // In a real app, you would delete from the backend and update the store
     // transactionStore.deleteCategory(category.id)
     // toast.success('Category deleted successfully!')
@@ -511,7 +514,6 @@ const closeCategoryModal = () => {
 }
 
 const handleCategorySubmit = (categoryData) => {
-  console.log('Category submitted:', categoryData)
   
   // In a real app, you would:
   // 1. Save to backend/store
@@ -520,12 +522,10 @@ const handleCategorySubmit = (categoryData) => {
   
   if (editingCategory.value) {
     // Update existing category
-    console.log('Updating category:', editingCategory.value.name, 'with new data:', categoryData)
     // transactionStore.updateCategory(editingCategory.value.id, categoryData)
     // toast.success('Category updated successfully!')
   } else {
     // Create new category
-    console.log('Creating new category:', categoryData)
     // transactionStore.addCategory(categoryData)
     // toast.success('Category created successfully!')
   }

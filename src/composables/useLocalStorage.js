@@ -46,7 +46,6 @@ export function useLocalStorage(key, defaultValue = null, options = {}) {
         })
       }
     } catch (error) {
-      console.error(`Failed to save to memory storage with key "${key}":`, error)
     }
   }
 
@@ -58,7 +57,6 @@ export function useLocalStorage(key, defaultValue = null, options = {}) {
         data.value = serializer.read(stored)
       }
     } catch (error) {
-      console.error(`Failed to load from memory storage with key "${key}":`, error)
     }
   }
 
@@ -77,7 +75,6 @@ export function useLocalStorage(key, defaultValue = null, options = {}) {
         })
       }
     } catch (error) {
-      console.error(`Failed to remove from memory storage with key "${key}":`, error)
     }
   }
 
@@ -127,7 +124,6 @@ export function useLocalStorage(key, defaultValue = null, options = {}) {
         const serializedValue = serializer.write(value)
         memoryStorage.set(key, serializedValue)
       } catch (error) {
-        console.error(`Failed to import data for key "${key}":`, error)
       }
     })
   }
@@ -300,7 +296,6 @@ class StorageEventEmitter {
         try {
           callback(data)
         } catch (error) {
-          console.error('Storage event listener error:', error)
         }
       })
     }

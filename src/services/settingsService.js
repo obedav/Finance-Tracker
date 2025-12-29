@@ -7,7 +7,6 @@ const settingsService = {
     try {
       return await api.get(API_ENDPOINTS.SETTINGS.GET)
     } catch (error) {
-      console.warn('Settings endpoint not implemented, using defaults:', error.message)
       // Return default settings if endpoint doesn't exist
       return {
         data: DEFAULT_SETTINGS,
@@ -21,7 +20,6 @@ const settingsService = {
     try {
       return await api.put(API_ENDPOINTS.SETTINGS.UPDATE_PREFERENCES, preferences)
     } catch (error) {
-      console.warn('Update preferences endpoint not implemented:', error.message)
       // Simulate successful update for now
       return {
         data: preferences,
@@ -36,7 +34,6 @@ const settingsService = {
     try {
       return await api.put(API_ENDPOINTS.SETTINGS.UPDATE_NOTIFICATIONS, notifications)
     } catch (error) {
-      console.warn('Update notifications endpoint not implemented:', error.message)
       return {
         data: notifications,
         success: true,
@@ -52,7 +49,6 @@ const settingsService = {
         responseType: 'blob'
       })
     } catch (error) {
-      console.warn('Export data endpoint not implemented:', error.message)
       throw new Error('Data export feature is not yet available')
     }
   },
@@ -62,7 +58,6 @@ const settingsService = {
     try {
       return await api.delete(API_ENDPOINTS.SETTINGS.DELETE_ALL_DATA)
     } catch (error) {
-      console.warn('Delete all data endpoint not implemented:', error.message)
       throw new Error('Data deletion feature is not yet available')
     }
   },
@@ -72,7 +67,6 @@ const settingsService = {
     try {
       return await api.put(API_ENDPOINTS.SETTINGS.UPDATE_AUTO_BACKUP, { enabled })
     } catch (error) {
-      console.warn('Update auto backup endpoint not implemented:', error.message)
       return {
         data: { autoBackup: enabled },
         success: true,

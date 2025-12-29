@@ -498,7 +498,7 @@ const calculateCategorySpending = (category, period = 'monthly') => {
       const matchesCategory = transaction.category === category || 
                             transaction.category_name === category ||
                             (transaction.category_id && getCategoryName(transaction.category_id) === category)
-      const isExpense = transaction.type === 'expense' || transaction.amount < 0
+      const isExpense = transaction.type?.toUpperCase() === 'EXPENSE' || transaction.amount < 0
       const inPeriod = transactionDate >= startDate && transactionDate <= endDate
       
       return matchesCategory && isExpense && inPeriod
@@ -623,7 +623,6 @@ const deleteBudget = async (budgetId) => {
       showToast('Budget deleted successfully', 'success')
     } catch (error) {
       showToast(error.message || 'Failed to delete budget. Please try again.', 'error')
-      console.error('Error deleting budget:', error)
     }
   }
 }
@@ -653,7 +652,6 @@ const saveBudget = async () => {
     closeBudgetModal()
   } catch (error) {
     showToast(error.message || 'Failed to save budget. Please try again.', 'error')
-    console.error('Error saving budget:', error)
   } finally {
     loading.value = false
   }
@@ -682,7 +680,6 @@ const refreshData = async () => {
     showToast('Data refreshed successfully', 'success')
   } catch (error) {
     showToast('Failed to refresh data', 'error')
-    console.error('Error refreshing data:', error)
   }
 }
 
@@ -701,7 +698,6 @@ onMounted(async () => {
       transactionStore.fetchCategories?.() || Promise.resolve()
     ])
   } catch (error) {
-    console.error('Error loading budget data:', error)
     showToast('Failed to load some data. Please refresh the page.', 'error')
   }
 })

@@ -142,7 +142,6 @@ const handleResetPassword = async () => {
     // If you want to redirect after reset, uncomment the next line:
     // router.push('/dashboard')
   } catch (error) {
-    console.error('Reset password error:', error)
   } finally {
     isLoading.value = false
   }

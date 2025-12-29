@@ -38,7 +38,6 @@ class CategoryService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get categories error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch categories',
@@ -68,7 +67,6 @@ class CategoryService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get category error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch category',
@@ -101,15 +99,17 @@ class CategoryService {
       }
 
       const response = await apiHelpers.post(API_ENDPOINTS.CATEGORIES.CREATE, categoryData)
-      
+
       this.clearCache() // Clear cache after creation
+
+      // Backend returns { success, message, data }
+      // apiHelpers.post already extracts response.data, so response IS the backend JSON
       return {
-        success: true,
-        category: response.category,
+        success: response.success ?? true,
+        data: response.data,  // This is the category object from backend
         message: response.message || 'Category created successfully'
       }
     } catch (error) {
-      console.error('Create category error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to create category',
@@ -145,15 +145,17 @@ class CategoryService {
 
       const url = API_ENDPOINTS.CATEGORIES.UPDATE.replace(':id', id)
       const response = await apiHelpers.put(url, categoryData)
-      
+
       this.clearCache() // Clear cache after update
+
+      // Backend returns { success, message, data }
+      // apiHelpers.put already extracts response.data, so response IS the backend JSON
       return {
-        success: true,
-        category: response.category,
+        success: response.success ?? true,
+        data: response.data,  // This is the category object from backend
         message: response.message || 'Category updated successfully'
       }
     } catch (error) {
-      console.error('Update category error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to update category',
@@ -181,7 +183,6 @@ class CategoryService {
         message: response.message || 'Category deleted successfully'
       }
     } catch (error) {
-      console.error('Delete category error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to delete category',
@@ -215,7 +216,6 @@ class CategoryService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get category stats error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch category statistics',
@@ -249,7 +249,6 @@ class CategoryService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get most used categories error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch most used categories',
@@ -279,7 +278,6 @@ class CategoryService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get category trends error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch category trends',
@@ -302,7 +300,6 @@ class CategoryService {
       const response = await apiHelpers.get('/categories/defaults')
       return response
     } catch (error) {
-      console.error('Get default categories error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch default categories',
@@ -328,7 +325,6 @@ class CategoryService {
         message: response.message || 'Categories reset to defaults successfully'
       }
     } catch (error) {
-      console.error('Reset categories error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to reset categories',
@@ -359,7 +355,6 @@ class CategoryService {
         message: response.message || `${response.importedCount} categories imported successfully`
       }
     } catch (error) {
-      console.error('Import categories error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to import categories',
@@ -383,7 +378,6 @@ class CategoryService {
         message: 'Categories exported successfully'
       }
     } catch (error) {
-      console.error('Export categories error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to export categories',

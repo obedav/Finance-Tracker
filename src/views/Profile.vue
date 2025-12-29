@@ -37,8 +37,9 @@
                   <span class="text-4xl font-bold text-white">{{ userInitials }}</span>
                 </div>
                 
-                <!-- Edit Avatar Button -->
-                <button 
+                <!-- Edit Avatar Button (only show if feature is enabled) -->
+                <button
+                  v-if="FEATURES.RECEIPT_UPLOAD"
                   @click="showAvatarUpload = true"
                   class="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full shadow-lg border-2 border-emerald-500 flex items-center justify-center hover:bg-emerald-50 transition-colors"
                 >
@@ -47,6 +48,16 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                   </svg>
                 </button>
+                <!-- Coming Soon Badge -->
+                <div
+                  v-if="!FEATURES.RECEIPT_UPLOAD"
+                  class="absolute bottom-2 right-2 px-2 py-1 bg-amber-100 border border-amber-300 rounded-full text-xs font-semibold text-amber-700"
+                  title="Avatar upload coming soon"
+                >
+                  <svg class="w-3 h-3 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
               </div>
             </div>
 
@@ -201,7 +212,8 @@
                 </router-link>
               </div>
               
-              <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+              <!-- Two-Factor Authentication (only show if feature is enabled) -->
+              <div v-if="FEATURES.TWO_FACTOR_AUTH" class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -287,6 +299,7 @@ import { useUserStore } from '@/stores/userStore'
 import { useTransactionStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import authService from '@/services/authService'
+import { FEATURES } from '@/utils/constants.js'
 
 // Initialize stores and composables
 const userStore = useUserStore()
@@ -379,7 +392,6 @@ const saveProfile = async () => {
     showToast('Profile updated successfully!', 'success')
   } catch (error) {
     showToast('Failed to update profile. Please try again.', 'error')
-    console.error('Error updating profile:', error)
   } finally {
     loading.value.profile = false
   }
@@ -442,7 +454,6 @@ const exportUserData = async () => {
     showToast('Your data has been exported successfully', 'success')
   } catch (error) {
     showToast('Failed to export data. Please try again.', 'error')
-    console.error('Export error:', error)
   }
 }
 
@@ -470,7 +481,6 @@ onMounted(async () => {
       }
     }
   } catch (error) {
-    console.error('Error loading profile data:', error)
     showToast('Failed to load profile data', 'error')
   }
 })

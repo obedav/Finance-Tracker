@@ -13,8 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
+            \App\Http\Middleware\ForceHttps::class,
             \Illuminate\Http\Middleware\HandleCors::class,
             \App\Http\Middleware\SecurityHeaders::class,
+            \App\Http\Middleware\SanitizeInput::class,
+            \App\Http\Middleware\AuthenticateFromCookie::class,
         ]);
 
         // Register custom middleware aliases

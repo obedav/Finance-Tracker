@@ -27,7 +27,6 @@ const userService = {
     try {
       return await api.post(API_ENDPOINTS.AUTH.ENABLE_2FA)
     } catch (error) {
-      console.error('Error enabling 2FA:', error)
       throw error
     }
   },
@@ -37,7 +36,6 @@ const userService = {
     try {
       return await api.post(API_ENDPOINTS.AUTH.DISABLE_2FA)
     } catch (error) {
-      console.error('Error disabling 2FA:', error)
       throw error
     }
   },
@@ -47,7 +45,6 @@ const userService = {
     try {
       return await api.post(API_ENDPOINTS.AUTH.VERIFY_2FA, { code })
     } catch (error) {
-      console.error('Error verifying 2FA code:', error)
       throw error
     }
   }

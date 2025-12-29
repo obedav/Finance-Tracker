@@ -331,7 +331,8 @@
               </div>
             </div>
 
-            <div class="notification-item group">
+            <!-- Goal Reminders (only show if feature is enabled) -->
+            <div v-if="FEATURES.GOAL_TRACKING" class="notification-item group">
               <div class="flex items-center justify-between p-6 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200 hover:shadow-lg transition-all duration-300">
                 <div class="flex items-center">
                   <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
@@ -423,8 +424,8 @@
           </form>
         </div>
 
-        <!-- Two-Factor Authentication -->
-        <div class="dashboard-card">
+        <!-- Two-Factor Authentication (only show if feature is enabled) -->
+        <div v-if="FEATURES.TWO_FACTOR_AUTH" class="dashboard-card">
           <div class="flex items-center mb-6">
             <div class="category-icon category-icon-income mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -436,7 +437,7 @@
               <p class="text-slate-500">Add an extra layer of security to your account</p>
             </div>
           </div>
-          
+
           <div class="flex items-center justify-between p-6 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200 hover:shadow-lg transition-all duration-300 group">
             <div class="flex items-center">
               <div class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
@@ -461,6 +462,23 @@
               </svg>
               {{ twoFactorEnabled ? 'Disable' : 'Enable' }}
             </button>
+          </div>
+        </div>
+
+        <!-- Coming Soon: Planned Security Features -->
+        <div v-if="!FEATURES.TWO_FACTOR_AUTH" class="dashboard-card bg-gradient-to-r from-amber-50 to-amber-100 border-2 border-dashed border-amber-300">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-amber-800">Additional Security Features Coming Soon</h3>
+                <p class="text-sm text-amber-700">Two-factor authentication and advanced security options will be available in a future update</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -650,6 +668,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { useToast } from '@/composables/useToast'
 import userService from '@/services/userService'
 import settingsService from '@/services/settingsService'
+import { FEATURES } from '@/utils/constants.js'
 
 
 // Initialize stores and composables
@@ -736,7 +755,6 @@ const dataForm = ref({
 // Load user settings on component mount
 onMounted(async () => {
   try {
-    console.log('Settings component mounted, loading data...')
     
     // Load user profile if not already loaded
     if (!userStore.isLoaded) {
@@ -783,9 +801,7 @@ onMounted(async () => {
     // Update data settings
     dataForm.value.autoBackup = settingsStore.data.autoBackup || false
     
-    console.log('Settings data loaded successfully')
   } catch (error) {
-    console.error('Failed to load settings:', error)
     showToast('Error loading settings', 'error')
   }
 })
@@ -798,7 +814,6 @@ const saveProfile = async () => {
     showToast('Profile updated successfully', 'success')
   } catch (error) {
     showToast('Failed to update profile', 'error')
-    console.error('Error updating profile:', error)
   } finally {
     loading.value.profile = false
   }
@@ -809,10 +824,8 @@ const saveProfile = async () => {
 const savePreferences = async () => {
   try {
     loading.value.preferences = true
-    console.log('Vue: Saving preferences:', preferencesForm.value)
     
     const result = await settingsStore.updatePreferences(preferencesForm.value)
-    console.log('Vue: Store result:', result)
     
     if (result && result.success) {
       showToast(result.message || 'Preferences updated successfully!', 'success')
@@ -820,7 +833,6 @@ const savePreferences = async () => {
       showToast('Update completed but no confirmation received', 'warning')
     }
   } catch (error) {
-    console.error('Vue: Error saving preferences:', error)
     showToast('Failed to update preferences', 'error')
   } finally {
     loading.value.preferences = false
@@ -835,7 +847,6 @@ const saveNotifications = async () => {
     showToast('Notification settings updated successfully', 'success')
   } catch (error) {
     showToast('Failed to update notification settings', 'error')
-    console.error('Error updating notifications:', error)
   } finally {
     loading.value.notifications = false
   }
@@ -871,7 +882,6 @@ const changePassword = async () => {
     showToast('Password changed successfully', 'success')
   } catch (error) {
     showToast('Failed to change password', 'error')
-    console.error('Error changing password:', error)
   } finally {
     loading.value.security = false
   }
@@ -899,7 +909,6 @@ const toggle2FA = async () => {
     showToast(`Two-factor authentication ${newState ? 'enabled' : 'disabled'}`, 'success')
   } catch (error) {
     showToast(`Failed to ${twoFactorEnabled.value ? 'disable' : 'enable'} two-factor authentication`, 'error')
-    console.error('Error toggling 2FA:', error)
   } finally {
     loading.value.security = false
   }
@@ -924,7 +933,6 @@ const exportData = async (format) => {
     showToast(`Data exported successfully as ${format}`, 'success')
   } catch (error) {
     showToast(`Failed to export data as ${format}`, 'error')
-    console.error('Error exporting data:', error)
   } finally {
     loading.value.data = false
   }
@@ -949,7 +957,6 @@ const confirmDeleteData = async () => {
     showToast('All data has been deleted successfully', 'success')
   } catch (error) {
     showToast('Failed to delete data', 'error')
-    console.error('Error deleting data:', error)
   } finally {
     loading.value.data = false
   }

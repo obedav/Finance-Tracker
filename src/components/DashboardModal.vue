@@ -148,6 +148,9 @@
 
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { useCategoriesStore } from '../stores/categories'
+
+const categoriesStore = useCategoriesStore()
 
 const props = defineProps({
   isOpen: {
@@ -166,29 +169,11 @@ const form = ref({
   date: new Date().toISOString().split('T')[0]
 })
 
-const defaultCategories = {
-  income: [
-    'Salary',
-    'Freelance', 
-    'Business',
-    'Investment',
-    'Gift',
-    'Other'
-  ],
-  expense: [
-    'Food & Dining',
-    'Transportation',
-    'Shopping',
-    'Entertainment',
-    'Bills & Utilities',
-    'Healthcare',
-    'Education',
-    'Other'
-  ]
-}
-
 const availableCategories = computed(() => {
-  return defaultCategories[form.value.type] || []
+  // Get categories from store based on type
+  return categoriesStore.categories
+    .filter(cat => cat.type.toLowerCase() === form.value.type.toLowerCase())
+    .map(cat => cat.name)
 })
 
 const isFormValid = computed(() => {
@@ -273,7 +258,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
@@ -285,12 +270,12 @@ onUnmounted(() => {
 }
 
 .dashboard-modal-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 30, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   width: 100%;

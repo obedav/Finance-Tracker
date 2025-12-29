@@ -31,7 +31,6 @@ class BudgetService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get budgets error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch budgets',
@@ -56,7 +55,6 @@ class BudgetService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get budget error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch budget',
@@ -86,7 +84,6 @@ class BudgetService {
         message: response.message || 'Budget created successfully'
       }
     } catch (error) {
-      console.error('Create budget error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to create budget',
@@ -108,7 +105,6 @@ class BudgetService {
         message: response.message || 'Budget updated successfully'
       }
     } catch (error) {
-      console.error('Update budget error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to update budget',
@@ -129,7 +125,6 @@ class BudgetService {
         message: response.message || 'Budget deleted successfully'
       }
     } catch (error) {
-      console.error('Delete budget error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to delete budget',
@@ -165,7 +160,6 @@ class BudgetService {
     const cached = this.cache.get(key)
 
     if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
-      console.log(`📦 Cache hit: ${key}`)
       return cached.data
     }
 
@@ -183,7 +177,6 @@ class BudgetService {
   // Clear cache
   clearCache() {
     this.cache.clear()
-    console.log('🗑️ Budget cache cleared')
   }
 }
 

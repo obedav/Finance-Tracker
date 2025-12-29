@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBudgetRequest;
+use App\Http\Requests\UpdateBudgetRequest;
 use App\Models\Budget;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -26,17 +28,9 @@ class BudgetController extends Controller
         return response()->json(['success' => true, 'data' => $budgets]);
     }
 
-    public function store(Request $request)
+    public function store(StoreBudgetRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0.01',
-            'period' => 'required|in:weekly,monthly,yearly',
-            'category_id' => 'nullable|exists:categories,id',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
-            'alert_threshold' => 'sometimes|integer|min:1|max:100',
-        ]);
+        $validated = $request->validated();
 
         $budget = $request->user()->budgets()->create($validated);
         $budget->load('category');
@@ -54,6 +48,8 @@ class BudgetController extends Controller
     {
         $budget = $request->user()->budgets()->with('category')->findOrFail($id);
 
+        $this->authorize('view', $budget);
+
         return response()->json([
             'success' => true,
             'data' => array_merge($budget->toArray(), [
@@ -62,20 +58,13 @@ class BudgetController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateBudgetRequest $request, $id)
     {
         $budget = $request->user()->budgets()->findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'amount' => 'sometimes|numeric|min:0.01',
-            'period' => 'sometimes|in:weekly,monthly,yearly',
-            'category_id' => 'nullable|exists:categories,id',
-            'start_date' => 'sometimes|date',
-            'end_date' => 'nullable|date',
-            'alert_threshold' => 'sometimes|integer|min:1|max:100',
-            'is_active' => 'sometimes|boolean',
-        ]);
+        $this->authorize('update', $budget);
+
+        $validated = $request->validated();
 
         $budget->update($validated);
         $budget->load('category');
@@ -92,6 +81,9 @@ class BudgetController extends Controller
     public function destroy(Request $request, $id)
     {
         $budget = $request->user()->budgets()->findOrFail($id);
+
+        $this->authorize('delete', $budget);
+
         $budget->delete();
 
         return response()->json([

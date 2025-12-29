@@ -383,7 +383,6 @@ const loadData = async () => {
     initializeCharts()
   } catch (err) {
     error.value = err.message || 'Failed to load monthly report'
-    console.error('Monthly report error:', err)
   } finally {
     loading.value = false
   }
@@ -496,7 +495,6 @@ const exportReport = async () => {
     
     await reportService.exportReportPDF('monthly', { year, month })
   } catch (err) {
-    console.error('Export error:', err)
   }
 }
 

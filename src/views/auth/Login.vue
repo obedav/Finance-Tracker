@@ -207,18 +207,23 @@ const handleLogin = async () => {
     if (response.success) {
       // Show success message if toast is available
       // toast?.success('Login successful!')
-      
+
+      // Wait for next tick to ensure localStorage is written
+      await nextTick()
+
+      // Small delay to ensure cookies are set
+      await new Promise(resolve => setTimeout(resolve, 100))
+
       // Get the redirect URL
       const redirectUrl = authService.getRedirectAfterLogin()
-      
+
       // Redirect to dashboard or intended route
-      router.push(redirectUrl)
+      await router.push(redirectUrl)
     } else {
       // Handle unsuccessful login
       errors.general = response.message || 'Login failed'
     }
   } catch (error) {
-    console.error('Login error:', error)
     errors.general = error.message || 'An error occurred during login'
     
     // Show error message if toast is available

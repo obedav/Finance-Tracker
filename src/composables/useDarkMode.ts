@@ -31,12 +31,8 @@ export function useDarkMode() {
 
     if (dark) {
       document.documentElement.classList.add('dark')
-      console.log('✅ Dark mode ENABLED - added .dark class to <html>')
-      console.log('HTML classes:', document.documentElement.className)
     } else {
       document.documentElement.classList.remove('dark')
-      console.log('☀️ Light mode ENABLED - removed .dark class from <html>')
-      console.log('HTML classes:', document.documentElement.className)
     }
   }
 
@@ -50,7 +46,6 @@ export function useDarkMode() {
         return stored as DarkModePreference
       }
     } catch (error) {
-      console.warn('Failed to load dark mode preference:', error)
     }
     return 'system'
   }
@@ -62,7 +57,6 @@ export function useDarkMode() {
     try {
       localStorage.setItem(DARK_MODE_KEY, pref)
     } catch (error) {
-      console.warn('Failed to save dark mode preference:', error)
     }
   }
 

@@ -598,7 +598,6 @@ const handleSubmit = async () => {
       }, 1000)
     }
   } catch (error) {
-    console.error('Error submitting transaction:', error)
     generalError.value = error.message || 'An error occurred while saving the transaction'
   } finally {
     isSubmitting.value = false

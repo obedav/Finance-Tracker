@@ -226,14 +226,12 @@ const fetchFrequentCategories = async () => {
     const categories = await transactionStore.getFrequentCategories(5)
     frequentCategories.value = categories
   } catch (error) {
-    console.error('Error fetching frequent categories:', error)
   }
 }
 
 const showNotification = (message, type = 'success') => {
   // This would integrate with your notification system
   // For now, we'll just log to console
-  console.log(`[${type.toUpperCase()}] ${message}`)
   
   // If you have a notification system, you would use it here
   // Example: notificationStore.show({ message, type })

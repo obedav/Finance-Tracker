@@ -23,36 +23,26 @@ const NotFound = () => import('../views/errors/NotFound.vue')
 const Unauthorized = () => import('../views/errors/Unauthorized.vue')
 const ServerError = () => import('../views/errors/ServerError.vue')
 
-// SIMPLIFIED AUTH GUARD - only uses authService
+// Debug views
+const AuthDebug = () => import('../views/AuthDebug.vue')
+
+// SIMPLIFIED AUTH GUARD - only uses authService (httpOnly cookie compatible)
 const authGuard = (to, from, next) => {
-  console.log('🔒 Auth guard checking...', { to: to.name, from: from.name })
-  
-  // Simple check using only authService
+  // Check authentication using user data (token is in httpOnly cookie)
   const isAuthenticated = authService.isAuthenticated()
-  const hasToken = authService.getStoredToken()
   const hasUser = authService.getStoredUser()
-  
-  console.log('Auth check:', { 
-    isAuthenticated, 
-    hasToken: !!hasToken, 
-    hasUser: !!hasUser,
-    tokenValue: hasToken?.substring(0, 20) + '...' 
-  })
-  
-  if (isAuthenticated && hasToken && hasUser) {
-    console.log('✅ Auth guard: User authenticated, allowing access')
+
+  if (isAuthenticated && hasUser) {
     next()
   } else {
-    console.log('❌ Auth guard: User not authenticated, redirecting to login')
-    
     // Store intended route
     if (to.fullPath !== '/login') {
       localStorage.setItem('intended_route', to.fullPath)
     }
-    
+
     next({
       path: '/login',
-      query: { 
+      query: {
         redirect: to.fullPath,
         reason: 'auth_required'
       }
@@ -60,34 +50,20 @@ const authGuard = (to, from, next) => {
   }
 }
 
-// SIMPLIFIED GUEST GUARD - only uses authService
+// SIMPLIFIED GUEST GUARD - only uses authService (httpOnly cookie compatible)
 const guestGuard = (to, from, next) => {
-  console.log('👤 Guest guard checking...', { to: to.name, from: from.name })
-  
   const isAuthenticated = authService.isAuthenticated()
-  const hasToken = authService.getStoredToken()
   const hasUser = authService.getStoredUser()
-  
-  console.log('Guest check:', { 
-    isAuthenticated, 
-    hasToken: !!hasToken, 
-    hasUser: !!hasUser 
-  })
-  
-  if (!isAuthenticated || !hasToken || !hasUser) {
-    console.log('✅ Guest guard: User not authenticated, allowing access to login')
+
+  if (!isAuthenticated || !hasUser) {
     next()
   } else {
-    console.log('❌ Guest guard: User already authenticated, redirecting to dashboard')
-    
     // Check for intended route
     const intendedRoute = localStorage.getItem('intended_route')
     if (intendedRoute) {
       localStorage.removeItem('intended_route')
-      console.log('Redirecting to intended route:', intendedRoute)
       next(intendedRoute)
     } else {
-      console.log('Redirecting to dashboard')
       next('/dashboard')
     }
   }
@@ -136,6 +112,16 @@ const routes = [
       description: 'Reset your password',
       requiresAuth: false,
       layout: 'auth'
+    }
+  },
+  {
+    path: '/auth-debug',
+    name: 'AuthDebug',
+    component: AuthDebug,
+    meta: {
+      title: 'Auth Debug',
+      description: 'Authentication debugging panel',
+      requiresAuth: false
     }
   },
   {
@@ -352,7 +338,6 @@ const router = createRouter({
 
 // SIMPLIFIED Global navigation guards - no auth store dependency
 router.beforeEach((to, from, next) => {
-  console.log(`🧭 Navigating from ${from.name || 'unknown'} to ${to.name || 'unknown'}`)
   
   // Update document title
   const appName = 'FinanceTracker'
@@ -372,7 +357,6 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from) => {
-  console.log(`✅ Navigation completed: ${to.name || 'unknown'}`)
   
   // Remove loading state
   document.body.classList.remove('page-loading')
@@ -387,11 +371,9 @@ router.afterEach((to, from) => {
 
 // Error handling
 router.onError((error) => {
-  console.error('Router error:', error)
   
   // Handle chunk load errors (lazy loading failures)
   if (error.message.includes('Loading chunk')) {
-    console.warn('Chunk loading failed, reloading page...')
     window.location.reload()
   }
 })
@@ -445,41 +427,6 @@ export const isRouteActive = (routeName, currentRoute) => {
   }
   
   return false
-}
-
-// Add debug helpers to window for testing
-if (typeof window !== 'undefined') {
-  window.routerDebug = {
-    checkAuth: () => {
-      const isAuth = authService.isAuthenticated()
-      const token = authService.getStoredToken()
-      const user = authService.getStoredUser()
-      
-      console.log('Router Auth Check:', {
-        isAuthenticated: isAuth,
-        hasToken: !!token,
-        hasUser: !!user,
-        currentRoute: router.currentRoute.value.name
-      })
-      
-      return { isAuth, hasToken: !!token, hasUser: !!user }
-    },
-    
-    forceLogin: () => {
-      router.push('/login')
-    },
-    
-    forceDashboard: () => {
-      router.push('/dashboard')
-    },
-    
-    clearAuth: () => {
-      authService.clearAuthData()
-      localStorage.removeItem('intended_route')
-      console.log('Auth cleared, redirecting to login')
-      router.push('/login')
-    }
-  }
 }
 
 export default router

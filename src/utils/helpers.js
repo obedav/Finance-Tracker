@@ -336,7 +336,6 @@ export const getFromStorage = (key, defaultValue = null) => {
     const item = localStorage.getItem(key)
     return item ? JSON.parse(item) : defaultValue
   } catch (error) {
-    console.error(`Error reading from localStorage key "${key}":`, error)
     return defaultValue
   }
 }
@@ -347,7 +346,6 @@ export const setToStorage = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value))
     return true
   } catch (error) {
-    console.error(`Error writing to localStorage key "${key}":`, error)
     return false
   }
 }
@@ -358,7 +356,6 @@ export const removeFromStorage = (key) => {
     localStorage.removeItem(key)
     return true
   } catch (error) {
-    console.error(`Error removing from localStorage key "${key}":`, error)
     return false
   }
 }
@@ -371,7 +368,6 @@ export const clearAppStorage = () => {
     })
     return true
   } catch (error) {
-    console.error('Error clearing app storage:', error)
     return false
   }
 }

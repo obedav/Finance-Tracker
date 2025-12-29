@@ -310,7 +310,6 @@ const fetchMonthlyOverview = async () => {
     const response = await reportService.getMonthlyOverview(year, month)
     monthlyData.value = response
   } catch (error) {
-    console.error('Error fetching monthly overview:', error)
     // You could emit an error event here or use a notification system
   } finally {
     isLoading.value = false

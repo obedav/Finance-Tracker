@@ -176,7 +176,6 @@ const fetchRecentTransactions = async () => {
     // Here we're using the store's recentTransactions computed property
     transactions.value = transactionStore.recentTransactions.slice(0, limit.value)
   } catch (error) {
-    console.error('Error fetching recent transactions:', error)
   } finally {
     isLoading.value = false
   }
@@ -190,7 +189,6 @@ const refreshTransactions = async () => {
     await transactionStore.initializeTransactions()
     await fetchRecentTransactions()
   } catch (error) {
-    console.error('Error refreshing transactions:', error)
   } finally {
     isRefreshing.value = false
   }
@@ -217,7 +215,6 @@ const deleteTransaction = async (transaction) => {
     closeDetailsModal()
     await fetchRecentTransactions()
   } catch (error) {
-    console.error('Error deleting transaction:', error)
   }
 }
 
@@ -235,7 +232,6 @@ const handleTransactionSubmit = async (transaction) => {
     closeAddModal()
     await fetchRecentTransactions()
   } catch (error) {
-    console.error('Error adding transaction:', error)
   }
 }
 

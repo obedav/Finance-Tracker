@@ -37,7 +37,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get monthly report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch monthly report',
@@ -67,7 +66,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get yearly report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch yearly report',
@@ -100,7 +98,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get category report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch category report',
@@ -130,7 +127,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get trends report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch trends report',
@@ -166,7 +162,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get custom range report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch custom range report',
@@ -200,7 +195,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get dashboard summary error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch dashboard summary',
@@ -230,7 +224,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get financial insights error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch financial insights',
@@ -264,7 +257,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get budget analysis error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch budget analysis',
@@ -294,7 +286,6 @@ class ReportService {
       this.setCache(cacheKey, response)
       return response
     } catch (error) {
-      console.error('Get spending patterns error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to fetch spending patterns',
@@ -328,7 +319,6 @@ class ReportService {
         message: 'Report exported successfully'
       }
     } catch (error) {
-      console.error('Export PDF report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to export PDF report',
@@ -358,7 +348,6 @@ class ReportService {
         message: 'Report exported successfully'
       }
     } catch (error) {
-      console.error('Export Excel report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to export Excel report',
@@ -385,7 +374,6 @@ class ReportService {
         message: response.message || 'Report sent successfully'
       }
     } catch (error) {
-      console.error('Email report error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to email report',

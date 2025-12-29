@@ -23,18 +23,47 @@
           </div>
         </div>
         <div class="flex gap-3">
-          <button @click="exportReport('pdf')" class="btn btn-primary hover-lift shadow-glow-primary group">
+          <!-- Export Buttons -->
+          <button
+            v-if="FEATURES.EXPORT_PDF"
+            @click="exportReport('pdf')"
+            class="btn btn-primary hover-lift shadow-glow-primary group"
+          >
             <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
             Export PDF
           </button>
-          <button @click="exportReport('csv')" class="btn btn-ghost hover-lift group">
+          <button
+            v-if="FEATURES.EXPORT_CSV"
+            @click="exportReport('csv')"
+            class="btn btn-ghost hover-lift group"
+          >
             <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2v0M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
             </svg>
             Export CSV
           </button>
+
+          <!-- Import CSV Button -->
+          <button
+            v-if="FEATURES.IMPORT_CSV"
+            @click="showImportModal = true"
+            class="btn btn-secondary hover-lift group"
+          >
+            <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+            Import CSV
+          </button>
+
+          <!-- Coming Soon Badge for Disabled Features -->
+          <div v-if="!FEATURES.EXPORT_PDF && !FEATURES.EXPORT_CSV && !FEATURES.IMPORT_CSV" class="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-medium text-amber-700">Import/Export features coming soon</span>
+          </div>
         </div>
       </div>
 
@@ -640,6 +669,100 @@
         </div>
       </div>
     </div>
+
+    <!-- CSV Import Modal -->
+    <div v-if="showImportModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
+      <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 animate-scale-up">
+        <div class="p-6 border-b border-gray-200">
+          <div class="flex items-center justify-between">
+            <h3 class="text-2xl font-bold text-slate-700">Import Transactions from CSV</h3>
+            <button @click="closeImportModal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <!-- Import Status Messages -->
+          <div v-if="importStatus.success" class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p class="text-green-800 font-medium">{{ importStatus.message }}</p>
+            <div v-if="importStatus.data" class="mt-2 text-sm text-green-700">
+              <p>✓ Imported: {{ importStatus.data.imported }} transactions</p>
+              <p v-if="importStatus.data.skipped > 0">⚠ Skipped: {{ importStatus.data.skipped }} rows</p>
+            </div>
+          </div>
+
+          <div v-if="importStatus.error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p class="text-red-800 font-medium">{{ importStatus.message }}</p>
+            <ul v-if="importStatus.errors && importStatus.errors.length > 0" class="mt-2 text-sm text-red-700 list-disc list-inside">
+              <li v-for="(error, index) in importStatus.errors.slice(0, 5)" :key="index">{{ error }}</li>
+              <li v-if="importStatus.errors.length > 5" class="font-semibold">... and {{ importStatus.errors.length - 5 }} more errors</li>
+            </ul>
+          </div>
+
+          <!-- File Upload Area -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-slate-700 mb-2">Select CSV File</label>
+            <div
+              @drop.prevent="handleFileDrop"
+              @dragover.prevent
+              @dragenter.prevent="dragActive = true"
+              @dragleave.prevent="dragActive = false"
+              :class="[
+                'border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer',
+                dragActive ? 'border-emerald-500 bg-emerald-50' : 'border-gray-300 hover:border-emerald-400'
+              ]"
+              @click="$refs.fileInput.click()"
+            >
+              <input
+                ref="fileInput"
+                type="file"
+                accept=".csv,.txt"
+                @change="handleFileSelect"
+                class="hidden"
+              />
+              <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              </svg>
+              <p class="text-lg font-medium text-slate-700 mb-2">
+                {{ selectedFile ? selectedFile.name : 'Drop your CSV file here or click to browse' }}
+              </p>
+              <p class="text-sm text-slate-500">Supported format: CSV (max 5MB)</p>
+            </div>
+          </div>
+
+          <!-- Download Template Button -->
+          <div class="mb-6">
+            <button @click="downloadTemplate" class="w-full btn btn-ghost hover-lift">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              Download CSV Template
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end gap-3">
+            <button @click="closeImportModal" class="px-6 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors duration-200">
+              Cancel
+            </button>
+            <button
+              @click="importCsv"
+              :disabled="!selectedFile || importing"
+              class="px-6 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <div v-if="importing" class="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              </svg>
+              {{ importing ? 'Importing...' : 'Import Transactions' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -648,6 +771,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTransactionStore } from '../stores/transactions'
 import { readFileAsText } from '../utils/helpers'
+import { FEATURES, API_ENDPOINTS } from '../utils/constants.js'
+import { generateTransactionReportPDF } from '../utils/pdfGenerator.js'
 // ADDED: Import the chart component
 import ExpensePieChart from '../components/charts/ExpensePieChart.vue'
 
@@ -675,6 +800,19 @@ const analysisType = ref('expense')
 // ADDED: Chart-specific state
 const chartLoading = ref(false)
 const chartPeriod = ref('month')
+
+// CSV Import/Export state
+const showImportModal = ref(false)
+const selectedFile = ref(null)
+const importing = ref(false)
+const dragActive = ref(false)
+const importStatus = ref({
+  success: false,
+  error: false,
+  message: '',
+  data: null,
+  errors: []
+})
 
 // Computed property to check if there are any transactions
 const hasTransactions = computed(() => transactionStore.transactions.length > 0)
@@ -726,8 +864,8 @@ const filteredTransactions = computed(() => {
 
 // Calculate summary data from filtered transactions
 const filteredData = computed(() => {
-  const incomeTransactions = filteredTransactions.value.filter(t => t.type === 'income')
-  const expenseTransactions = filteredTransactions.value.filter(t => t.type === 'expense')
+  const incomeTransactions = filteredTransactions.value.filter(t => t.type?.toUpperCase() === 'INCOME')
+  const expenseTransactions = filteredTransactions.value.filter(t => t.type?.toUpperCase() === 'EXPENSE')
   
   const totalIncome = incomeTransactions.reduce((sum, t) => sum + t.amount, 0)
   const totalExpenses = expenseTransactions.reduce((sum, t) => sum + t.amount, 0)
@@ -746,7 +884,7 @@ const filteredData = computed(() => {
 
 // Calculate category analysis
 const categoryAnalysis = computed(() => {
-  const transactions = filteredTransactions.value.filter(t => t.type === analysisType.value)
+  const transactions = filteredTransactions.value.filter(t => t.type?.toUpperCase() === analysisType.value?.toUpperCase())
   const categories = {}
   const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0)
   
@@ -772,7 +910,7 @@ const categoryAnalysis = computed(() => {
 
 // ADDED: Chart data computed properties
 const expenseChartData = computed(() => {
-  const expenseTransactions = filteredTransactions.value.filter(t => t.type === 'expense')
+  const expenseTransactions = filteredTransactions.value.filter(t => t.type?.toUpperCase() === 'EXPENSE')
   const categories = {}
   
   expenseTransactions.forEach(t => {
@@ -791,7 +929,7 @@ const expenseChartData = computed(() => {
 })
 
 const incomeChartData = computed(() => {
-  const incomeTransactions = filteredTransactions.value.filter(t => t.type === 'income')
+  const incomeTransactions = filteredTransactions.value.filter(t => t.type?.toUpperCase() === 'INCOME')
   const categories = {}
   
   incomeTransactions.forEach(t => {
@@ -832,7 +970,7 @@ const trendChartData = computed(() => {
     const monthKey = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     
     if (months[monthKey]) {
-      if (t.type === 'income') {
+      if (t.type?.toUpperCase() === 'INCOME') {
         months[monthKey].income += t.amount
       } else {
         months[monthKey].expenses += t.amount
@@ -869,7 +1007,7 @@ const monthlyComparison = computed(() => {
     const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
     
     if (months[monthKey]) {
-      if (t.type === 'income') {
+      if (t.type?.toUpperCase() === 'INCOME') {
         months[monthKey].income += t.amount
       } else {
         months[monthKey].expenses += t.amount
@@ -912,7 +1050,7 @@ const insights = computed(() => {
   )
 
   // Get expense categories for top expense analysis
-  const expenseTransactions = transactionStore.transactions.filter(t => t.type === 'expense')
+  const expenseTransactions = transactionStore.transactions.filter(t => t.type?.toUpperCase() === 'EXPENSE')
   const expenseCategories = {}
   
   expenseTransactions.forEach(t => {
@@ -965,28 +1103,245 @@ const animateCard = (event) => {
   }, 1000)
 }
 
-// IMPROVED: Export report with better error handling
-const exportReport = (format) => {
+// Export report to CSV or PDF
+const exportReport = async (format) => {
   try {
-    const data = transactionStore.exportTransactions(format)
-    
     if (format === 'csv') {
-      const blob = new Blob([data], { type: 'text/csv' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `finance-report-${new Date().toISOString().split('T')[0]}.csv`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-    } else {
-      // For PDF, we'd typically use a library like jsPDF
-      alert('PDF export functionality coming soon!')
+      // Call backend API to export CSV
+      const queryParams = new URLSearchParams()
+
+      // Add date filters if set
+      if (selectedPeriod.value.start) {
+        queryParams.append('start_date', selectedPeriod.value.start)
+      }
+      if (selectedPeriod.value.end) {
+        queryParams.append('end_date', selectedPeriod.value.end)
+      }
+
+      // Build URL with query parameters
+      const url = `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.TRANSACTIONS.EXPORT_CSV}?${queryParams.toString()}`
+
+      // Create a temporary link and trigger download
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `transactions_${new Date().toISOString().split('T')[0]}.csv`)
+
+      // For authenticated download, we need to fetch with credentials
+      const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include', // Include httpOnly cookies
+        headers: {
+          'Accept': 'text/csv'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      // Get the CSV content
+      const csvContent = await response.text()
+
+      // Create blob and download
+      const blob = new Blob([csvContent], { type: 'text/csv' })
+      const blobUrl = URL.createObjectURL(blob)
+
+      link.href = blobUrl
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(blobUrl)
+
+    } else if (format === 'pdf') {
+      // Generate PDF using jsPDF
+
+      // Get filtered transactions
+      const transactions = filteredTransactions.value || []
+
+      // Calculate summary
+      const summary = {
+        totalIncome: transactions
+          .filter(t => t.type?.toUpperCase() === 'INCOME')
+          .reduce((sum, t) => sum + (t.amount || 0), 0),
+        totalExpense: transactions
+          .filter(t => t.type?.toUpperCase() === 'EXPENSE')
+          .reduce((sum, t) => sum + (t.amount || 0), 0)
+      }
+
+      // Determine date range
+      let dateRange = null
+      if (selectedPeriod.value.start && selectedPeriod.value.end) {
+        dateRange = {
+          start: selectedPeriod.value.start,
+          end: selectedPeriod.value.end
+        }
+      }
+
+      // Generate PDF
+      const result = generateTransactionReportPDF({
+        transactions,
+        summary,
+        period: getPeriodLabel(selectedPeriod.value),
+        dateRange,
+        user: {
+          email: transactionStore.user?.email || 'User'
+        }
+      })
     }
   } catch (error) {
     console.error('Export failed:', error)
     alert('Export failed. Please try again.')
+  }
+}
+
+// Helper to get readable period label
+const getPeriodLabel = (period) => {
+  if (period === 'allTime') return 'All Time'
+  if (period === 'thisMonth') return 'This Month'
+  if (period === 'lastMonth') return 'Last Month'
+  if (period === 'thisYear') return 'This Year'
+  if (period === 'custom') return 'Custom Period'
+  return period
+}
+
+// CSV Import Functions
+const handleFileSelect = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    selectedFile.value = file
+    // Reset status when new file selected
+    importStatus.value = {
+      success: false,
+      error: false,
+      message: '',
+      data: null,
+      errors: []
+    }
+  }
+}
+
+const handleFileDrop = (event) => {
+  dragActive.value = false
+  const file = event.dataTransfer.files[0]
+  if (file && (file.name.endsWith('.csv') || file.name.endsWith('.txt'))) {
+    selectedFile.value = file
+    // Reset status when new file dropped
+    importStatus.value = {
+      success: false,
+      error: false,
+      message: '',
+      data: null,
+      errors: []
+    }
+  } else {
+    alert('Please select a valid CSV file')
+  }
+}
+
+const importCsv = async () => {
+  if (!selectedFile.value) return
+
+  importing.value = true
+  importStatus.value = {
+    success: false,
+    error: false,
+    message: '',
+    data: null,
+    errors: []
+  }
+
+  try {
+    // Create FormData for file upload
+    const formData = new FormData()
+    formData.append('file', selectedFile.value)
+
+    // Upload to backend
+    const response = await fetch(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.TRANSACTIONS.IMPORT_CSV}`, {
+      method: 'POST',
+      credentials: 'include', // Include httpOnly cookies
+      body: formData
+    })
+
+    const result = await response.json()
+
+    if (result.success) {
+      importStatus.value = {
+        success: true,
+        error: false,
+        message: result.message,
+        data: result.data,
+        errors: result.data?.errors || []
+      }
+
+      // Refresh transactions list
+      await transactionStore.fetchTransactions()
+
+      // Clear file selection after successful import
+      selectedFile.value = null
+    } else {
+      importStatus.value = {
+        success: false,
+        error: true,
+        message: result.message,
+        data: null,
+        errors: result.errors || []
+      }
+    }
+  } catch (error) {
+    console.error('Import failed:', error)
+    importStatus.value = {
+      success: false,
+      error: true,
+      message: 'Import failed. Please try again.',
+      data: null,
+      errors: []
+    }
+  } finally {
+    importing.value = false
+  }
+}
+
+const closeImportModal = () => {
+  showImportModal.value = false
+  selectedFile.value = null
+  importing.value = false
+  dragActive.value = false
+  importStatus.value = {
+    success: false,
+    error: false,
+    message: '',
+    data: null,
+    errors: []
+  }
+}
+
+const downloadTemplate = async () => {
+  try {
+    const url = `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.TRANSACTIONS.DOWNLOAD_TEMPLATE}`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      throw new Error('Template download failed')
+    }
+
+    const csvContent = await response.text()
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const blobUrl = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = 'transaction_import_template.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error('Template download failed:', error)
+    alert('Failed to download template. Please try again.')
   }
 }
 
@@ -998,27 +1353,10 @@ const goToTransactions = () => {
 // ADDED: Chart event handlers
 const handleChartPeriodChange = (period) => {
   chartPeriod.value = period
-  console.log('Chart period changed to:', period)
 }
 
 // Debug function for troubleshooting
 const debugStore = () => {
-  console.log('=== REPORTS DEBUG INFO ===')
-  console.log('Total transactions:', transactionStore.transactions.length)
-  console.log('Filtered transactions:', filteredTransactions.value.length)
-  console.log('Selected period:', selectedPeriod.value)
-  console.log('Has transactions:', hasTransactions.value)
-  console.log('Expense chart data:', expenseChartData.value)
-  console.log('Income chart data:', incomeChartData.value)
-  console.log('Trend chart data:', trendChartData.value)
-  console.log('Sample transaction dates:', transactionStore.transactions.slice(0, 3).map(t => ({
-    id: t.id,
-    date: new Date(t.createdAt || t.date).toLocaleDateString(),
-    amount: t.amount
-  })))
-  console.log('Monthly comparison:', monthlyComparison.value.length)
-  console.log('Insights:', insights.value)
-  console.log('=== END DEBUG ===')
 }
 
 // Better initialization with sample data updating
@@ -1041,7 +1379,6 @@ const updateSampleDataToCurrent = () => {
   
   if (updated) {
     transactionStore.saveToStorage()
-    console.log('Sample data updated to current year for better demo experience')
   }
 }
 
@@ -1072,7 +1409,6 @@ watch(selectedPeriod, (newValue) => {
 watch(
   () => transactionStore.transactions.length,
   (newCount, oldCount) => {
-    console.log(`Transaction count changed: ${oldCount} -> ${newCount}`)
   }
 )
 </script>

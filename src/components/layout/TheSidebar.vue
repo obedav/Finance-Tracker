@@ -413,13 +413,13 @@ const totalTransactionCount = computed(() => {
 const incomeTransactionCount = computed(() => {
   if (!transactionStore || !transactionStore.transactions) return 0
   if (!Array.isArray(transactionStore.transactions)) return 0
-  return transactionStore.transactions.filter(t => t.type === 'income').length
+  return transactionStore.transactions.filter(t => t.type?.toUpperCase() === 'INCOME').length
 })
 
 const expenseTransactionCount = computed(() => {
   if (!transactionStore || !transactionStore.transactions) return 0
   if (!Array.isArray(transactionStore.transactions)) return 0
-  return transactionStore.transactions.filter(t => t.type === 'expense').length
+  return transactionStore.transactions.filter(t => t.type?.toUpperCase() === 'EXPENSE').length
 })
 
 // Navigation links with real counts
@@ -565,7 +565,6 @@ onMounted(() => {
       const parsed = JSON.parse(saved)
       expandedSections.value = { ...expandedSections.value, ...parsed }
     } catch (e) {
-      console.warn('Failed to parse saved sidebar state')
     }
   }
 })

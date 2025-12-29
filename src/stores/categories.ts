@@ -62,7 +62,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch categories'
       error.value = errorMessage
-      console.error('Fetch categories error:', err)
       categories.value = []
       return { success: false, message: error.value }
     } finally {
@@ -90,7 +89,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to add category'
       error.value = errorMessage
-      console.error('Add category error:', err)
       throw err
     } finally {
       loading.value = false
@@ -116,7 +114,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update category'
       error.value = errorMessage
-      console.error('Update category error:', err)
       throw err
     } finally {
       loading.value = false
@@ -139,7 +136,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete category'
       error.value = errorMessage
-      console.error('Delete category error:', err)
       throw err
     } finally {
       loading.value = false
@@ -161,7 +157,6 @@ export const useCategoriesStore = defineStore('categories', () => {
         averageAmount: 0
       }
     } catch (err) {
-      console.error('Get category stats error:', err)
       return {
         totalAmount: 0,
         transactionCount: 0,
@@ -186,7 +181,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch default categories'
       error.value = errorMessage
-      console.error('Get default categories error:', err)
       return []
     } finally {
       loading.value = false
@@ -228,7 +222,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to import categories'
       error.value = errorMessage
-      console.error('Import categories error:', err)
       throw err
     } finally {
       loading.value = false
@@ -241,7 +234,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to export categories'
       error.value = errorMessage
-      console.error('Export categories error:', err)
       throw err
     }
   }

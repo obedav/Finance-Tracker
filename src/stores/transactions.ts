@@ -62,13 +62,13 @@ export const useTransactionStore = defineStore('transactions', () => {
   // Getters
   const totalIncome: ComputedRef<number> = computed(() =>
     transactions.value
-      .filter(t => t.type === 'income' || t.type.toUpperCase() === 'INCOME')
+      .filter(t => t.type?.toUpperCase() === 'INCOME')
       .reduce((sum, t) => sum + parseFloat(String(t.amount)), 0)
   )
 
   const totalExpenses: ComputedRef<number> = computed(() =>
     transactions.value
-      .filter(t => t.type === 'expense' || t.type.toUpperCase() === 'EXPENSE')
+      .filter(t => t.type?.toUpperCase() === 'EXPENSE')
       .reduce((sum, t) => sum + parseFloat(String(t.amount)), 0)
   )
 
@@ -80,7 +80,7 @@ export const useTransactionStore = defineStore('transactions', () => {
 
     return transactions.value
       .filter(t => {
-        const date = new Date(t.transaction_date || t.created_at)
+        const date = new Date(t.date || t.transaction_date || t.created_at)
         return (t.type === 'income' || t.type.toUpperCase() === 'INCOME') &&
                date.getMonth() === currentMonth &&
                date.getFullYear() === currentYear
@@ -94,7 +94,7 @@ export const useTransactionStore = defineStore('transactions', () => {
 
     return transactions.value
       .filter(t => {
-        const date = new Date(t.transaction_date || t.created_at)
+        const date = new Date(t.date || t.transaction_date || t.created_at)
         return (t.type === 'expense' || t.type.toUpperCase() === 'EXPENSE') &&
                date.getMonth() === currentMonth &&
                date.getFullYear() === currentYear
@@ -106,7 +106,11 @@ export const useTransactionStore = defineStore('transactions', () => {
 
   const recentTransactions: ComputedRef<Transaction[]> = computed(() =>
     [...transactions.value]
-      .sort((a, b) => new Date(b.transaction_date || b.created_at).getTime() - new Date(a.transaction_date || a.created_at).getTime())
+      .sort((a, b) => {
+        const dateA = new Date(a.date || a.transaction_date || a.created_at).getTime()
+        const dateB = new Date(b.date || b.transaction_date || b.created_at).getTime()
+        return dateB - dateA
+      })
       .slice(0, 10)
   )
 
@@ -138,7 +142,7 @@ export const useTransactionStore = defineStore('transactions', () => {
     const trends: Record<string, MonthlyTrend> = {}
 
     transactions.value.forEach(transaction => {
-      const date = new Date(transaction.transaction_date || transaction.created_at)
+      const date = new Date(transaction.date || transaction.transaction_date || transaction.created_at)
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
 
       if (!trends[monthKey]) {
@@ -185,7 +189,7 @@ export const useTransactionStore = defineStore('transactions', () => {
       const start = new Date(filters.value.dateRange.start)
       const end = new Date(filters.value.dateRange.end)
       filtered = filtered.filter(t => {
-        const date = new Date(t.transaction_date || t.created_at)
+        const date = new Date(t.date || t.transaction_date || t.created_at)
         return date >= start && date <= end
       })
     }
@@ -210,9 +214,11 @@ export const useTransactionStore = defineStore('transactions', () => {
       filtered = filtered.filter(t => parseFloat(String(t.amount)) <= filters.value.maxAmount!)
     }
 
-    return filtered.sort((a, b) =>
-      new Date(b.transaction_date || b.created_at).getTime() - new Date(a.transaction_date || a.created_at).getTime()
-    )
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.date || a.transaction_date || a.created_at).getTime()
+      const dateB = new Date(b.date || b.transaction_date || b.created_at).getTime()
+      return dateB - dateA
+    })
   })
 
   const statistics: ComputedRef<Statistics> = computed(() => {
@@ -233,8 +239,8 @@ export const useTransactionStore = defineStore('transactions', () => {
     stats.avgTransactionAmount = totalAmount / transactions.value.length
 
     // Average income/expense amounts
-    const incomeTransactions = transactions.value.filter(t => t.type === 'income' || t.type.toUpperCase() === 'INCOME')
-    const expenseTransactions = transactions.value.filter(t => t.type === 'expense' || t.type.toUpperCase() === 'EXPENSE')
+    const incomeTransactions = transactions.value.filter(t => t.type?.toUpperCase() === 'INCOME')
+    const expenseTransactions = transactions.value.filter(t => t.type?.toUpperCase() === 'EXPENSE')
 
     if (incomeTransactions.length > 0) {
       stats.avgIncomeAmount = totalIncome.value / incomeTransactions.length
@@ -291,7 +297,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch transactions'
       error.value = errorMessage
-      console.error('Fetch transactions error:', err)
       // Don't throw, just set empty array
       transactions.value = []
       return { success: false, message: error.value }
@@ -325,7 +330,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to add transaction'
       error.value = errorMessage
-      console.error('Add transaction error:', err)
       throw err
     } finally {
       loading.value = false
@@ -352,7 +356,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update transaction'
       error.value = errorMessage
-      console.error('Update transaction error:', err)
       throw err
     } finally {
       loading.value = false
@@ -379,7 +382,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete transaction'
       error.value = errorMessage
-      console.error('Delete transaction error:', err)
       throw err
     } finally {
       loading.value = false
@@ -403,7 +405,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete transactions'
       error.value = errorMessage
-      console.error('Bulk delete error:', err)
       throw err
     } finally {
       loading.value = false
@@ -427,7 +428,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to import transactions'
       error.value = errorMessage
-      console.error('Import error:', err)
       throw err
     } finally {
       loading.value = false
@@ -440,7 +440,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to export transactions'
       error.value = errorMessage
-      console.error('Export error:', err)
       throw err
     }
   }
@@ -468,7 +467,7 @@ export const useTransactionStore = defineStore('transactions', () => {
     const end = new Date(endDate)
 
     return transactions.value.filter(t => {
-      const date = new Date(t.transaction_date || t.created_at)
+      const date = new Date(t.date || t.transaction_date || t.created_at)
       return date >= start && date <= end
     })
   }

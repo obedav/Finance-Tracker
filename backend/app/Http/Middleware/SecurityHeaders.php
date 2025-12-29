@@ -6,16 +6,26 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Security Headers Middleware
+ *
+ * Implements comprehensive security headers following OWASP best practices:
+ * - Content Security Policy (CSP) - Prevents XSS attacks
+ * - Strict-Transport-Security (HSTS) - Forces HTTPS
+ * - X-Frame-Options - Prevents clickjacking
+ * - X-Content-Type-Options - Prevents MIME sniffing
+ * - Referrer-Policy - Controls referrer information
+ * - Permissions-Policy - Restricts browser features
+ */
 class SecurityHeaders
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
+        $isDevelopment = config('app.env') !== 'production';
 
         // Prevent clickjacking attacks
         $response->headers->set('X-Frame-Options', 'DENY');
@@ -23,34 +33,44 @@ class SecurityHeaders
         // Prevent MIME type sniffing
         $response->headers->set('X-Content-Type-Options', 'nosniff');
 
-        // Enable XSS protection (legacy browsers)
+        // XSS Protection (legacy browsers - modern browsers use CSP)
         $response->headers->set('X-XSS-Protection', '1; mode=block');
 
-        // Referrer policy - only send origin for cross-origin requests
-        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        // Prevent browsers from guessing MIME types
+        $response->headers->set('X-Download-Options', 'noopen');
 
-        // Permissions policy - restrict browser features
-        $response->headers->set('Permissions-Policy',
-            'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=()'
-        );
+        // Referrer policy - strict for production, relaxed for development
+        $referrerPolicy = $isDevelopment
+            ? 'strict-origin-when-cross-origin'
+            : 'strict-origin-when-cross-origin';
+        $response->headers->set('Referrer-Policy', $referrerPolicy);
 
-        // Content Security Policy
-        // Note: Adjust this based on your frontend requirements
-        $csp = implode('; ', [
-            "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // unsafe-inline and unsafe-eval needed for Vue in dev
-            "style-src 'self' 'unsafe-inline'",
-            "img-src 'self' data: https:",
-            "font-src 'self' data:",
-            "connect-src 'self' " . env('CORS_ALLOWED_ORIGINS', 'http://localhost:5173'),
-            "frame-ancestors 'none'",
-            "base-uri 'self'",
-            "form-action 'self'"
-        ]);
-        $response->headers->set('Content-Security-Policy', $csp);
+        // Permissions Policy - Restrict powerful browser features
+        $response->headers->set('Permissions-Policy', implode(', ', [
+            'geolocation=()',
+            'microphone=()',
+            'camera=()',
+            'payment=()',
+            'usb=()',
+            'magnetometer=()',
+            'gyroscope=()',
+            'accelerometer=()',
+            'autoplay=()',
+            'encrypted-media=()',
+            'picture-in-picture=()',
+            'fullscreen=(self)',  // Allow fullscreen for the app itself
+        ]));
 
-        // HSTS - Force HTTPS (only in production with HTTPS enabled)
-        if (config('app.env') === 'production' && env('FORCE_HTTPS', false)) {
+        // Cross-Origin Policies
+        $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
+        $response->headers->set('Cross-Origin-Embedder-Policy', 'require-corp');
+        $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+
+        // Content Security Policy - Environment-based configuration
+        $this->setContentSecurityPolicy($response, $isDevelopment);
+
+        // HSTS - Force HTTPS in production
+        if (!$isDevelopment) {
             $response->headers->set(
                 'Strict-Transport-Security',
                 'max-age=31536000; includeSubDomains; preload'
@@ -58,5 +78,49 @@ class SecurityHeaders
         }
 
         return $response;
+    }
+
+    /**
+     * Set Content Security Policy based on environment
+     */
+    private function setContentSecurityPolicy(Response $response, bool $isDevelopment): void
+    {
+        if ($isDevelopment) {
+            // Development CSP - Relaxed for hot module replacement and debugging
+            $csp = implode('; ', [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:* http://127.0.0.1:*", // Vue HMR needs this
+                "style-src 'self' 'unsafe-inline' http://localhost:* http://127.0.0.1:*",
+                "img-src 'self' data: https: http: blob:",
+                "font-src 'self' data:",
+                "connect-src 'self' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*", // WebSocket for HMR
+                "frame-ancestors 'none'",
+                "base-uri 'self'",
+                "form-action 'self'",
+                "object-src 'none'",
+                "upgrade-insecure-requests",
+            ]);
+        } else {
+            // Production CSP - Strict security policy
+            $csp = implode('; ', [
+                "default-src 'self'",
+                "script-src 'self'",  // NO unsafe-inline or unsafe-eval in production!
+                "style-src 'self'",   // Consider using nonces for inline styles if needed
+                "img-src 'self' data: https:",
+                "font-src 'self' data:",
+                "connect-src 'self'",
+                "frame-ancestors 'none'",
+                "base-uri 'self'",
+                "form-action 'self'",
+                "object-src 'none'",
+                "upgrade-insecure-requests",
+                "block-all-mixed-content",
+            ]);
+        }
+
+        $response->headers->set('Content-Security-Policy', $csp);
+
+        // Also set CSP in report-only mode for testing (optional)
+        // $response->headers->set('Content-Security-Policy-Report-Only', $csp);
     }
 }

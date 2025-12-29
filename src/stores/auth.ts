@@ -53,7 +53,6 @@ export const useAuthStore = defineStore('auth', () => {
       // Load current user data
       user.value = authService.getCurrentUserData()
     } catch (error) {
-      console.error('Error initializing auth:', error)
       clearAuth()
     } finally {
       isInitialized.value = true
@@ -104,7 +103,6 @@ export const useAuthStore = defineStore('auth', () => {
       // Clear user context from error tracking
       setSentryUser(null)
     } catch (error) {
-      console.warn('Logout API call failed:', error)
       // Force clear auth data even if API call fails
       authService.clearAuthData()
       user.value = null
@@ -153,7 +151,6 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = authService.getCurrentUserData()
       }
     } catch (error) {
-      console.error('Error refreshing user data:', error)
     }
   }
 

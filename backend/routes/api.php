@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\TransactionExportController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,8 +55,16 @@ Route::middleware(['auth:sanctum', 'rate.limit:api'])->group(function () {
         Route::post('/', [TransactionController::class, 'store']);
         Route::get('/statistics', [TransactionController::class, 'statistics']);
         Route::get('/trends', [TransactionController::class, 'trends']);
+
+        // CSV Export/Import routes
+        Route::get('/export/csv', [TransactionExportController::class, 'exportCsv']);
+        Route::post('/import/csv', [TransactionExportController::class, 'importCsv']);
+        Route::get('/import/template', [TransactionExportController::class, 'downloadTemplate']);
+
+        // Legacy routes (if they exist in TransactionController)
         Route::post('/import', [TransactionController::class, 'import']);
         Route::get('/export', [TransactionController::class, 'export']);
+
         Route::delete('/bulk', [TransactionController::class, 'bulkDelete']);
         Route::get('/{id}', [TransactionController::class, 'show']);
         Route::put('/{id}', [TransactionController::class, 'update']);

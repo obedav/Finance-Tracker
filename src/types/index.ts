@@ -1,93 +1,121 @@
 /**
- * Type Definitions Index
- * Central export point for all TypeScript types
+ * Core Type Definitions for Finance Tracker
+ * Centralized, strict type definitions for the entire application
  */
 
-// Export all model types
-export type {
-  // User Types
-  User,
-  UserRegistration,
-  UserLogin,
-  AuthResponse,
+// ============================================================================
+// ENUMS & CONSTANTS
+// ============================================================================
 
-  // Category Types
-  Category,
-  CategoryFormData,
-  CategoryStats,
+export enum TransactionType {
+  INCOME = 'INCOME',
+  EXPENSE = 'EXPENSE'
+}
 
-  // Transaction Types
-  Transaction,
-  TransactionFormData,
-  TransactionFilters,
-  TransactionStats,
+export enum TransactionStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
+  FAILED = 'failed'
+}
 
-  // Budget Types
-  Budget,
-  BudgetFormData,
-  BudgetProgress,
+export enum CategoryType {
+  INCOME = 'INCOME',
+  EXPENSE = 'EXPENSE'
+}
 
-  // Report Types
-  ReportParams,
-  MonthlyReport,
-  CategoryReport,
-  DailyReport,
-  FinancialSummary,
-  TrendData,
+// ============================================================================
+// BASE TYPES
+// ============================================================================
 
-  // Chart Types
-  ChartDataset,
-  ChartData,
-  ChartOptions,
+export interface BaseEntity {
+  id: number
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+}
 
-  // API Response Types
-  ApiResponse,
-  PaginatedResponse,
-  ApiError,
+// ============================================================================
+// USER TYPES
+// ============================================================================
 
-  // Form Types
-  FormField,
-  ValidationError,
+export interface User extends BaseEntity {
+  name: string
+  email: string
+  email_verified_at: string | null
+  profile_picture: string | null
+  settings: UserSettings | null
+}
 
-  // Store State Types
-  AuthState,
-  TransactionState,
-  CategoryState,
-  BudgetState,
+export interface UserSettings {
+  currency: string
+  language: string
+  timezone: string
+  theme: 'light' | 'dark' | 'auto'
+  notifications: {
+    email: boolean
+    push: boolean
+    budget_alerts: boolean
+    transaction_reminders: boolean
+  }
+}
 
-  // Utility Types
-  TransactionType,
-  BudgetPeriod,
-  DateRange,
-  SortOrder,
-  SortField,
+// ============================================================================
+// AUTHENTICATION TYPES
+// ============================================================================
 
-  // Composable Return Types
-  UseTransactionFiltersReturn,
-  UseCurrencyReturn,
-  UseDateReturn
-} from './models'
+export interface AuthResponse {
+  success: boolean
+  message: string
+  user: User
+  token?: string
+}
 
-// Export all API types
-export type {
-  // API Configuration
-  ApiConfig,
-  RequestConfig,
+export interface LoginCredentials {
+  email: string
+  password: string
+  remember?: boolean
+}
 
-  // Service Interfaces
-  AuthServiceInterface,
-  CategoryServiceInterface,
-  TransactionServiceInterface,
-  BudgetServiceInterface,
-  ReportServiceInterface,
+// ============================================================================
+// CATEGORY TYPES
+// ============================================================================
 
-  // API Error Types
-  ApiErrorResponse,
+export interface Category extends BaseEntity {
+  user_id: number | null
+  name: string
+  type: TransactionType
+  icon: string
+  color: string
+  description?: string
+  is_default: boolean
+  is_active: boolean
+}
 
-  // Mock API Types
-  MockDataStore,
-  MockApiResponse
-} from './api'
+// ============================================================================
+// TRANSACTION TYPES
+// ============================================================================
 
-// Re-export ApiError class
-export { ApiError } from './api'
+export interface Transaction extends BaseEntity {
+  user_id: number
+  category_id: number
+  type: TransactionType
+  amount: number
+  description: string
+  date: string
+  notes: string | null
+  status: TransactionStatus
+  receipt_path: string | null
+  category?: Category
+}
+
+// ============================================================================
+// API RESPONSE TYPES
+// ============================================================================
+
+export interface ApiResponse<T = unknown> {
+  success: boolean
+  message?: string
+  data?: T
+  errors?: Record<string, string[]>
+}

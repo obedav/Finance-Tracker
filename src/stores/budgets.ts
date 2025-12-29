@@ -74,7 +74,6 @@ export const useBudgetStore = defineStore('budgets', () => {
   const fetchBudgets = async (force = false): Promise<Budget[]> => {
     // Skip if data is fresh and not forced
     if (!force && !isDataStale.value) {
-      console.log('Using cached budget data')
       return budgets.value
     }
 
@@ -93,13 +92,11 @@ export const useBudgetStore = defineStore('budgets', () => {
       }
 
       lastFetched.value = new Date().toISOString()
-      console.log('Budgets loaded:', budgets.value.length)
 
       return budgets.value
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch budgets'
       error.value = errorMessage
-      console.error('Error fetching budgets:', err)
       budgets.value = []
       throw err
     } finally {
@@ -116,7 +113,6 @@ export const useBudgetStore = defineStore('budgets', () => {
 
       if (response.success && response.data) {
         budgets.value.push(response.data)
-        console.log('Budget created:', response.data)
         return response.data
       }
 
@@ -124,7 +120,6 @@ export const useBudgetStore = defineStore('budgets', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create budget'
       error.value = errorMessage
-      console.error('Error creating budget:', err)
       throw err
     } finally {
       isLoading.value = false
@@ -143,7 +138,6 @@ export const useBudgetStore = defineStore('budgets', () => {
         if (index !== -1) {
           budgets.value[index] = response.data
         }
-        console.log('Budget updated:', response.data)
         return response.data
       }
 
@@ -151,7 +145,6 @@ export const useBudgetStore = defineStore('budgets', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update budget'
       error.value = errorMessage
-      console.error('Error updating budget:', err)
       throw err
     } finally {
       isLoading.value = false
@@ -169,7 +162,6 @@ export const useBudgetStore = defineStore('budgets', () => {
         const index = budgets.value.findIndex(budget => budget.id === id)
         if (index !== -1) {
           budgets.value.splice(index, 1)
-          console.log('Budget deleted')
         }
         return { success: true, message: 'Budget deleted successfully' }
       }
@@ -178,7 +170,6 @@ export const useBudgetStore = defineStore('budgets', () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete budget'
       error.value = errorMessage
-      console.error('Error deleting budget:', err)
       throw err
     } finally {
       isLoading.value = false

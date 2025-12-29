@@ -87,27 +87,20 @@ async function setupToastNotifications() {
       }
     })
     
-    console.log('✅ Vue Toastification (Vue 3) loaded successfully')
   } catch (error) {
-    console.warn('Vue Toastification not available. Using fallback toast service.')
-    console.warn('Install with: npm install vue-toastification@next')
     
     // Provide a comprehensive fallback toast service
     const fallbackToast = {
       success: (message, options = {}) => {
-        console.log('✅ Success:', message)
         showFallbackNotification('success', message, options)
       },
       error: (message, options = {}) => {
-        console.error('❌ Error:', message)
         showFallbackNotification('error', message, options)
       },
       warning: (message, options = {}) => {
-        console.warn('⚠️ Warning:', message)
         showFallbackNotification('warning', message, options)
       },
       info: (message, options = {}) => {
-        console.info('ℹ️ Info:', message)
         showFallbackNotification('info', message, options)
       },
       // Additional methods for compatibility
@@ -285,9 +278,6 @@ function showFallbackNotification(type, message, options = {}) {
 
 // Global error handler with toast integration
 app.config.errorHandler = (error, instance, info) => {
-  console.error('Global error:', error)
-  console.error('Component instance:', instance)
-  console.error('Error info:', info)
   
   // Show user-friendly error message
   const toast = app.config.globalProperties.$toast
@@ -326,9 +316,7 @@ app.config.errorHandler = (error, instance, info) => {
 app.config.warnHandler = (msg, instance, trace) => {
   // Only log warnings in development
   if (import.meta.env.DEV) {
-    console.warn('Vue warning:', msg)
     if (trace) {
-      console.warn('Component trace:', trace)
     }
   }
 }
@@ -346,9 +334,6 @@ if (import.meta.env.DEV) {
   
   // Add helpful console styling
   const style = 'color: #10B981; font-weight: bold; font-size: 14px;'
-  console.log('%c🚀 FinanceTracker App Initializing...', style)
-  console.log('%c📦 Environment:', 'color: #F59E0B; font-weight: bold;', import.meta.env.MODE)
-  console.log('%c🎯 Vue version:', 'color: #3B82F6; font-weight: bold;', app.version)
 }
 
 // Add custom CSS for toast styling
@@ -463,16 +448,13 @@ function initDarkMode() {
       document.documentElement.classList.remove('dark')
     }
 
-    console.log('%c🌓 Dark mode initialized:', 'color: #F59E0B; font-weight: bold;', isDark ? 'Dark' : 'Light')
   } catch (error) {
-    console.warn('Failed to initialize dark mode:', error)
   }
 }
 
 // Initialize the app
 async function initApp() {
   try {
-    console.log('%c⚡ Initializing FinanceTracker...', 'color: #10B981; font-weight: bold;')
 
     // Initialize dark mode before mounting
     initDarkMode()
@@ -487,8 +469,6 @@ async function initApp() {
     app.mount('#app')
     
     if (import.meta.env.DEV) {
-      console.log('%c✅ FinanceTracker app mounted successfully!', 'color: #10B981; font-weight: bold;')
-      console.log('%c🎉 Ready to track your finances!', 'color: #F59E0B; font-weight: bold;')
     }
     
     // Add a welcome toast in development
@@ -499,7 +479,6 @@ async function initApp() {
     }
     
   } catch (error) {
-    console.error('Failed to initialize app:', error)
     
     // Show fallback error message
     document.body.innerHTML = `
@@ -569,23 +548,6 @@ async function initApp() {
             >
               🔄 Refresh Page
             </button>
-            <button 
-              onclick="console.log('Error details:', ${JSON.stringify(error?.message || 'Unknown error')})" 
-              style="
-                background-color: transparent; 
-                color: #6B7280; 
-                padding: 0.75rem 1.5rem; 
-                border: 1px solid #D1D5DB; 
-                border-radius: 0.5rem; 
-                cursor: pointer;
-                font-weight: 500;
-                transition: all 0.2s;
-              "
-              onmouseover="this.style.backgroundColor='#F9FAFB'; this.style.color='#374151'"
-              onmouseout="this.style.backgroundColor='transparent'; this.style.color='#6B7280'"
-            >
-              🐛 View Details
-            </button>
           </div>
           <p style="
             color: #9CA3AF; 
@@ -602,3 +564,5 @@ async function initApp() {
 
 // Start the app
 initApp()
+
+

@@ -37,7 +37,6 @@ export const useUserStore = defineStore('user', {
         return userData
       } catch (error) {
         this.error = error.message || 'Failed to fetch user profile'
-        console.error('Error fetching user profile:', error)
         return null
       } finally {
         this.loading = false
@@ -54,7 +53,6 @@ export const useUserStore = defineStore('user', {
         return updatedUser
       } catch (error) {
         this.error = error.message || 'Failed to update user profile'
-        console.error('Error updating user profile:', error)
         throw error
       } finally {
         this.loading = false

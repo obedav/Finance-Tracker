@@ -32,10 +32,6 @@
 
         <!-- Right: Notifications + Dark Mode + User Menu -->
         <div class="flex items-center space-x-2 sm:space-x-4">
-          <!-- Debug Info - Hidden on mobile -->
-          <div class="text-xs text-gray-500 hidden lg:block">
-            User: {{ currentUser?.firstName || 'None' }} | Auth: {{ isAuthenticated ? 'Yes' : 'No' }}
-          </div>
 
           <!-- Notifications Button -->
           <button
@@ -121,18 +117,6 @@
       </div>
     </div>
 
-    <!-- Debug Panel (temporary) - Hidden on mobile -->
-    <div v-if="showDebug" class="bg-yellow-100 border-t border-yellow-200 p-2 text-xs hidden sm:block">
-      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <div>
-          <span class="font-bold">DEBUG:</span>
-          showUserMenu: {{ showUserMenu }} | 
-          isAuthenticated: {{ isAuthenticated }} | 
-          user: {{ currentUser?.firstName || 'null' }}
-        </div>
-        <button @click="showDebug = false" class="text-yellow-700 hover:text-yellow-900">×</button>
-      </div>
-    </div>
   </header>
 </template>
 
@@ -154,7 +138,6 @@ const userDropdownRef = ref(null)
 // Local state
 const showUserMenu = ref(false)
 const showNotifications = ref(false)
-const showDebug = ref(true) // Temporary debug panel
 
 // Get auth data directly from authService
 const isAuthenticated = computed(() => {
@@ -181,11 +164,7 @@ const userDisplayName = computed(() => {
 
 // Methods
 const toggleUserMenu = (event) => {
-  console.log('🔽 User menu toggle clicked!')
-  console.log('Event:', event)
-  console.log('Before:', showUserMenu.value)
   showUserMenu.value = !showUserMenu.value
-  console.log('After:', showUserMenu.value)
   
   // Prevent event propagation
   event.stopPropagation()
@@ -197,12 +176,10 @@ const toggleUserMenu = (event) => {
 }
 
 const closeUserMenu = () => {
-  console.log('🔒 Closing user menu')
   showUserMenu.value = false
 }
 
 const toggleNotifications = () => {
-  console.log('🔔 Notifications toggle clicked!')
   showNotifications.value = !showNotifications.value
   
   // Close user menu if open
@@ -213,20 +190,16 @@ const toggleNotifications = () => {
 
 const testLogout = () => {
   alert('TEST LOGOUT CLICKED!')
-  console.log('🧪 Test logout function called')
   showUserMenu.value = false
 }
 
 const handleLogout = async () => {
-  console.log('🚪 Real logout clicked!')
   
   try {
     closeUserMenu()
     await authService.logout()
-    console.log('✅ Logout successful')
     router.push('/login')
   } catch (error) {
-    console.error('❌ Logout error:', error)
     // Force logout even if API fails
     authService.clearAuthData()
     router.push('/login')
@@ -238,7 +211,6 @@ const handleClickOutside = (event) => {
   // Check if click is outside the user dropdown
   if (userDropdownRef.value && !userDropdownRef.value.contains(event.target)) {
     if (showUserMenu.value) {
-      console.log('👆 Clicked outside user menu, closing...')
       closeUserMenu()
     }
   }
@@ -251,62 +223,12 @@ const handleClickOutside = (event) => {
 
 // Lifecycle
 onMounted(() => {
-  console.log('🏗️ Header mounted')
-  console.log('Auth state:', { 
-    isAuthenticated: isAuthenticated.value, 
-    user: currentUser.value,
-    userInitials: userInitials.value,
-    userDisplayName: userDisplayName.value
-  })
   document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
-  console.log('🏗️ Header unmounted')
   document.removeEventListener('click', handleClickOutside)
 })
-
-// Debug function for testing
-if (typeof window !== 'undefined') {
-  window.headerDebug = () => {
-    console.log('=== HEADER DEBUG ===')
-    console.log('showUserMenu:', showUserMenu.value)
-    console.log('isAuthenticated:', isAuthenticated.value)
-    console.log('currentUser:', currentUser.value)
-    console.log('userInitials:', userInitials.value)
-    console.log('userDisplayName:', userDisplayName.value)
-    console.log('authService data:', {
-      token: authService.getStoredToken(),
-      user: authService.getStoredUser(),
-      authenticated: authService.isAuthenticated()
-    })
-    console.log('Storage check:', {
-      finance_token: localStorage.getItem(STORAGE_KEYS.TOKEN),
-      finance_user: localStorage.getItem(STORAGE_KEYS.USER),
-      allKeys: Object.keys(localStorage)
-    })
-  }
-
-  // Add authService to window for debugging
-  window.authService = authService
-
-  // Add manual toggle function for testing
-  window.testToggle = () => {
-    console.log('Manual toggle test')
-    showUserMenu.value = !showUserMenu.value
-    console.log('showUserMenu after manual toggle:', showUserMenu.value)
-  }
-
-  // Add clear function for debugging
-  window.clearAuth = () => {
-    localStorage.removeItem(STORAGE_KEYS.TOKEN)
-    localStorage.removeItem(STORAGE_KEYS.USER)
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
-    authService.clearAuthData()
-    console.log('Auth data cleared')
-    window.location.href = '/login'
-  }
-}
 </script>
 
 <style scoped>

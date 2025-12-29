@@ -19,19 +19,15 @@ export const clearMockData = () => {
     keysToRemove.forEach(key => {
       if (localStorage.getItem(key)) {
         localStorage.removeItem(key)
-        console.log(`✅ Removed: ${key}`)
       }
     })
 
-    console.log('🎉 All mock data cleared successfully!')
-    console.log('💡 The app will now fetch data from the Laravel backend API')
 
     return {
       success: true,
       message: 'Mock data cleared successfully. Please refresh the page and login to fetch real data from the API.'
     }
   } catch (error) {
-    console.error('❌ Error clearing mock data:', error)
     return {
       success: false,
       message: 'Failed to clear mock data: ' + error.message

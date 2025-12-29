@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,14 +40,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created category
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:INCOME,EXPENSE',
-            'icon' => 'nullable|string|max:50',
-            'color' => 'nullable|string|max:7',
-        ]);
+        $validated = $request->validated();
+
+        // Convert type to uppercase for database storage
+        if (isset($validated['type'])) {
+            $validated['type'] = strtoupper($validated['type']);
+        }
 
         $category = $request->user()->categories()->create($validated);
 
@@ -66,6 +68,8 @@ class CategoryController extends Controller
               ->orWhere('is_default', true);
         })->findOrFail($id);
 
+        $this->authorize('view', $category);
+
         return response()->json([
             'success' => true,
             'data' => $category,
@@ -75,16 +79,18 @@ class CategoryController extends Controller
     /**
      * Update the specified category
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCategoryRequest $request, $id)
     {
         $category = $request->user()->categories()->findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'icon' => 'nullable|string|max:50',
-            'color' => 'nullable|string|max:7',
-            'is_active' => 'sometimes|boolean',
-        ]);
+        $this->authorize('update', $category);
+
+        $validated = $request->validated();
+
+        // Convert type to uppercase for database storage
+        if (isset($validated['type'])) {
+            $validated['type'] = strtoupper($validated['type']);
+        }
 
         $category->update($validated);
 
@@ -101,6 +107,8 @@ class CategoryController extends Controller
     public function destroy(Request $request, $id)
     {
         $category = $request->user()->categories()->findOrFail($id);
+
+        $this->authorize('delete', $category);
 
         // Don't allow deleting categories with transactions
         if ($category->transactions()->exists()) {

@@ -18,7 +18,6 @@ export const formatCurrency = (amount, currency = 'USD', locale = 'en-US', optio
   try {
     return new Intl.NumberFormat(locale, defaultOptions).format(amount)
   } catch (error) {
-    console.error('Currency formatting error:', error)
     // Fallback formatting
     const symbol = getCurrencySymbol(currency)
     return `${symbol}${Number(amount).toFixed(2)}`
@@ -109,7 +108,6 @@ export const formatDate = (date, format = 'MM/DD/YYYY', locale = 'en-US') => {
         return dateObj.toLocaleDateString(locale)
     }
   } catch (error) {
-    console.error('Date formatting error:', error)
     return dateObj.toLocaleDateString()
   }
 }
@@ -137,7 +135,6 @@ export const formatRelativeTime = (date, locale = 'en-US') => {
       return rtf.format(diffMinutes, 'minute')
     }
   } catch (error) {
-    console.error('Relative time formatting error:', error)
     return formatDate(date)
   }
 }
@@ -191,7 +188,6 @@ export const formatPercentage = (value, decimals = 1, locale = 'en-US') => {
       maximumFractionDigits: decimals
     }).format(value / 100)
   } catch (error) {
-    console.error('Percentage formatting error:', error)
     return `${Number(value).toFixed(decimals)}%`
   }
 }
@@ -211,7 +207,6 @@ export const formatNumber = (value, locale = 'en-US', options = {}) => {
   try {
     return new Intl.NumberFormat(locale, defaultOptions).format(value)
   } catch (error) {
-    console.error('Number formatting error:', error)
     return Number(value).toLocaleString()
   }
 }
@@ -413,7 +408,6 @@ export const formatForJSON = (data) => {
   try {
     return JSON.stringify(data, null, 2)
   } catch (error) {
-    console.error('JSON formatting error:', error)
     return '{}'
   }
 }

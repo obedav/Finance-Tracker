@@ -254,12 +254,12 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <p class="font-semibold text-slate-700 group-hover:text-slate-900 transition-colors text-sm sm:text-base truncate">
-                      {{ transaction.category }}
+                      {{ transaction.category?.name || transaction.category || 'Uncategorized' }}
                     </p>
                     <p class="text-xs sm:text-sm text-slate-500 truncate">
                       {{ transaction.description || 'No description' }}
                     </p>
-                    <p class="text-xs text-slate-400 mt-1">{{ formatDate(transaction.createdAt) }}</p>
+                    <p class="text-xs text-slate-400 mt-1">{{ formatDate(transaction.date || transaction.created_at || transaction.createdAt) }}</p>
                   </div>
                 </div>
                 <div class="text-right flex-shrink-0 ml-2">
@@ -300,11 +300,11 @@
               </svg>
             </div>
             <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-emerald-600 group-hover:scale-110 transition-transform">
-              {{ currentMonthTransactions.filter(t => t.type === 'income').length }}
+              {{ currentMonthTransactions.filter(t => t.type?.toUpperCase() === 'INCOME').length }}
             </div>
             <p class="text-xs sm:text-sm text-emerald-700 font-medium">Income Transactions</p>
           </div>
-          
+
           <div class="text-center p-4 sm:p-6 bg-gradient-to-br from-gold-50 to-gold-100 rounded-xl hover-lift group cursor-pointer border border-gold-200">
             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gold-500 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3 group-hover:scale-110 transition-transform">
               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -312,7 +312,7 @@
               </svg>
             </div>
             <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-gold-600 group-hover:scale-110 transition-transform">
-              {{ currentMonthTransactions.filter(t => t.type === 'expense').length }}
+              {{ currentMonthTransactions.filter(t => t.type?.toUpperCase() === 'EXPENSE').length }}
             </div>
             <p class="text-xs sm:text-sm text-gold-700 font-medium">Expense Transactions</p>
           </div>
@@ -357,11 +357,13 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTransactionStore } from '../stores/transactions'
+import { useCategoriesStore } from '../stores/categories'
 import DashboardModal from '../components/DashboardModal.vue'
 import { useFormatters } from '@/composables/useFormatters'
 
 const router = useRouter()
 const transactionStore = useTransactionStore()
+const categoriesStore = useCategoriesStore()
 const showTransactionModal = ref(false)
 const isRefreshing = ref(false)
 const lastUpdated = ref(new Date().toLocaleTimeString())
@@ -374,18 +376,23 @@ const balanceColor = computed(() => {
 
 const recentTransactions = computed(() => {
   return transactionStore.transactions
+    .slice()
+    .sort((a, b) => {
+      const dateA = new Date(a.date || a.created_at || a.createdAt)
+      const dateB = new Date(b.date || b.created_at || b.createdAt)
+      return dateB - dateA
+    })
     .slice(0, 5)
-    .sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date))
 })
 
 const currentMonthTransactions = computed(() => {
   const now = new Date()
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
-  
+
   return transactionStore.transactions.filter(transaction => {
-    const transactionDate = new Date(transaction.createdAt || transaction.date)
-    return transactionDate.getMonth() === currentMonth && 
+    const transactionDate = new Date(transaction.date || transaction.created_at || transaction.createdAt)
+    return transactionDate.getMonth() === currentMonth &&
            transactionDate.getFullYear() === currentYear
   })
 })
@@ -461,30 +468,62 @@ const refreshData = async () => {
   showNotification('Data refreshed successfully!', 'success')
 }
 
-const handleTransactionSubmit = (transactionData) => {
+const handleTransactionSubmit = async (transactionData) => {
+  console.log('=== Transaction Submit Debug ===')
+  console.log('Raw transaction data:', transactionData)
+  console.log('Available categories:', categoriesStore.categories)
+
   try {
-    // Add transaction to store
-    transactionStore.addTransaction(transactionData)
-    
+    // Find the category ID by name and type - directly filter the array
+    const category = categoriesStore.categories.find(cat =>
+      cat.name === transactionData.category &&
+      cat.type.toLowerCase() === transactionData.type.toLowerCase()
+    )
+    console.log('Found category:', category)
+
+    if (!category) {
+      const errorMsg = `Category "${transactionData.category}" (${transactionData.type}) not found.`
+      console.error(errorMsg)
+      console.log('Available categories for type', transactionData.type, ':',
+        categoriesStore.categories.filter(c => c.type.toLowerCase() === transactionData.type.toLowerCase()))
+      alert(errorMsg + '\n\nPlease go to Categories page to create this category first.')
+      return
+    }
+
+    // Transform data to match API expectations
+    const apiData = {
+      type: transactionData.type.toLowerCase(), // Backend validation expects lowercase: income/expense
+      amount: parseFloat(transactionData.amount),
+      category_id: category.id, // Convert category name to ID
+      description: transactionData.description || transactionData.category, // Use category as description if empty
+      date: transactionData.date,
+      notes: transactionData.notes || null,
+      status: 'completed'
+    }
+
+    console.log('Sending to API:', apiData)
+
+    // Add transaction to store (this calls the API)
+    const result = await transactionStore.addTransaction(apiData)
+    console.log('API Result:', result)
+
     // Close modal
     showTransactionModal.value = false
-    
+
     // Show success notification
-    showNotification('Transaction added successfully!', 'success')
-    
+    alert('Transaction added successfully!')
+
     // Update last updated time
     lastUpdated.value = new Date().toLocaleTimeString()
-    
-    console.log('Transaction added:', transactionData)
+
   } catch (error) {
-    console.error('Error adding transaction:', error)
-    showNotification('Failed to add transaction. Please try again.', 'error')
+    console.error('Failed to add transaction:', error)
+    alert('Error: ' + (error.message || 'Failed to add transaction. Please try again.'))
   }
 }
 
 const showNotification = (message, type = 'info') => {
   // In a real app, you'd integrate with a toast notification system
-  console.log(`${type.toUpperCase()}: ${message}`)
   
   // For now, you can add a simple toast notification here
   // or integrate with vue-toastification if available
@@ -492,11 +531,12 @@ const showNotification = (message, type = 'info') => {
 
 // Lifecycle hooks
 onMounted(async () => {
-  console.log('Enhanced Dashboard mounted with DashboardModal!')
-  
-  // Initialize transaction store if needed
-  await transactionStore.initializeStore()
-  
+  // Initialize stores in parallel
+  await Promise.all([
+    transactionStore.initializeStore(),
+    categoriesStore.initializeCategories()
+  ])
+
   // Set initial last updated time
   lastUpdated.value = new Date().toLocaleTimeString()
 })

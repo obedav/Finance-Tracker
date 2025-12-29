@@ -302,7 +302,6 @@ const loadData = async () => {
     initializeCharts()
   } catch (err) {
     error.value = err.message || 'Failed to load category report'
-    console.error('Category report error:', err)
   } finally {
     loading.value = false
   }
@@ -392,7 +391,6 @@ const exportData = async (format) => {
       await reportService.exportReportPDF('category', filters.value)
     }
   } catch (err) {
-    console.error('Export error:', err)
   }
 }
 

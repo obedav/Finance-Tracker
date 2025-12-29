@@ -385,7 +385,6 @@ const fetchCategories = async () => {
     await categoriesStore.initializeCategories()
   } catch (err) {
     error.value = err.message || 'Failed to load categories'
-    console.error('Error loading categories:', err)
   } finally {
     loading.value = false
   }
@@ -436,7 +435,6 @@ const handleCategorySubmit = async (formData) => {
     }
     closeCategoryModal()
   } catch (err) {
-    console.error('Error saving category:', err)
     // You could show an error message here
   } finally {
     isSubmitting.value = false
@@ -447,7 +445,6 @@ const deleteCategory = async (category) => {
   try {
     await categoriesStore.deleteCategory(category.id)
   } catch (err) {
-    console.error('Error deleting category:', err)
     // You could show an error message here
   }
 }
@@ -458,7 +455,6 @@ const resetToDefaults = async () => {
       categoriesStore.resetToDefaults()
       showBulkActionsModal.value = false
         } catch (err) {
-      console.error('Error resetting categories:', err)
       // You could show an error message here
     }
   }
@@ -486,7 +482,6 @@ const exportCategories = () => {
     
     showBulkActionsModal.value = false
   } catch (err) {
-    console.error('Error exporting categories:', err)
     // You could show an error message here
   }
 }
@@ -515,7 +510,6 @@ const handleFileUpload = async (event) => {
     
     importData.value = parsedData
   } catch (err) {
-    console.error('Error reading file:', err)
     importError.value = 'Failed to read file. Please make sure it is a valid JSON file.'
   }
 }
@@ -532,7 +526,6 @@ const confirmImport = async () => {
     alert(`Successfully imported ${result.imported} categories.`)
   } catch (err) {
     importError.value = err.message || 'Failed to import categories'
-    console.error('Error importing categories:', err)
   } finally {
     isImporting.value = false
   }

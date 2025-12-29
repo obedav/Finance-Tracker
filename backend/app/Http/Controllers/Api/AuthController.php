@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\User;
 use App\Models\UserPreference;
 use Illuminate\Http\Request;
@@ -47,6 +48,19 @@ class AuthController extends Controller
         // Create token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Set token in httpOnly cookie for security
+        $cookie = cookie(
+            'auth_token',                                           // name
+            $token,                                                 // value
+            60 * 24 * 7,                                           // minutes (7 days)
+            '/',                                                    // path
+            config('session.domain'),                               // domain
+            config('session.secure', false),                        // secure (false in dev, true in prod)
+            true,                                                   // httpOnly (prevents JavaScript access)
+            false,                                                  // raw
+            config('session.same_site', 'lax')                      // sameSite
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'User registered successfully. Please check your email to verify your account.',
@@ -61,9 +75,7 @@ class AuthController extends Controller
                 'created_at' => $user->created_at,
                 'preferences' => $user->preferences,
             ],
-            'token' => $token,
-            'expiresIn' => 3600,
-        ], 201);
+        ], 201)->cookie($cookie);
     }
 
     /**
@@ -93,6 +105,22 @@ class AuthController extends Controller
         // Create new token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Determine cookie expiration based on remember me
+        $cookieMinutes = ($validated['remember'] ?? false) ? 60 * 24 * 30 : 60 * 24 * 7; // 30 days or 7 days
+
+        // Set token in httpOnly cookie for security
+        $cookie = cookie(
+            'auth_token',
+            $token,
+            $cookieMinutes,
+            '/',                                                    // path
+            config('session.domain'),                               // domain
+            config('session.secure', false),                        // secure (false in dev, true in prod)
+            true,                                                   // httpOnly
+            false,                                                  // raw
+            config('session.same_site', 'lax')                      // sameSite
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
@@ -107,9 +135,7 @@ class AuthController extends Controller
                 'created_at' => $user->created_at,
                 'preferences' => $user->preferences,
             ],
-            'token' => $token,
-            'expiresIn' => 3600,
-        ]);
+        ])->cookie($cookie);
     }
 
     /**
@@ -119,10 +145,13 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
+        // Clear the auth cookie
+        $cookie = cookie()->forget('auth_token');
+
         return response()->json([
             'success' => true,
             'message' => 'Logged out successfully',
-        ]);
+        ])->cookie($cookie);
     }
 
     /**
@@ -151,14 +180,9 @@ class AuthController extends Controller
     /**
      * Update user profile
      */
-    public function updateProfile(Request $request)
+    public function updateProfile(UpdateProfileRequest $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'sometimes|string|max:255',
-            'last_name' => 'sometimes|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'avatar' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $user = $request->user();
         $user->update($validated);

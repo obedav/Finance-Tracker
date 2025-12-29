@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,17 +66,14 @@ class TransactionController extends Controller
     /**
      * Store a newly created transaction
      */
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request)
     {
-        $validated = $request->validate([
-            'type' => 'required|in:INCOME,EXPENSE',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:categories,id',
-            'date' => 'required|date',
-            'status' => 'sometimes|in:pending,completed,cancelled,failed',
-            'notes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
+
+        // Convert type to uppercase for database storage
+        if (isset($validated['type'])) {
+            $validated['type'] = strtoupper($validated['type']);
+        }
 
         $transaction = $request->user()->transactions()->create($validated);
         $transaction->load('category');
@@ -97,6 +95,9 @@ class TransactionController extends Controller
             ->with('category')
             ->findOrFail($id);
 
+        // Explicit authorization check
+        $this->authorize('view', $transaction);
+
         return response()->json([
             'success' => true,
             'data' => $transaction,
@@ -110,15 +111,24 @@ class TransactionController extends Controller
     {
         $transaction = $request->user()->transactions()->findOrFail($id);
 
+        // Explicit authorization check
+        $this->authorize('update', $transaction);
+
+        // Validation with XSS protection
         $validated = $request->validate([
-            'type' => 'sometimes|in:INCOME,EXPENSE',
-            'amount' => 'sometimes|numeric|min:0.01',
-            'description' => 'sometimes|string|max:255',
+            'type' => 'sometimes|in:income,expense',
+            'amount' => 'sometimes|numeric|min:0.01|max:999999999.99',
+            'description' => ['sometimes', 'string', 'max:500', 'regex:/^[a-zA-Z0-9\s\-\_\.\,\!\@\#\$\%\&\*\(\)]+$/'],
             'category_id' => 'nullable|exists:categories,id',
-            'date' => 'sometimes|date',
+            'date' => 'sometimes|date|before_or_equal:today',
             'status' => 'sometimes|in:pending,completed,cancelled,failed',
-            'notes' => 'nullable|string',
+            'notes' => 'nullable|string|max:1000',
         ]);
+
+        // Convert type to uppercase for database storage
+        if (isset($validated['type'])) {
+            $validated['type'] = strtoupper($validated['type']);
+        }
 
         $transaction->update($validated);
         $transaction->load('category');
@@ -136,6 +146,10 @@ class TransactionController extends Controller
     public function destroy(Request $request, $id)
     {
         $transaction = $request->user()->transactions()->findOrFail($id);
+
+        // Explicit authorization check
+        $this->authorize('delete', $transaction);
+
         $transaction->delete();
 
         return response()->json([

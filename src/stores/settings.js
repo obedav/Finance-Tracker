@@ -97,7 +97,6 @@ export const useSettingsStore = defineStore('settings', () => {
       try {
         preferences.value = { ...preferences.value, ...JSON.parse(storedPreferences) }
       } catch (err) {
-        console.error('Failed to parse stored preferences:', err)
       }
     }
 
@@ -105,7 +104,6 @@ export const useSettingsStore = defineStore('settings', () => {
       try {
         notifications.value = { ...notifications.value, ...JSON.parse(storedNotifications) }
       } catch (err) {
-        console.error('Failed to parse stored notifications:', err)
       }
     }
 
@@ -113,7 +111,6 @@ export const useSettingsStore = defineStore('settings', () => {
       try {
         privacy.value = { ...privacy.value, ...JSON.parse(storedPrivacy) }
       } catch (err) {
-        console.error('Failed to parse stored privacy settings:', err)
       }
     }
 
@@ -121,7 +118,6 @@ export const useSettingsStore = defineStore('settings', () => {
       try {
         budget.value = { ...budget.value, ...JSON.parse(storedBudget) }
       } catch (err) {
-        console.error('Failed to parse stored budget settings:', err)
       }
     }
 
@@ -129,7 +125,6 @@ export const useSettingsStore = defineStore('settings', () => {
       try {
         goals.value = JSON.parse(storedGoals)
       } catch (err) {
-        console.error('Failed to parse stored goals:', err)
       }
     }
 

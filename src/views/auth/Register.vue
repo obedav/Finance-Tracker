@@ -254,11 +254,6 @@
               </div>
             </div>
 
-            <!-- Debug Information (remove in production) -->
-            <div v-if="showDebugInfo" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <p class="text-xs text-blue-700 font-medium">Debug Info:</p>
-              <pre class="text-xs text-blue-600 mt-1">{{ debugInfo }}</pre>
-            </div>
           </div>
         </div>
 
@@ -298,9 +293,7 @@ export default {
       errors: {},
       loading: false,
       showPassword: false,
-      showConfirmPassword: false,
-      showDebugInfo: false, // Set to true for debugging
-      debugInfo: {}
+      showConfirmPassword: false
     }
   },
   computed: {
@@ -417,10 +410,8 @@ export default {
     },
 
     async handleRegister() {
-      console.log('🔵 Starting registration process...')
       
       if (!this.validateForm()) {
-        console.log('❌ Form validation failed:', this.errors)
         return
       }
 
@@ -437,28 +428,10 @@ export default {
           password_confirmation: this.form.confirmPassword
         }
 
-        // Debug information
-        this.debugInfo = {
-          requestData: { ...registrationData, password: '[HIDDEN]' },
-          timestamp: new Date().toISOString(),
-          formValid: this.isFormValid
-        }
-
-        console.log('🔵 Registration attempt with data:', this.debugInfo.requestData)
-
         // Import the API service
         const { authApi } = await import('@/services/api.js')
-        
-        // Test API endpoint availability first
-        console.log('🔍 Testing API availability...')
-        
-        const response = await authApi.register(registrationData)
-        
-        console.log('✅ Registration successful:', response)
 
-        // Update debug info
-        this.debugInfo.response = response
-        this.debugInfo.success = true
+        const response = await authApi.register(registrationData)
 
         // 🚨 CRITICAL: Clear all cached data for new user
         await this.clearAllCachedData()
@@ -482,16 +455,6 @@ export default {
         }, 2000)
 
       } catch (error) {
-        console.error('❌ Registration error:', error)
-        
-        // Update debug info
-        this.debugInfo.error = {
-          message: error.message,
-          status: error.response?.status,
-          data: error.response?.data,
-          headers: error.response?.headers
-        }
-        
         this.handleRegistrationError(error)
         this.toast.error(this.errors.general)
       } finally {
@@ -501,7 +464,6 @@ export default {
 
     // Critical method to clear all cached data for new user
     async clearAllCachedData() {
-      console.log('🧹 Clearing all cached data for new user...')
       
       try {
         // Clear localStorage completely
@@ -522,22 +484,18 @@ export default {
         
         authKeys.forEach(key => {
           localStorage.removeItem(key)
-          console.log(`🗑️ Removed ${key} from localStorage`)
         })
         
         // Clear sessionStorage completely
         sessionStorage.clear()
-        console.log('🗑️ SessionStorage cleared')
         
         // Clear auth service data if available
         try {
           const authService = await import('@/services/authService')
           if (authService.default?.clearAuthData) {
             authService.default.clearAuthData()
-            console.log('🗑️ Auth service data cleared')
           }
         } catch (error) {
-          console.log('⚠️ Auth service not available or error clearing:', error.message)
         }
         
         // Clear Pinia stores if available
@@ -547,10 +505,8 @@ export default {
           const userStore = useUserStore()
           if (userStore.$reset) {
             userStore.$reset()
-            console.log('🗑️ User store reset')
           }
         } catch (error) {
-          console.log('⚠️ User store not available:', error.message)
         }
         
         try {
@@ -559,10 +515,8 @@ export default {
           const transactionStore = useTransactionStore()
           if (transactionStore.$reset) {
             transactionStore.$reset()
-            console.log('🗑️ Transaction store reset')
           }
         } catch (error) {
-          console.log('⚠️ Transaction store not available:', error.message)
         }
         
         try {
@@ -571,39 +525,26 @@ export default {
           const budgetStore = useBudgetStore()
           if (budgetStore.$reset) {
             budgetStore.$reset()
-            console.log('🗑️ Budget store reset')
           }
         } catch (error) {
-          console.log('⚠️ Budget store not available:', error.message)
         }
         
         // Clear any cached API responses
         if (window.apiCache) {
           window.apiCache.clear()
-          console.log('🗑️ API cache cleared')
         }
         
         // Clear any Vue component caches
         if (this.$parent?.$store) {
           this.$parent.$store.commit('RESET_ALL_STATE')
-          console.log('🗑️ Vuex store reset')
         }
-        
-        console.log('✅ All cached data cleared successfully')
-        
-        // Update debug info
-        this.debugInfo.dataClearingSuccess = true
-        this.debugInfo.clearedAt = new Date().toISOString()
-        
+
       } catch (error) {
-        console.error('❌ Error clearing cached data:', error)
-        this.debugInfo.dataClearingError = error.message
       }
     },
 
     // Force fresh data reload helper
     async forceFreshDataReload() {
-      console.log('🔄 Forcing fresh data reload...')
       
       try {
         // Option 1: Reload the entire page to ensure fresh start
@@ -619,12 +560,10 @@ export default {
         })
         
       } catch (error) {
-        console.error('Error forcing fresh reload:', error)
       }
     },
 
     handleRegistrationError(error) {
-      console.log('🔍 Handling registration error:', error)
       
       // Handle network errors
       if (!error.response) {
@@ -635,7 +574,6 @@ export default {
       const status = error.response.status
       const errorData = error.response.data
 
-      console.log('🔍 Error details:', { status, errorData })
 
       switch (status) {
         case 400:
@@ -676,14 +614,8 @@ export default {
       }
     },
 
-    // Debug helper methods
-    toggleDebugInfo() {
-      this.showDebugInfo = !this.showDebugInfo
-    },
-
     // Emergency reset method (for testing)
     async emergencyReset() {
-      console.log('🚨 Emergency reset triggered')
       
       // Clear everything
       await this.clearAllCachedData()
@@ -699,41 +631,17 @@ export default {
       document.getElementById('firstName')?.focus()
     })
 
-    // Add debug keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      // Ctrl+D for debug info
-      if (e.ctrlKey && e.key === 'd') {
-        e.preventDefault()
-        this.toggleDebugInfo()
-      }
-      
-      // Ctrl+Shift+R for emergency reset (for testing)
-      if (e.ctrlKey && e.shiftKey && e.key === 'R') {
-        e.preventDefault()
-        if (confirm('Emergency reset: Clear all data and reload?')) {
-          this.emergencyReset()
-        }
-      }
-    })
-
     // Clear any existing auth data when component loads
     this.$nextTick(async () => {
       try {
         // Ensure we start with a clean slate
         const authService = await import('@/services/authService')
         if (authService.default?.isAuthenticated?.()) {
-          console.log('🔄 User already authenticated, clearing for new registration')
           await this.clearAllCachedData()
         }
       } catch (error) {
-        console.log('No existing auth to clear')
       }
     })
-  },
-
-  // Cleanup when component is destroyed
-  beforeUnmount() {
-    document.removeEventListener('keydown', this.toggleDebugInfo)
   }
 }
 </script>
@@ -750,11 +658,5 @@ button:hover:not(:disabled) {
 
 button:active:not(:disabled) {
   transform: translateY(0);
-}
-
-/* Debug info styles */
-pre {
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 </style>

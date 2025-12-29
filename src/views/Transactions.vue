@@ -270,23 +270,23 @@
             <div class="hidden lg:flex lg:items-center lg:justify-between">
               <div class="flex items-center space-x-4">
                 <div class="w-10 h-10 rounded-lg flex items-center justify-center"
-                     :class="transaction.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
+                     :class="transaction.type?.toUpperCase() === 'INCOME' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          :d="transaction.type === 'income' ? 'M7 11l5-5m0 0l5 5m-5-5v12' : 'M17 13l-5 5m0 0l-5-5m5 5V6'">
+                          :d="transaction.type?.toUpperCase() === 'INCOME' ? 'M7 11l5-5m0 0l5 5m-5-5v12' : 'M17 13l-5 5m0 0l-5-5m5 5V6'">
                     </path>
                   </svg>
                 </div>
                 <div>
-                  <p class="font-medium text-slate-900">{{ transaction.category }}</p>
-                  <p class="text-sm text-slate-500">{{ formatDate(transaction.createdAt || transaction.date) }}</p>
+                  <p class="font-medium text-slate-900">{{ transaction.category?.name || transaction.category }}</p>
+                  <p class="text-sm text-slate-500">{{ formatDate(transaction.date || transaction.created_at || transaction.createdAt) }}</p>
                 </div>
               </div>
               
               <div class="flex items-center space-x-4">
                 <div class="text-center">
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                        :class="transaction.type === 'income' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'">
+                        :class="transaction.type?.toUpperCase() === 'INCOME' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'">
                     {{ transaction.type }}
                   </span>
                 </div>
@@ -296,8 +296,8 @@
                 </div>
                 
                 <div class="text-right">
-                  <p class="font-semibold" :class="transaction.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
-                    {{ transaction.type === 'income' ? '+' : '-' }}${{ formatCurrency(transaction.amount) }}
+                  <p class="font-semibold" :class="transaction.type?.toUpperCase() === 'INCOME' ? 'text-emerald-600' : 'text-red-600'">
+                    {{ transaction.type?.toUpperCase() === 'INCOME' ? '+' : '-' }}${{ formatCurrency(transaction.amount) }}
                   </p>
                 </div>
                 
@@ -326,22 +326,22 @@
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                   <div class="w-10 h-10 rounded-lg flex items-center justify-center"
-                       :class="transaction.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
+                       :class="transaction.type?.toUpperCase() === 'INCOME' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            :d="transaction.type === 'income' ? 'M7 11l5-5m0 0l5 5m-5-5v12' : 'M17 13l-5 5m0 0l-5-5m5 5V6'">
+                            :d="transaction.type?.toUpperCase() === 'INCOME' ? 'M7 11l5-5m0 0l5 5m-5-5v12' : 'M17 13l-5 5m0 0l-5-5m5 5V6'">
                       </path>
                     </svg>
                   </div>
                   <div>
-                    <p class="font-medium text-slate-900">{{ transaction.category }}</p>
-                    <p class="text-sm text-slate-500">{{ formatDate(transaction.createdAt || transaction.date) }}</p>
+                    <p class="font-medium text-slate-900">{{ transaction.category?.name || transaction.category }}</p>
+                    <p class="text-sm text-slate-500">{{ formatDate(transaction.date || transaction.created_at || transaction.createdAt) }}</p>
                   </div>
                 </div>
                 
                 <div class="text-right">
-                  <p class="font-semibold" :class="transaction.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
-                    {{ transaction.type === 'income' ? '+' : '-' }}${{ formatCurrency(transaction.amount) }}
+                  <p class="font-semibold" :class="transaction.type?.toUpperCase() === 'INCOME' ? 'text-emerald-600' : 'text-red-600'">
+                    {{ transaction.type?.toUpperCase() === 'INCOME' ? '+' : '-' }}${{ formatCurrency(transaction.amount) }}
                   </p>
                   <div class="flex items-center space-x-1 mt-1">
                     <button @click="editTransaction(transaction)" class="p-1 text-gray-400 hover:text-emerald-600 transition-colors">
@@ -468,13 +468,13 @@ const allTransactions = computed(() => transactionStore.transactions || [])
 
 const realTotalIncome = computed(() => 
   allTransactions.value
-    .filter(t => t.type === 'income')
+    .filter(t => t.type?.toUpperCase() === 'INCOME')
     .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
 )
 
 const realTotalExpenses = computed(() => 
   allTransactions.value
-    .filter(t => t.type === 'expense')
+    .filter(t => t.type?.toUpperCase() === 'EXPENSE')
     .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
 )
 
@@ -503,11 +503,11 @@ const pageDescription = computed(() => {
 })
 
 const incomeTransactionsCount = computed(() => 
-  allTransactions.value.filter(t => t.type === 'income').length
+  allTransactions.value.filter(t => t.type?.toUpperCase() === 'INCOME').length
 )
 
 const expenseTransactionsCount = computed(() => 
-  allTransactions.value.filter(t => t.type === 'expense').length
+  allTransactions.value.filter(t => t.type?.toUpperCase() === 'EXPENSE').length
 )
 
 // Filter logic
@@ -517,43 +517,51 @@ const hasActiveFilters = computed(() =>
 
 const filteredTransactions = computed(() => {
   let transactions = [...allTransactions.value]
-  
+
   // Apply type filter from route query or filters
   const typeFilter = currentFilter.value || filters.value.type
   if (typeFilter) {
-    transactions = transactions.filter(t => t.type === typeFilter)
+    transactions = transactions.filter(t => t.type?.toUpperCase() === typeFilter?.toUpperCase())
   }
-  
+
   if (filters.value.category) {
-    transactions = transactions.filter(t => t.category === filters.value.category)
+    transactions = transactions.filter(t => {
+      const categoryName = t.category?.name || t.category
+      return categoryName === filters.value.category
+    })
   }
-  
+
   if (filters.value.search) {
     const searchTerm = filters.value.search.toLowerCase()
-    transactions = transactions.filter(t => 
-      (t.description && t.description.toLowerCase().includes(searchTerm)) ||
-      (t.category && t.category.toLowerCase().includes(searchTerm))
-    )
+    transactions = transactions.filter(t => {
+      const categoryName = t.category?.name || t.category || ''
+      return (t.description && t.description.toLowerCase().includes(searchTerm)) ||
+        categoryName.toLowerCase().includes(searchTerm)
+    })
   }
-  
+
   if (filters.value.fromDate) {
     transactions = transactions.filter(t => {
-      const transactionDate = new Date(t.createdAt || t.date)
-      return transactionDate >= new Date(filters.value.fromDate)
+      const transactionDate = new Date(t.date || t.transaction_date || t.created_at || t.createdAt)
+      const fromDate = new Date(filters.value.fromDate)
+      fromDate.setHours(0, 0, 0, 0)
+      return transactionDate >= fromDate
     })
   }
-  
+
   if (filters.value.toDate) {
     transactions = transactions.filter(t => {
-      const transactionDate = new Date(t.createdAt || t.date)
-      return transactionDate <= new Date(filters.value.toDate)
+      const transactionDate = new Date(t.date || t.transaction_date || t.created_at || t.createdAt)
+      const toDate = new Date(filters.value.toDate)
+      toDate.setHours(23, 59, 59, 999)
+      return transactionDate <= toDate
     })
   }
-  
+
   // Sort by date (newest first)
   return transactions.sort((a, b) => {
-    const dateA = new Date(a.createdAt || a.date)
-    const dateB = new Date(b.createdAt || b.date)
+    const dateA = new Date(a.date || a.transaction_date || a.created_at || a.createdAt).getTime()
+    const dateB = new Date(b.date || b.transaction_date || b.created_at || b.createdAt).getTime()
     return dateB - dateA
   })
 })
@@ -690,7 +698,7 @@ const duplicateTransaction = (transaction) => {
   const duplicatedTransaction = {
     type: transaction.type,
     amount: transaction.amount,
-    category: transaction.category,
+    category: transaction.category?.name || transaction.category,
     description: `${transaction.description || ''} (Copy)`.trim(),
     date: new Date().toISOString(),
     createdAt: new Date().toISOString()
@@ -708,9 +716,9 @@ const deleteTransaction = (id) => {
 
 const exportTransactions = () => {
   const dataToExport = filteredTransactions.value.map(t => ({
-    Date: formatDate(t.createdAt || t.date),
+    Date: formatDate(t.date || t.transaction_date || t.created_at || t.createdAt),
     Type: t.type,
-    Category: t.category,
+    Category: t.category?.name || t.category,
     Description: t.description || '',
     Amount: t.amount
   }))
@@ -755,7 +763,6 @@ const handleTransactionSubmit = (transactionData) => {
 
 const showNotification = (message, type = 'info') => {
   // You can replace this with your preferred notification system
-  console.log(`${type.toUpperCase()}: ${message}`)
 }
 
 // Watchers

@@ -373,7 +373,6 @@ const quickExport = async (type, format) => {
     
     showMessage('Export completed successfully!')
   } catch (error) {
-    console.error('Quick export error:', error)
     showMessage('Export failed. Please try again.', 'error')
   } finally {
     exporting.value = false
@@ -393,7 +392,6 @@ const emailReport = async () => {
     showMessage(`Report sent to ${emailForm.value.address}`)
     emailForm.value.address = ''
   } catch (error) {
-    console.error('Email report error:', error)
     showMessage('Failed to send report. Please try again.', 'error')
   } finally {
     emailing.value = false
@@ -435,7 +433,6 @@ const customExportReport = async () => {
     
     showMessage('Custom export completed successfully!')
   } catch (error) {
-    console.error('Custom export error:', error)
     showMessage('Custom export failed. Please try again.', 'error')
   } finally {
     exporting.value = false
@@ -480,7 +477,6 @@ const loadCategories = async () => {
     const response = await categoryService.getCategories()
     availableCategories.value = response.categories?.map(cat => cat.name) || []
   } catch (error) {
-    console.error('Failed to load categories:', error)
   }
 }
 

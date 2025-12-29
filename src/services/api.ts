@@ -49,29 +49,19 @@ const api: AxiosInstance = axios.create({
   xsrfHeaderName: 'X-XSRF-TOKEN'  // Header name for CSRF token
 })
 
-// Request interceptor to add authentication token
+// Request interceptor to add metadata
+// Note: Authentication token is now sent via httpOnly cookie automatically
+// No need to manually add Authorization header
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const extendedConfig = config as ExtendedAxiosRequestConfig
 
-    // Add auth token if available
-    const token = localStorage.getItem(STORAGE_KEYS.TOKEN)
-    if (token) {
-      extendedConfig.headers.Authorization = `Bearer ${token}`
-    }
-
     // Add request timestamp for debugging
     extendedConfig.metadata = { startTime: new Date() }
-
-    // Log request in development
-    if (import.meta.env.DEV) {
-      console.log(`🚀 API Request: ${extendedConfig.method?.toUpperCase()} ${extendedConfig.url}`)
-    }
 
     return extendedConfig
   },
   (error: AxiosError): Promise<AxiosError> => {
-    console.error('Request interceptor error:', error)
     return Promise.reject(error)
   }
 )
@@ -86,7 +76,6 @@ api.interceptors.response.use(
 
     // Log response in development
     if (import.meta.env.DEV) {
-      console.log(`✅ API Response: ${config.method?.toUpperCase()} ${config.url} (${duration}ms)`)
     }
 
     return response
@@ -97,7 +86,6 @@ api.interceptors.response.use(
     if (config?.metadata?.startTime) {
       const endTime = new Date()
       const duration = endTime.getTime() - config.metadata.startTime.getTime()
-      console.log(`❌ API Error: ${config.method?.toUpperCase()} ${config.url} (${duration}ms)`)
     }
 
     // Handle different error types
@@ -170,23 +158,13 @@ const handleApiError = (error: ExtendedAxiosError): Promise<never> => {
   enhancedError.timestamp = new Date().toISOString()
 
   // Log error
-  console.error('API Error:', {
-    message: errorMessage,
-    code: errorCode,
-    statusCode,
-    url: error.config?.url,
-    method: error.config?.method,
-    timestamp: enhancedError.timestamp
-  })
 
   return Promise.reject(enhancedError)
 }
 
 // Handle unauthorized access
 const handleUnauthorized = (): void => {
-  // Clear stored auth data
-  localStorage.removeItem(STORAGE_KEYS.TOKEN)
-  localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
+  // Clear stored user data (token is in httpOnly cookie, cleared by backend)
   localStorage.removeItem(STORAGE_KEYS.USER)
 
   // Emit event for auth state change
@@ -337,21 +315,11 @@ interface PasswordResetData {
 export const authApi = {
   // Login
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    if (import.meta.env.DEV) {
-      console.log('🔐 AuthAPI.login called with:', maskSensitiveData(credentials))
-    }
-
     const response = await apiHelpers.post<ApiResponse<AuthResponse>>(API_ENDPOINTS.AUTH.LOGIN, credentials)
 
-    // Store tokens if login successful
-    if (response.token) {
-      localStorage.setItem(STORAGE_KEYS.TOKEN, response.token)
-      if (response.refreshToken) {
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken)
-      }
-      if (response.user) {
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user))
-      }
+    // Store user data (token is in httpOnly cookie now)
+    if (response.user) {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user))
     }
 
     return response as AuthResponse
@@ -359,25 +327,24 @@ export const authApi = {
 
   // Register
   register: async (userData: UserRegistration): Promise<AuthResponse> => {
-    if (import.meta.env.DEV) {
-      console.log('🔐 AuthAPI.register called with:', maskSensitiveData(userData as any))
+    const response = await apiHelpers.post<ApiResponse<AuthResponse>>(API_ENDPOINTS.AUTH.REGISTER, userData)
+
+    // Store user data (token is in httpOnly cookie now)
+    if (response.user) {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user))
     }
 
-    const response = await apiHelpers.post<ApiResponse<AuthResponse>>(API_ENDPOINTS.AUTH.REGISTER, userData)
     return response as AuthResponse
   },
 
   // Logout
   logout: async (): Promise<void> => {
-    const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)
-
     try {
-      await apiHelpers.post(API_ENDPOINTS.AUTH.LOGOUT, { refreshToken })
+      await apiHelpers.post(API_ENDPOINTS.AUTH.LOGOUT, {})
     } catch (error) {
-      console.warn('Logout API call failed:', error)
+      // Ignore logout errors
     } finally {
-      localStorage.removeItem(STORAGE_KEYS.TOKEN)
-      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
+      // Clear user data (token is cleared via httpOnly cookie by backend)
       localStorage.removeItem(STORAGE_KEYS.USER)
 
       window.dispatchEvent(new CustomEvent('auth:logout'))
@@ -385,22 +352,10 @@ export const authApi = {
   },
 
   // Refresh token
+  // Note: With httpOnly cookies, token refresh is handled automatically by the backend
+  // This method is kept for backward compatibility but simplified
   refreshToken: async (): Promise<ApiResponse> => {
-    const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)
-
-    if (!refreshToken) {
-      throw new Error('No refresh token available')
-    }
-
-    const response = await apiHelpers.post<ApiResponse>(API_ENDPOINTS.AUTH.REFRESH, { refreshToken })
-
-    if (response.token) {
-      localStorage.setItem(STORAGE_KEYS.TOKEN, response.token)
-      if (response.refreshToken) {
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken)
-      }
-    }
-
+    const response = await apiHelpers.post<ApiResponse>(API_ENDPOINTS.AUTH.REFRESH, {})
     return response
   },
 
@@ -565,22 +520,18 @@ let csrfInitialized = false
 
 export const initCsrfProtection = async (): Promise<boolean> => {
   if (csrfInitialized) {
-    console.log('📝 CSRF protection already initialized')
     return true
   }
 
   try {
-    console.log('🔐 Initializing CSRF protection...')
     const baseUrl = API_ENDPOINTS.BASE_URL.replace('/api', '')
     await axios.get(`${baseUrl}/sanctum/csrf-cookie`, {
       withCredentials: true
     })
 
     csrfInitialized = true
-    console.log('✅ CSRF protection initialized successfully')
     return true
   } catch (error) {
-    console.error('❌ Failed to initialize CSRF protection:', error)
     return false
   }
 }
@@ -635,12 +586,11 @@ api.interceptors.response.use(
       isRefreshing = true
 
       try {
-        const response = await authApi.refreshToken()
-        const newToken = response.token!
+        // With httpOnly cookies, just retry the request
+        // The cookie will be sent automatically
+        await authApi.refreshToken()
 
-        processQueue(null, newToken)
-        originalRequest.headers.Authorization = `Bearer ${newToken}`
-
+        processQueue(null, '')
         return api(originalRequest)
       } catch (refreshError) {
         processQueue(refreshError, null)

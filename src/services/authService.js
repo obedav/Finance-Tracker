@@ -27,21 +27,20 @@ class AuthService {
         remember: credentials.remember || false
       })
 
-      if (response.token && response.user) {
-        this.setAuthData(response.token, response.user)
-        this.startRefreshTokenTimer(response.expiresIn)
-        
+      // httpOnly cookie authentication - token is in cookie, not response
+      if (response.success && response.user) {
+        this.currentUser = response.user
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user))
+
         return {
           success: true,
           user: response.user,
-          token: response.token,
-          message: 'Login successful'
+          message: response.message || 'Login successful'
         }
       }
 
-      throw new Error('Invalid response from server')
+      throw new Error(response.message || 'Invalid response from server')
     } catch (error) {
-      console.error('Login error:', error)
       throw {
         success: false,
         message: error.message || 'Login failed',
@@ -62,24 +61,24 @@ class AuthService {
         last_name: userData.lastName,
         email: userData.email,
         password: userData.password,
+        password_confirmation: userData.password,
         phone: userData.phone || null
       })
 
-      if (response.token && response.user) {
-        this.setAuthData(response.token, response.user)
-        this.startRefreshTokenTimer(response.expiresIn)
-        
+      // httpOnly cookie authentication - token is in cookie, not response
+      if (response.success && response.user) {
+        this.currentUser = response.user
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user))
+
         return {
           success: true,
           user: response.user,
-          token: response.token,
-          message: 'Registration successful'
+          message: response.message || 'Registration successful'
         }
       }
 
-      throw new Error('Invalid response from server')
+      throw new Error(response.message || 'Invalid response from server')
     } catch (error) {
-      console.error('Registration error:', error)
       throw {
         success: false,
         message: error.message || 'Registration failed',
@@ -103,7 +102,6 @@ class AuthService {
         message: 'Logout successful'
       }
     } catch (error) {
-      console.error('Logout error:', error)
       // Clear data even if API call fails
       this.clearAuthData()
       this.stopRefreshTokenTimer()
@@ -138,7 +136,6 @@ class AuthService {
 
       throw new Error('Failed to refresh token')
     } catch (error) {
-      console.error('Token refresh error:', error)
       this.clearAuthData()
       throw error
     }
@@ -160,7 +157,6 @@ class AuthService {
         message: response.message || 'Password reset email sent'
       }
     } catch (error) {
-      console.error('Forgot password error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to send reset email',
@@ -186,7 +182,6 @@ class AuthService {
         message: response.message || 'Password reset successful'
       }
     } catch (error) {
-      console.error('Reset password error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to reset password',
@@ -212,7 +207,6 @@ class AuthService {
         message: response.message || 'Password changed successfully'
       }
     } catch (error) {
-      console.error('Change password error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to change password',
@@ -237,7 +231,6 @@ class AuthService {
       
       return response.user
     } catch (error) {
-      console.error('Get current user error:', error)
       throw error
     }
   }
@@ -262,7 +255,6 @@ class AuthService {
         message: response.message || 'Profile updated successfully'
       }
     } catch (error) {
-      console.error('Update profile error:', error)
       throw {
         success: false,
         message: error.message || 'Failed to update profile',
@@ -279,9 +271,8 @@ class AuthService {
   setAuthData(token, user) {
     this.token = token
     this.currentUser = user
-    
-    // Store in localStorage
-    localStorage.setItem(STORAGE_KEYS.TOKEN, token)
+
+    // Store user data in localStorage (tokens are now in httpOnly cookies)
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user))
   }
 
@@ -289,9 +280,8 @@ class AuthService {
   clearAuthData() {
     this.token = null
     this.currentUser = null
-    
-    // Clear from localStorage
-    localStorage.removeItem(STORAGE_KEYS.TOKEN)
+
+    // Clear user data from localStorage (token is in httpOnly cookie, handled by server)
     localStorage.removeItem(STORAGE_KEYS.USER)
   }
 
@@ -302,7 +292,8 @@ class AuthService {
 
   // Get stored token
   getStoredToken() {
-    return localStorage.getItem(STORAGE_KEYS.TOKEN)
+    // Tokens are now stored in httpOnly cookies, not in localStorage
+    return null
   }
 
   // Get stored user
@@ -311,20 +302,20 @@ class AuthService {
       const userData = localStorage.getItem(STORAGE_KEYS.USER)
       return userData ? JSON.parse(userData) : null
     } catch (error) {
-      console.error('Error parsing stored user data:', error)
       return null
     }
   }
 
   // Get refresh token
   getRefreshToken() {
-    // In a real app, this would be stored separately
-    return localStorage.getItem(STORAGE_KEYS.TOKEN)
+    // Refresh token is now handled by httpOnly cookies on the server side
+    return null
   }
 
   // Check if user is authenticated
   isAuthenticated() {
-    return !!(this.token || this.getStoredToken())
+    // Check for user data instead of token (tokens are in httpOnly cookies)
+    return !!(this.currentUser || this.getStoredUser())
   }
 
   // Get current user
@@ -334,17 +325,14 @@ class AuthService {
 
   // Initialize auth state from storage
   initializeAuth() {
-    const token = this.getStoredToken()
     const user = this.getStoredUser()
-    
-    if (token && user) {
-      this.token = token
+
+    if (user) {
       this.currentUser = user
-      // Start refresh timer (assuming 1 hour expiry)
-      this.startRefreshTokenTimer(3600)
+      // Token is in httpOnly cookie, server will handle refresh
       return true
     }
-    
+
     return false
   }
 
@@ -362,7 +350,6 @@ class AuthService {
       try {
         await this.refreshToken()
       } catch (error) {
-        console.error('Auto token refresh failed:', error)
         this.clearAuthData()
       }
     }, refreshTime)
@@ -525,11 +512,11 @@ class AuthService {
 
   async mockRefreshToken() {
     await mockApiHelpers.delay(300)
-    
+
     const newToken = 'mock-jwt-token-' + Date.now()
     this.token = newToken
-    localStorage.setItem(STORAGE_KEYS.TOKEN, newToken)
-    
+    // Token is stored in httpOnly cookie on the server side, not in localStorage
+
     return {
       success: true,
       token: newToken,
@@ -606,22 +593,20 @@ class AuthService {
   // Verify if the current token is valid
   async verifyToken() {
     try {
-      if (!this.token && !this.getStoredToken()) {
+      // Check if user data exists (tokens are in httpOnly cookies)
+      if (!this.currentUser && !this.getStoredUser()) {
         return false
       }
-      
+
       if (USE_MOCK_API) {
-        // For mock API, just check if token exists and is not expired
-        // In a real app, you would decode the JWT and check its expiration
-        const token = this.getStoredToken()
-        return !!token
+        // For mock API, just check if user exists
+        return !!this.currentUser
       }
-      
-      // For real API, verify with backend
+
+      // For real API, verify with backend (token is in httpOnly cookie, server side)
       const response = await apiHelpers.get(API_ENDPOINTS.AUTH.VERIFY_TOKEN)
       return response.valid === true
     } catch (error) {
-      console.error('Token verification error:', error)
       return false
     }
   }

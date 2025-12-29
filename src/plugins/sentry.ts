@@ -30,7 +30,6 @@ export function initSentry(app: App, router: Router): void {
 
   // Skip initialization if no DSN or not enabled
   if (!sentryDsn || (!isProduction && !enableSentry)) {
-    console.log('ℹ️ Sentry error tracking is disabled')
     return
   }
 
@@ -137,12 +136,8 @@ export function initSentry(app: App, router: Router): void {
       normalizeDepth: 5,
     })
 
-    console.log('✅ Sentry error tracking initialized')
-    console.log(`📊 Environment: ${config.environment}`)
-    console.log(`🔢 Release: ${config.release}`)
 
   } catch (error) {
-    console.error('❌ Failed to initialize Sentry:', error)
   }
 }
 

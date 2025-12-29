@@ -505,11 +505,11 @@ const filteredTransactions = computed(() => {
 const realAnalytics = computed(() => {
   const transactions = filteredTransactions.value
   const totalIncome = transactions
-    .filter(t => t.type === 'income')
+    .filter(t => t.type?.toUpperCase() === 'INCOME')
     .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
   
   const totalExpenses = transactions
-    .filter(t => t.type === 'expense')
+    .filter(t => t.type?.toUpperCase() === 'EXPENSE')
     .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
   
   const totalBalance = totalIncome - totalExpenses
@@ -570,10 +570,10 @@ const realAnalytics = computed(() => {
   
   // Calculate previous period balance
   const previousPeriodIncome = previousPeriodTransactions
-    .filter(t => t.type === 'income')
+    .filter(t => t.type?.toUpperCase() === 'INCOME')
     .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
   const previousPeriodExpenses = previousPeriodTransactions
-    .filter(t => t.type === 'expense')
+    .filter(t => t.type?.toUpperCase() === 'EXPENSE')
     .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
   const previousPeriodBalance = previousPeriodIncome - previousPeriodExpenses
   
@@ -590,9 +590,11 @@ const realAnalytics = computed(() => {
   const categoryTotals = {}
   transactions.forEach(t => {
     if (!t.category) return
-    const key = `${t.type}-${t.category}`
+    const categoryName = t.category?.name || t.category
+    const categoryType = t.type?.toUpperCase()
+    const key = `${categoryType}-${categoryName}`
     if (!categoryTotals[key]) {
-      categoryTotals[key] = { name: t.category, type: t.type, amount: 0, count: 0 }
+      categoryTotals[key] = { name: categoryName, type: categoryType, amount: 0, count: 0 }
     }
     categoryTotals[key].amount += parseFloat(t.amount) || 0
     categoryTotals[key].count += 1
@@ -603,11 +605,11 @@ const realAnalytics = computed(() => {
   
   // Separate income and expense categories
   const expenseCategoryBreakdown = allCategoryBreakdown
-    .filter(cat => cat.type === 'expense')
+    .filter(cat => cat.type?.toUpperCase() === 'EXPENSE')
     .slice(0, 8)
   
   const incomeCategoryBreakdown = allCategoryBreakdown
-    .filter(cat => cat.type === 'income')
+    .filter(cat => cat.type?.toUpperCase() === 'INCOME')
     .slice(0, 8)
   
   // Top category (highest amount across all categories)
@@ -733,11 +735,11 @@ const getIncomeExpensesData = () => {
     labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }))
     
     const dayIncome = transactions
-      .filter(t => t.type === 'income' && new Date(t.createdAt || t.date).toISOString().split('T')[0] === dateStr)
+      .filter(t => t.type?.toUpperCase() === 'INCOME' && new Date(t.createdAt || t.date).toISOString().split('T')[0] === dateStr)
       .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
     
     const dayExpenses = transactions
-      .filter(t => t.type === 'expense' && new Date(t.createdAt || t.date).toISOString().split('T')[0] === dateStr)
+      .filter(t => t.type?.toUpperCase() === 'EXPENSE' && new Date(t.createdAt || t.date).toISOString().split('T')[0] === dateStr)
       .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
     
     incomeData.push(dayIncome)
@@ -769,10 +771,10 @@ const getTrendData = () => {
     
     if (trendView.value === 'balance') {
       const monthIncome = monthTransactions
-        .filter(t => t.type === 'income')
+        .filter(t => t.type?.toUpperCase() === 'INCOME')
         .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
       const monthExpenses = monthTransactions
-        .filter(t => t.type === 'expense')
+        .filter(t => t.type?.toUpperCase() === 'EXPENSE')
         .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
       data.push(monthIncome - monthExpenses)
     } else {
@@ -951,7 +953,6 @@ const createIncomeExpensesChart = async () => {
       }
     })
   } catch (error) {
-    console.error('Error creating income/expenses chart:', error)
   }
 }
 
@@ -1002,7 +1003,6 @@ const createCategoryChart = async () => {
       }
     })
   } catch (error) {
-    console.error('Error creating category chart:', error)
   }
 }
 
@@ -1055,7 +1055,6 @@ const createTrendChart = async () => {
       }
     })
   } catch (error) {
-    console.error('Error creating trend chart:', error)
   }
 }
 

@@ -14,7 +14,6 @@ export const authGuard = (to, from, next) => {
     next()
   } else {
     // User is not authenticated, redirect to login
-    console.log('Auth guard: User not authenticated, redirecting to login')
     
     // Store the intended destination
     const intendedRoute = to.fullPath
@@ -44,7 +43,6 @@ export const guestGuard = (to, from, next) => {
     next()
   } else {
     // User is already authenticated, redirect to dashboard
-    console.log('Guest guard: User already authenticated, redirecting to dashboard')
     
     // Check if there's an intended route to redirect to
     const intendedRoute = localStorage.getItem('intended_route')
@@ -72,7 +70,6 @@ export const adminGuard = (to, from, next) => {
   if (user.role === 'admin' || user.isAdmin) {
     next()
   } else {
-    console.log('Admin guard: User does not have admin privileges')
     next({ 
       name: 'Unauthorized',
       query: { reason: 'admin_required' }
@@ -95,7 +92,6 @@ export const emailVerifiedGuard = (to, from, next) => {
   if (user.emailVerified) {
     next()
   } else {
-    console.log('Email verification guard: User email not verified')
     next({ 
       name: 'EmailVerification',
       query: { reason: 'email_verification_required' }
@@ -118,7 +114,6 @@ export const subscriptionGuard = (to, from, next) => {
   if (user.subscription?.status === 'active' || user.isPremium) {
     next()
   } else {
-    console.log('Subscription guard: User does not have active subscription')
     next({ 
       name: 'Upgrade',
       query: { reason: 'subscription_required' }
@@ -145,7 +140,6 @@ export const createRoleGuard = (requiredRoles) => {
     if (hasRequiredRole) {
       next()
     } else {
-      console.log(`Role guard: User does not have required roles: ${requiredRoles.join(', ')}`)
       next({ 
         name: 'Unauthorized',
         query: { reason: 'insufficient_privileges' }
@@ -166,7 +160,6 @@ export const createFeatureGuard = (featureName) => {
     if (isFeatureEnabled) {
       next()
     } else {
-      console.log(`Feature guard: Feature "${featureName}" is not enabled`)
       next({ 
         name: 'NotFound',
         query: { reason: 'feature_disabled' }
@@ -194,7 +187,6 @@ export const rateLimitGuard = (() => {
     
     // Check rate limit
     if (navigationHistory.length >= maxNavigations) {
-      console.log('Rate limit guard: Too many navigation attempts')
       next({ 
         name: 'ServerError',
         query: { reason: 'rate_limit_exceeded' }
@@ -226,7 +218,6 @@ export const maintenanceGuard = (to, from, next) => {
   if (isAdmin) {
     next()
   } else {
-    console.log('Maintenance guard: Application is in maintenance mode')
     next({ 
       name: 'Maintenance',
       query: { reason: 'maintenance_mode' }
@@ -244,7 +235,6 @@ export const browserSupportGuard = (to, from, next) => {
   if (isSupported) {
     next()
   } else {
-    console.log('Browser support guard: Browser not supported')
     next({ 
       name: 'BrowserNotSupported',
       query: { reason: 'browser_not_supported' }
@@ -286,7 +276,6 @@ export const tokenValidationGuard = async (to, from, next) => {
     const isValid = await authService.verifyToken()
     
     if (!isValid) {
-      console.log('Token validation guard: Token is invalid')
       authService.clearAuthData()
       next({ 
         name: 'Login',
@@ -296,7 +285,6 @@ export const tokenValidationGuard = async (to, from, next) => {
       next()
     }
   } catch (error) {
-    console.error('Token validation error:', error)
     next()
   }
 }
@@ -322,7 +310,6 @@ export const createPermissionGuard = (requiredPermissions) => {
     if (hasPermission) {
       next()
     } else {
-      console.log(`Permission guard: User missing permissions: ${requiredPermissions.join(', ')}`)
       next({ 
         name: 'Unauthorized',
         query: { reason: 'insufficient_permissions' }
@@ -371,7 +358,6 @@ export const setupRouterGuards = (router) => {
         })
       })
     } catch (error) {
-      console.error('Router guard error:', error)
       next({ name: 'ServerError' })
     }
   })
@@ -380,7 +366,6 @@ export const setupRouterGuards = (router) => {
   router.afterEach((to, from) => {
     // Log navigation for debugging
     if (process.env.NODE_ENV === 'development') {
-      console.log(`Navigation: ${from.name || 'unknown'} → ${to.name || 'unknown'}`)
     }
     
     // Clear any temporary storage
@@ -391,11 +376,9 @@ export const setupRouterGuards = (router) => {
   
   // Global error handler
   router.onError((error, to, from) => {
-    console.error('Router navigation error:', error)
     
     // Handle chunk loading errors
     if (error.message.includes('Loading chunk')) {
-      console.log('Chunk loading error, reloading page')
       window.location.reload()
       return
     }
@@ -577,7 +560,6 @@ export const securityUtils = {
       ...details
     }
     
-    console.warn('Security Event:', securityLog)
     
     // In a real app, send to security monitoring service
     // securityService.logEvent(securityLog)
@@ -615,7 +597,6 @@ export const securityUtils = {
 export const errorRecovery = {
   // Attempt to recover from navigation errors
   recoverFromError(error, to, from, router) {
-    console.error('Attempting error recovery:', error)
     
     // Handle specific error types
     if (error.message.includes('Loading chunk')) {
@@ -678,7 +659,6 @@ export const performanceMonitor = {
     
     // Log slow navigations
     if (duration > 1000) {
-      console.warn(`Slow navigation detected: ${from?.name || 'unknown'} → ${to.name || 'unknown'} (${duration.toFixed(2)}ms)`)
     }
     
     // Track in analytics
@@ -750,7 +730,6 @@ export const devHelpers = {
       const route = router.resolve({ name: test.name })
       const requiresAuth = navigationHelpers.requiresAuth(route)
       
-      console.log(`Route ${test.name}: requires auth = ${requiresAuth}, expected = ${test.shouldRequireAuth}`)
     })
   }
 }

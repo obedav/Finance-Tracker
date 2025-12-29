@@ -326,27 +326,28 @@ export const language = (value) => {
 // Validate entire transaction object
 export const validateTransaction = (transaction) => {
   const errors = {}
-  
+
   if (!transactionType(transaction.type)) {
     errors.type = 'Invalid transaction type'
   }
-  
+
   if (!transactionAmount(transaction.amount)) {
     errors.amount = 'Invalid amount'
   }
-  
-  if (!required(transaction.category)) {
+
+  // Check for category_id (API format) or category (legacy format)
+  if (!required(transaction.category_id) && !required(transaction.category)) {
     errors.category = 'Category is required'
   }
-  
+
   if (!transactionDate(transaction.date)) {
     errors.date = 'Invalid date'
   }
-  
+
   if (transaction.description && !transactionDescription(transaction.description)) {
     errors.description = 'Description is too long'
   }
-  
+
   return {
     isValid: Object.keys(errors).length === 0,
     errors
@@ -464,7 +465,6 @@ export const validators = {
 export const validateField = (value, validatorName, ...args) => {
   const validator = validators[validatorName]
   if (!validator) {
-    console.warn(`Validator "${validatorName}" not found`)
     return { isValid: true, message: '' }
   }
   
