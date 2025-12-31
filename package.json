@@ -12,7 +12,11 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@sentry/vue": "^10.31.0",
@@ -26,22 +30,28 @@
     "vue": "^3.5.13",
     "vue-chartjs": "^5.3.2",
     "vue-router": "^4.5.1",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-virtual-scroll-list": "^0.2.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.2",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^4.0.16",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
     "autoprefixer": "^10.4.21",
     "happy-dom": "^20.0.11",
     "jsdom": "^27.3.0",
+    "playwright": "^1.57.0",
     "postcss": "^8.5.4",
     "tailwindcss": "^3.4.17",
+    "terser": "^5.44.1",
     "typescript": "^5.9.3",
     "vite": "^6.3.5",
+    "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.0.16",
     "vue-tsc": "^3.1.8"
   }

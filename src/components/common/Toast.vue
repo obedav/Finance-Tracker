@@ -7,8 +7,10 @@
         class="toast"
         :class="[toast.type, { 'show': toast.show }]"
         role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
       >
-        <div class="toast-icon">
+        <div class="toast-icon" aria-hidden="true">
           <svg v-if="toast.type === 'success'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
@@ -25,13 +27,13 @@
         <div class="toast-content">
           <p>{{ toast.message }}</p>
         </div>
-        <button 
-          v-if="toast.closable" 
-          @click="removeToast(toast.id)" 
+        <button
+          v-if="toast.closable"
+          @click="removeToast(toast.id)"
           class="toast-close"
           aria-label="Close notification"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>

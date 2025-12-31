@@ -6,9 +6,12 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
           <h3 class="text-lg font-semibold text-[#334155]">
-            Transactions 
+            Transactions
             <span v-if="transactions.length > 0" class="text-sm font-normal text-[#334155]/60">
               ({{ transactions.length }} {{ transactions.length === 1 ? 'item' : 'items' }})
+            </span>
+            <span v-if="useVirtualScroll" class="ml-2 px-2 py-0.5 text-xs font-medium bg-[#10B981]/10 text-[#10B981] rounded-full" title="Using virtual scrolling for optimal performance">
+              ⚡ Optimized
             </span>
           </h3>
           
@@ -107,51 +110,85 @@
     </div>
 
     <!-- Transaction List -->
-    <div v-else class="divide-y divide-[#E5E7EB]">
-      <!-- List View -->
-      <div v-if="viewMode === 'list'" class="divide-y divide-[#E5E7EB]">
-        <TransactionItem
-          v-for="transaction in paginatedTransactions"
-          :key="transaction.id"
-          :transaction="transaction"
-          :selectable="true"
-          :is-selected="selectedTransactions.includes(transaction.id)"
-          :show-actions="true"
-          :show-percentage="showPercentages"
-          :percentage="getTransactionPercentage(transaction)"
-          @toggle-select="toggleSelect"
-          @edit="$emit('edit-transaction', $event)"
-          @duplicate="$emit('duplicate-transaction', $event)"
-          @delete="$emit('delete-transaction', $event)"
-          class="px-6 py-4 hover:bg-[#FAF9F6]"
-        />
+    <div v-else>
+      <!-- List View with Virtual Scrolling (for large datasets) -->
+      <div v-if="viewMode === 'list' && useVirtualScroll" class="virtual-scroll-container">
+        <VirtualList
+          :data-key="'id'"
+          :data-sources="transactions"
+          :data-component="VirtualTransactionItem"
+          :estimate-size="88"
+          :keeps="30"
+          :extra-props="{
+            selectable: true,
+            showActions: true,
+            showPercentage: showPercentages,
+          }"
+          role="list"
+          aria-label="Transaction list"
+        >
+          <template #default="{ item }">
+            <VirtualTransactionItem
+              :source="item"
+              :index="transactions.indexOf(item)"
+              :selectable="true"
+              :is-selected="selectedTransactions.includes(item.id)"
+              :show-actions="true"
+              :show-percentage="showPercentages"
+              :percentage="getTransactionPercentage(item)"
+              @toggle-select="toggleSelect"
+              @edit="$emit('edit-transaction', $event)"
+              @duplicate="$emit('duplicate-transaction', $event)"
+              @delete="$emit('delete-transaction', $event)"
+            />
+          </template>
+        </VirtualList>
       </div>
 
-      <!-- Grid View -->
-      <div v-else class="p-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- List View with Pagination (for small datasets) -->
+      <ul v-else-if="viewMode === 'list'" class="divide-y divide-[#E5E7EB]" role="list" aria-label="Transaction list">
+        <li v-for="transaction in paginatedTransactions" :key="transaction.id">
           <TransactionItem
-            v-for="transaction in paginatedTransactions"
-            :key="transaction.id"
             :transaction="transaction"
             :selectable="true"
             :is-selected="selectedTransactions.includes(transaction.id)"
             :show-actions="true"
-            :show-details="true"
+            :show-percentage="showPercentages"
+            :percentage="getTransactionPercentage(transaction)"
             @toggle-select="toggleSelect"
             @edit="$emit('edit-transaction', $event)"
             @duplicate="$emit('duplicate-transaction', $event)"
             @delete="$emit('delete-transaction', $event)"
+            class="px-6 py-4 hover:bg-[#FAF9F6]"
           />
-        </div>
+        </li>
+      </ul>
+
+      <!-- Grid View (always uses pagination) -->
+      <div v-else class="p-4">
+        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" role="list" aria-label="Transaction grid">
+          <li v-for="transaction in paginatedTransactions" :key="transaction.id">
+            <TransactionItem
+              :transaction="transaction"
+              :selectable="true"
+              :is-selected="selectedTransactions.includes(transaction.id)"
+              :show-actions="true"
+              :show-details="true"
+              @toggle-select="toggleSelect"
+              @edit="$emit('edit-transaction', $event)"
+              @duplicate="$emit('duplicate-transaction', $event)"
+              @delete="$emit('delete-transaction', $event)"
+            />
+          </li>
+        </ul>
       </div>
     </div>
 
-    <!-- Pagination -->
-    <div v-if="totalPages > 1" class="px-6 py-4 border-t border-[#E5E7EB]">
+    <!-- Pagination (hidden when using virtual scrolling) -->
+    <div v-if="!useVirtualScroll && totalPages > 1" class="px-6 py-4 border-t border-[#E5E7EB]">
       <div class="flex items-center justify-between">
         <div class="text-sm text-[#334155]/60">
-          Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, transactions.length) }} 
+          Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, transactions.length) }}
           of {{ transactions.length }} transactions
         </div>
         
@@ -203,13 +240,37 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import TransactionItem from './TransactionItem.vue'
+// @ts-ignore - vue3-virtual-scroll-list doesn't have types
+import VirtualList from 'vue3-virtual-scroll-list'
+import VirtualTransactionItem from './VirtualTransactionItem.vue'
+import type { Transaction } from '@/types/models'
 
-const props = defineProps({
+interface Props {
+  transactions?: Transaction[]
+  loading?: boolean
+  hasFilters?: boolean
+  showPercentages?: boolean
+  pageSize?: number
+  enableVirtualScroll?: boolean
+  virtualScrollThreshold?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  transactions: () => [],
+  loading: false,
+  hasFilters: false,
+  showPercentages: false,
+  pageSize: 15,
+  enableVirtualScroll: undefined,
+  virtualScrollThreshold: 100
+})
+
+/* const props = defineProps({
   transactions: {
-    type: Array,
+    type: Array as PropType<Transaction[]>,
     default: () => []
   },
   loading: {
@@ -227,6 +288,15 @@ const props = defineProps({
   pageSize: {
     type: Number,
     default: 15
+  },
+  // Virtual scrolling configuration
+  enableVirtualScroll: {
+    type: Boolean,
+    default: undefined  // undefined = auto-detect based on transaction count
+  },
+  virtualScrollThreshold: {
+    type: Number,
+    default: 100  // Auto-enable virtual scroll for 100+ transactions
   }
 })
 
@@ -241,6 +311,15 @@ const emit = defineEmits([
 const viewMode = ref('list')
 const currentPage = ref(1)
 const selectedTransactions = ref([])
+
+// Determine if virtual scrolling should be used
+const useVirtualScroll = computed(() => {
+  if (props.enableVirtualScroll !== undefined) {
+    return props.enableVirtualScroll
+  }
+  // Auto-enable for large datasets
+  return props.transactions.length >= props.virtualScrollThreshold
+})
 
 const totalPages = computed(() => {
   return Math.ceil(props.transactions.length / props.pageSize)
@@ -338,8 +417,21 @@ watch(() => props.transactions.length, () => {
 
 // Reset selection when transactions change
 watch(() => props.transactions, () => {
-  selectedTransactions.value = selectedTransactions.value.filter(id => 
+  selectedTransactions.value = selectedTransactions.value.filter(id =>
     props.transactions.some(t => t.id === id)
   )
 }, { deep: true })
 </script>
+
+<style scoped>
+/* Virtual scroll container needs a defined height */
+.virtual-scroll-container {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Ensure smooth scrolling */
+.virtual-scroll-container :deep(.virtual-list) {
+  overflow-y: auto !important;
+}
+</style>

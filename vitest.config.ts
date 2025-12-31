@@ -7,11 +7,19 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
     globals: true,
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/tests/e2e/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*'
+    ],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
       exclude: [
         "node_modules/",
+        "tests/e2e/",
         "src/**/*.spec.ts",
         "src/**/*.test.ts",
         "**/*.d.ts",
@@ -19,10 +27,10 @@ export default defineConfig({
         "**/mockData",
       ],
       thresholds: {
-        lines: 60,
-        functions: 60,
-        branches: 60,
-        statements: 60
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80
       }
     },
     setupFiles: ["./src/test/setup.ts"]

@@ -1,7 +1,8 @@
-// src/composables/useCharts.js
-import { ref, computed, watch, nextTick } from 'vue'
-import { 
-  COLORS, 
+// src/composables/useCharts.ts
+import { ref, computed, watch, nextTick, type Ref, type ComputedRef } from 'vue'
+import type { Chart as ChartJS, ChartConfiguration, ChartType as ChartJSType } from 'chart.js'
+import {
+  COLORS,
   CHART_COLORS,
   defaultChartOptions,
   lineChartConfig,
@@ -15,52 +16,171 @@ import {
 } from '../utils/chartConfig'
 import { formatCurrency } from '../utils/formatters'
 import { groupBy } from '../utils/helpers'
+import type { Transaction, TransactionType } from '../types'
 
-export function useCharts() {
+/**
+ * Composable for managing charts
+ * Provides comprehensive chart creation, management, and visualization capabilities
+ */
+
+// ============================================================================
+// Types & Interfaces
+// ============================================================================
+
+export interface ChartDataset {
+  label: string
+  data: number[]
+  backgroundColor?: string | string[]
+  borderColor?: string | string[]
+  borderWidth?: number
+  tension?: number
+  fill?: boolean
+  borderDash?: number[]
+  borderRadius?: number
+  borderSkipped?: boolean | string
+  hoverOffset?: number
+}
+
+export interface ChartData {
+  labels: string[]
+  datasets: ChartDataset[]
+}
+
+export interface ChartOptions {
+  responsive?: boolean
+  maintainAspectRatio?: boolean
+  plugins?: Record<string, any>
+  scales?: Record<string, any>
+  interaction?: Record<string, any>
+  elements?: Record<string, any>
+  indexAxis?: 'x' | 'y'
+  cutout?: string
+  [key: string]: any
+}
+
+export interface ChartConfig {
+  data: ChartData
+  options: ChartOptions
+  type: ChartJSType
+}
+
+export interface MonthlyData {
+  month: string
+  period: string
+  income: number
+  expenses: number
+  transactions: Transaction[]
+}
+
+export interface MonthlyTrendData {
+  month: string
+  income: number
+  expenses: number
+  net: number
+}
+
+export interface CategoryTotal {
+  category: string
+  amount: number
+  count: number
+}
+
+export interface BalanceHistoryPoint {
+  date: string
+  balance: number
+}
+
+export interface SavingsData {
+  period: string
+  savingsRate: number
+}
+
+export interface UseChartsReturn {
   // State
-  const chartRefs = ref({})
-  const chartInstances = ref({})
-  const loading = ref(false)
-  const error = ref(null)
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  chartData: Ref<Record<string, ChartData>>
+  defaultOptions: Ref<ChartOptions>
+
+  // Chart creation methods
+  createIncomeExpenseChart: (transactionData: Transaction[], period?: string) => ChartConfig
+  createCategoryBreakdownChart: (transactionData: Transaction[], type?: TransactionType) => ChartConfig
+  createMonthlyTrendChart: (transactionData: Transaction[], months?: number) => ChartConfig
+  createSavingsRateChart: (transactionData: Transaction[], period?: string) => ChartConfig
+  createBalanceHistoryChart: (transactionData: Transaction[]) => ChartConfig
+  createTopCategoriesChart: (transactionData: Transaction[], type?: TransactionType, limit?: number) => ChartConfig
+
+  // Chart management methods
+  registerChart: (chartId: string, chartRef: any) => void
+  getChartInstance: (chartId: string) => ChartJS | null
+  updateChartData: (chartId: string, newData: Partial<ChartData>) => void
+  updateChart: (chartId: string, newData: ChartData, newOptions?: ChartOptions | null) => void
+  destroyChart: (chartId: string) => void
+  destroyAllCharts: () => void
+  resizeChart: (chartId: string) => void
+  resizeAllCharts: () => void
+  exportChart: (chartId: string, format?: string, filename?: string) => void
+
+  // Utility methods
+  groupTransactionsByPeriod: (transactions: Transaction[], period: string) => MonthlyData[]
+  getMonthlyTrendData: (transactions: Transaction[], months: number) => MonthlyTrendData[]
+  formatPeriodLabel: (key: string, period: string) => string
+  clearError: () => void
+
+  // Theme methods
+  applyDarkTheme: () => void
+  applyLightTheme: () => void
+}
+
+// ============================================================================
+// Main Composable
+// ============================================================================
+
+export function useCharts(): UseChartsReturn {
+  // State
+  const chartRefs = ref<Record<string, any>>({})
+  const chartInstances = ref<Record<string, ChartJS>>({})
+  const loading = ref<boolean>(false)
+  const error = ref<string | null>(null)
 
   // Chart options
-  const defaultOptions = ref(defaultChartOptions)
+  const defaultOptions = ref<ChartOptions>(defaultChartOptions)
 
   // Reactive chart data
-  const chartData = ref({})
+  const chartData = ref<Record<string, ChartData>>({})
 
   // Register chart reference
-  const registerChart = (chartId, chartRef) => {
+  const registerChart = (chartId: string, chartRef: any): void => {
     chartRefs.value[chartId] = chartRef
   }
 
   // Get chart instance
-  const getChartInstance = (chartId) => {
+  const getChartInstance = (chartId: string): ChartJS | null => {
     return chartInstances.value[chartId] || null
   }
 
   // Update chart data
-  const updateChartData = (chartId, newData) => {
+  const updateChartData = (chartId: string, newData: Partial<ChartData>): void => {
     if (chartData.value[chartId]) {
       chartData.value[chartId] = { ...chartData.value[chartId], ...newData }
     } else {
-      chartData.value[chartId] = newData
+      chartData.value[chartId] = newData as ChartData
     }
   }
 
   // Income vs Expenses Chart
-  const createIncomeExpenseChart = (transactionData, period = 'month') => {
+  const createIncomeExpenseChart = (transactionData: Transaction[], period: string = 'month'): ChartConfig => {
     try {
       loading.value = true
-      
+
       // Group transactions by period
       const groupedData = groupTransactionsByPeriod(transactionData, period)
-      
+
       // Format data for chart
       const chartData = formatIncomeExpenseData(groupedData)
-      
+
       // Custom options for this chart type
-      const options = {
+      const options: ChartOptions = {
         ...barChartConfig,
         plugins: {
           ...barChartConfig.plugins,
@@ -77,7 +197,7 @@ export function useCharts() {
         scales: {
           ...barChartConfig.scales,
           y: {
-            ...barChartConfig.scales.y,
+            ...barChartConfig.scales?.y,
             beginAtZero: true
           }
         }
@@ -88,7 +208,7 @@ export function useCharts() {
         options,
         type: 'bar'
       }
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message
       throw err
     } finally {
@@ -97,34 +217,34 @@ export function useCharts() {
   }
 
   // Category Breakdown Pie Chart
-  const createCategoryBreakdownChart = (transactionData, type = 'expense') => {
+  const createCategoryBreakdownChart = (transactionData: Transaction[], type: TransactionType = 'EXPENSE'): ChartConfig => {
     try {
       loading.value = true
-      
+
       // Filter by transaction type
       const filteredTransactions = transactionData.filter(t => t.type === type)
-      
+
       // Group by category and sum amounts
-      const categoryData = groupBy(filteredTransactions, 'category')
+      const categoryData = groupBy(filteredTransactions, 'category.name')
       const formattedData = Object.entries(categoryData).map(([category, transactions]) => ({
         name: category,
-        amount: transactions.reduce((sum, t) => sum + t.amount, 0),
-        count: transactions.length
+        amount: (transactions as Transaction[]).reduce((sum, t) => sum + t.amount, 0),
+        count: (transactions as Transaction[]).length
       }))
 
       // Sort by amount (descending)
       formattedData.sort((a, b) => b.amount - a.amount)
 
       // Format for pie chart
-      const chartData = formatCategoryData(formattedData, type)
-      
-      const options = {
+      const chartData = formatCategoryData(formattedData, type.toLowerCase())
+
+      const options: ChartOptions = {
         ...pieChartConfig,
         plugins: {
           ...pieChartConfig.plugins,
           title: {
             display: true,
-            text: `${type === 'income' ? 'Income' : 'Expense'} Categories`,
+            text: `${type === 'INCOME' ? 'Income' : 'Expense'} Categories`,
             font: {
               size: 16,
               weight: 'bold'
@@ -139,7 +259,7 @@ export function useCharts() {
         options,
         type: 'pie'
       }
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message
       throw err
     } finally {
@@ -148,15 +268,15 @@ export function useCharts() {
   }
 
   // Monthly Trend Line Chart
-  const createMonthlyTrendChart = (transactionData, months = 6) => {
+  const createMonthlyTrendChart = (transactionData: Transaction[], months: number = 6): ChartConfig => {
     try {
       loading.value = true
-      
+
       // Get last N months of data
       const monthlyData = getMonthlyTrendData(transactionData, months)
-      
+
       // Format for line chart
-      const datasets = [
+      const datasets: ChartDataset[] = [
         {
           label: 'Income',
           data: monthlyData.map(item => item.income),
@@ -184,12 +304,12 @@ export function useCharts() {
         }
       ]
 
-      const chartData = {
+      const chartData: ChartData = {
         labels: monthlyData.map(item => item.month),
         datasets
       }
-      
-      const options = {
+
+      const options: ChartOptions = {
         ...lineChartConfig,
         plugins: {
           ...lineChartConfig.plugins,
@@ -210,7 +330,7 @@ export function useCharts() {
         options,
         type: 'line'
       }
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message
       throw err
     } finally {
@@ -219,13 +339,13 @@ export function useCharts() {
   }
 
   // Savings Rate Chart
-  const createSavingsRateChart = (transactionData, period = 'month') => {
+  const createSavingsRateChart = (transactionData: Transaction[], period: string = 'month'): ChartConfig => {
     try {
       loading.value = true
-      
+
       const groupedData = groupTransactionsByPeriod(transactionData, period)
-      
-      const savingsData = groupedData.map(item => {
+
+      const savingsData: SavingsData[] = groupedData.map(item => {
         const savingsRate = item.income > 0 ? ((item.income - item.expenses) / item.income) * 100 : 0
         return {
           period: item.month || item.period,
@@ -233,7 +353,7 @@ export function useCharts() {
         }
       })
 
-      const chartData = {
+      const chartData: ChartData = {
         labels: savingsData.map(item => item.period),
         datasets: [{
           label: 'Savings Rate (%)',
@@ -244,8 +364,8 @@ export function useCharts() {
           fill: true
         }]
       }
-      
-      const options = {
+
+      const options: ChartOptions = {
         ...lineChartConfig,
         plugins: {
           ...lineChartConfig.plugins,
@@ -262,12 +382,12 @@ export function useCharts() {
         scales: {
           ...lineChartConfig.scales,
           y: {
-            ...lineChartConfig.scales.y,
+            ...lineChartConfig.scales?.y,
             beginAtZero: true,
             max: 100,
             ticks: {
-              ...lineChartConfig.scales.y.ticks,
-              callback: function(value) {
+              ...lineChartConfig.scales?.y?.ticks,
+              callback: function(value: string | number) {
                 return value + '%'
               }
             }
@@ -280,7 +400,7 @@ export function useCharts() {
         options,
         type: 'line'
       }
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message
       throw err
     } finally {
@@ -289,32 +409,32 @@ export function useCharts() {
   }
 
   // Balance History Chart
-  const createBalanceHistoryChart = (transactionData) => {
+  const createBalanceHistoryChart = (transactionData: Transaction[]): ChartConfig => {
     try {
       loading.value = true
-      
+
       // Sort transactions by date
       const sortedTransactions = [...transactionData].sort(
-        (a, b) => new Date(a.createdAt || a.date) - new Date(b.createdAt || b.date)
+        (a, b) => new Date(a.created_at || a.date).getTime() - new Date(b.created_at || b.date).getTime()
       )
 
       let runningBalance = 0
-      const balanceHistory = []
+      const balanceHistory: BalanceHistoryPoint[] = []
 
       sortedTransactions.forEach(transaction => {
-        if (transaction.type === 'income') {
+        if (transaction.type === 'INCOME') {
           runningBalance += transaction.amount
         } else {
           runningBalance -= transaction.amount
         }
 
         balanceHistory.push({
-          date: new Date(transaction.createdAt || transaction.date).toLocaleDateString(),
+          date: new Date(transaction.created_at || transaction.date).toLocaleDateString(),
           balance: runningBalance
         })
       })
 
-      const chartData = {
+      const chartData: ChartData = {
         labels: balanceHistory.map(item => item.date),
         datasets: [{
           label: 'Account Balance',
@@ -325,8 +445,8 @@ export function useCharts() {
           tension: 0.4
         }]
       }
-      
-      const options = {
+
+      const options: ChartOptions = {
         ...lineChartConfig,
         plugins: {
           ...lineChartConfig.plugins,
@@ -347,7 +467,7 @@ export function useCharts() {
         options,
         type: 'line'
       }
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message
       throw err
     } finally {
@@ -356,25 +476,25 @@ export function useCharts() {
   }
 
   // Top Categories Chart
-  const createTopCategoriesChart = (transactionData, type = 'expense', limit = 5) => {
+  const createTopCategoriesChart = (transactionData: Transaction[], type: TransactionType = 'EXPENSE', limit: number = 5): ChartConfig => {
     try {
       loading.value = true
-      
+
       // Filter and group by category
       const filteredTransactions = transactionData.filter(t => t.type === type)
-      const categoryData = groupBy(filteredTransactions, 'category')
-      
+      const categoryData = groupBy(filteredTransactions, 'category.name')
+
       // Calculate totals and sort
-      const categoryTotals = Object.entries(categoryData)
+      const categoryTotals: CategoryTotal[] = Object.entries(categoryData)
         .map(([category, transactions]) => ({
           category,
-          amount: transactions.reduce((sum, t) => sum + t.amount, 0),
-          count: transactions.length
+          amount: (transactions as Transaction[]).reduce((sum, t) => sum + t.amount, 0),
+          count: (transactions as Transaction[]).length
         }))
         .sort((a, b) => b.amount - a.amount)
         .slice(0, limit)
 
-      const chartData = {
+      const chartData: ChartData = {
         labels: categoryTotals.map(item => item.category),
         datasets: [{
           label: `Top ${type} Categories`,
@@ -384,8 +504,8 @@ export function useCharts() {
           borderWidth: 1
         }]
       }
-      
-      const options = {
+
+      const options: ChartOptions = {
         ...barChartConfig,
         indexAxis: 'y', // Horizontal bar chart
         plugins: {
@@ -407,7 +527,7 @@ export function useCharts() {
         options,
         type: 'bar'
       }
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message
       throw err
     } finally {
@@ -416,13 +536,13 @@ export function useCharts() {
   }
 
   // Utility functions
-  const groupTransactionsByPeriod = (transactions, period) => {
-    const grouped = {}
-    
+  const groupTransactionsByPeriod = (transactions: Transaction[], period: string): MonthlyData[] => {
+    const grouped: Record<string, MonthlyData> = {}
+
     transactions.forEach(transaction => {
-      const date = new Date(transaction.createdAt || transaction.date)
-      let key
-      
+      const date = new Date(transaction.created_at || transaction.date)
+      let key: string
+
       switch (period) {
         case 'day':
           key = date.toISOString().split('T')[0]
@@ -442,7 +562,7 @@ export function useCharts() {
         default:
           key = date.toISOString().substring(0, 7)
       }
-      
+
       if (!grouped[key]) {
         grouped[key] = {
           period: key,
@@ -452,41 +572,41 @@ export function useCharts() {
           transactions: []
         }
       }
-      
+
       grouped[key].transactions.push(transaction)
-      
-      if (transaction.type === 'income') {
+
+      if (transaction.type === 'INCOME') {
         grouped[key].income += transaction.amount
       } else {
         grouped[key].expenses += transaction.amount
       }
     })
-    
+
     return Object.values(grouped).sort((a, b) => a.period.localeCompare(b.period))
   }
 
-  const getMonthlyTrendData = (transactions, months) => {
+  const getMonthlyTrendData = (transactions: Transaction[], months: number): MonthlyTrendData[] => {
     const now = new Date()
-    const monthlyData = []
-    
+    const monthlyData: MonthlyTrendData[] = []
+
     for (let i = months - 1; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
       const monthKey = date.toISOString().substring(0, 7)
       const monthLabel = date.toLocaleDateString('default', { month: 'short', year: 'numeric' })
-      
+
       const monthTransactions = transactions.filter(t => {
-        const tDate = new Date(t.createdAt || t.date)
+        const tDate = new Date(t.created_at || t.date)
         return tDate.toISOString().substring(0, 7) === monthKey
       })
-      
+
       const income = monthTransactions
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === 'INCOME')
         .reduce((sum, t) => sum + t.amount, 0)
-      
+
       const expenses = monthTransactions
-        .filter(t => t.type === 'expense')
+        .filter(t => t.type === 'EXPENSE')
         .reduce((sum, t) => sum + t.amount, 0)
-      
+
       monthlyData.push({
         month: monthLabel,
         income,
@@ -494,13 +614,13 @@ export function useCharts() {
         net: income - expenses
       })
     }
-    
+
     return monthlyData
   }
 
-  const formatPeriodLabel = (key, period) => {
+  const formatPeriodLabel = (key: string, period: string): string => {
     const date = new Date(key)
-    
+
     switch (period) {
       case 'day':
         return date.toLocaleDateString('default', { month: 'short', day: 'numeric' })
@@ -516,7 +636,7 @@ export function useCharts() {
   }
 
   // Chart manipulation methods
-  const updateChart = (chartId, newData, newOptions = null) => {
+  const updateChart = (chartId: string, newData: ChartData, newOptions: ChartOptions | null = null): void => {
     const instance = getChartInstance(chartId)
     if (instance) {
       instance.data = newData
@@ -527,7 +647,7 @@ export function useCharts() {
     }
   }
 
-  const destroyChart = (chartId) => {
+  const destroyChart = (chartId: string): void => {
     const instance = getChartInstance(chartId)
     if (instance) {
       instance.destroy()
@@ -536,30 +656,30 @@ export function useCharts() {
     }
   }
 
-  const destroyAllCharts = () => {
+  const destroyAllCharts = (): void => {
     Object.keys(chartInstances.value).forEach(chartId => {
       destroyChart(chartId)
     })
   }
 
-  const resizeChart = (chartId) => {
+  const resizeChart = (chartId: string): void => {
     const instance = getChartInstance(chartId)
     if (instance) {
       instance.resize()
     }
   }
 
-  const resizeAllCharts = () => {
+  const resizeAllCharts = (): void => {
     Object.keys(chartInstances.value).forEach(chartId => {
       resizeChart(chartId)
     })
   }
 
   // Export chart as image
-  const exportChart = (chartId, format = 'png', filename = 'chart') => {
+  const exportChart = (chartId: string, format: string = 'png', filename: string = 'chart'): void => {
     const instance = getChartInstance(chartId)
     if (instance) {
-      const url = instance.toBase64Image(format, 1)
+      const url = instance.toBase64Image(format as any, 1)
       const link = document.createElement('a')
       link.download = `${filename}.${format}`
       link.href = url
@@ -568,36 +688,36 @@ export function useCharts() {
   }
 
   // Clear errors
-  const clearError = () => {
+  const clearError = (): void => {
     error.value = null
   }
 
   // Chart theme management
-  const applyDarkTheme = () => {
+  const applyDarkTheme = (): void => {
     defaultOptions.value = {
       ...defaultOptions.value,
       plugins: {
         ...defaultOptions.value.plugins,
         legend: {
-          ...defaultOptions.value.plugins.legend,
+          ...defaultOptions.value.plugins?.legend,
           labels: {
-            ...defaultOptions.value.plugins.legend.labels,
+            ...defaultOptions.value.plugins?.legend?.labels,
             color: '#F3F4F6'
           }
         }
       },
       scales: {
         x: {
-          ...defaultOptions.value.scales.x,
+          ...defaultOptions.value.scales?.x,
           ticks: {
-            ...defaultOptions.value.scales.x.ticks,
+            ...defaultOptions.value.scales?.x?.ticks,
             color: '#F3F4F6'
           }
         },
         y: {
-          ...defaultOptions.value.scales.y,
+          ...defaultOptions.value.scales?.y,
           ticks: {
-            ...defaultOptions.value.scales.y.ticks,
+            ...defaultOptions.value.scales?.y?.ticks,
             color: '#F3F4F6'
           }
         }
@@ -605,7 +725,7 @@ export function useCharts() {
     }
   }
 
-  const applyLightTheme = () => {
+  const applyLightTheme = (): void => {
     defaultOptions.value = defaultChartOptions
   }
 

@@ -1,0 +1,2035 @@
+
+> obe-finance-tracker@0.0.0 test:coverage
+> vitest run --coverage
+
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mC:/Users/obeda/Desktop/obe-finance-tracker[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [31m❯[39m src/utils/__tests__/validators.spec.ts [2m([22m[2m96 tests[22m[2m | [22m[31m57 failed[39m[2m)[22m[32m 134[2mms[22m[39m
+       [32m✓[39m should return true for non-empty string[32m 3[2mms[22m[39m
+       [32m✓[39m should return false for empty string[32m 0[2mms[22m[39m
+       [32m✓[39m should return false for whitespace only[32m 0[2mms[22m[39m
+       [32m✓[39m should return false for null[32m 0[2mms[22m[39m
+       [32m✓[39m should return false for undefined[32m 0[2mms[22m[39m
+       [32m✓[39m should return true for zero[32m 0[2mms[22m[39m
+       [32m✓[39m should return true for boolean false[32m 0[2mms[22m[39m
+       [32m✓[39m should validate correct email addresses[32m 1[2mms[22m[39m
+       [32m✓[39m should reject invalid email addresses[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 20[2mms[22m[39m
+[31m       [31m×[31m should return true when length meets minimum[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should return false when length is below minimum[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle exact match[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return true when length is within maximum[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return false when length exceeds maximum[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should handle exact match[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should validate numeric strings[32m 0[2mms[22m[39m
+       [32m✓[39m should validate numbers[32m 0[2mms[22m[39m
+       [32m✓[39m should validate decimal numbers[32m 0[2mms[22m[39m
+       [32m✓[39m should validate negative numbers[32m 0[2mms[22m[39m
+       [32m✓[39m should reject non-numeric values[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate alphanumeric strings[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate letters only[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate numbers only[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject special characters[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate correct URLs[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject invalid URLs[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate 10-digit phone numbers[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject invalid phone numbers[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should validate 16-digit card numbers[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject invalid card numbers[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate 5-digit US zip codes[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate ZIP+4 format[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject invalid zip codes[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should validate strong passwords[32m 2[2mms[22m[39m
+       [32m✓[39m should reject weak passwords - no uppercase[32m 0[2mms[22m[39m
+       [32m✓[39m should reject weak passwords - no lowercase[32m 0[2mms[22m[39m
+       [32m✓[39m should reject weak passwords - no numbers[32m 1[2mms[22m[39m
+       [32m✓[39m should reject weak passwords - no special chars[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject weak passwords - too short[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return true when fields match[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return false when fields do not match[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should handle empty strings[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should validate INCOME type[32m 1[2mms[22m[39m
+       [32m✓[39m should validate EXPENSE type[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject invalid types[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should validate positive amounts[32m 0[2mms[22m[39m
+       [32m✓[39m should reject zero[32m 0[2mms[22m[39m
+       [32m✓[39m should reject negative amounts[32m 0[2mms[22m[39m
+       [32m✓[39m should reject non-numeric values[32m 0[2mms[22m[39m
+       [32m✓[39m should validate valid dates[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject invalid dates[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate non-empty category[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should reject empty category[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate positive budget amounts[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject zero or negative[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate monthly period[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate weekly period[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate yearly period[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject invalid periods[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should validate when end is after start[32m 3[2mms[22m[39m
+       [32m✓[39m should validate when dates are equal[32m 1[2mms[22m[39m
+       [32m✓[39m should reject when end is before start[32m 2[2mms[22m[39m
+       [32m✓[39m should handle string dates[32m 1[2mms[22m[39m
+       [32m✓[39m should validate valid transaction[32m 4[2mms[22m[39m
+       [32m✓[39m should invalidate transaction with invalid type[32m 0[2mms[22m[39m
+       [32m✓[39m should invalidate transaction with zero amount[32m 6[2mms[22m[39m
+       [32m✓[39m should invalidate transaction with invalid date[32m 1[2mms[22m[39m
+       [32m✓[39m should invalidate transaction without category[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate valid budget[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate budget without category_id[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should invalidate budget with zero amount[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate budget with invalid period[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should validate valid new category[32m 1[2mms[22m[39m
+       [32m✓[39m should invalidate category without name[32m 0[2mms[22m[39m
+[31m       [31m×[31m should invalidate duplicate category name[39m[32m 4[2mms[22m[39m
+       [32m✓[39m should invalidate category with invalid type[32m 0[2mms[22m[39m
+[31m       [31m×[31m should validate valid user[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate user without firstName[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate user with invalid email[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate user with weak password[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate correct email[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate incorrect email[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate strong password[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate weak password[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate positive amount[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate zero amount[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should invalidate negative amount[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate valid date[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate date string[39m[32m 5[2mms[22m[39m
+[31m       [31m×[31m should invalidate invalid date[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should validate when all validators pass[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should fail when any validator fails[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle empty validators array[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/utils/__tests__/helpers.spec.ts [2m([22m[2m86 tests[22m[2m | [22m[31m10 failed[39m[2m)[22m[33m 371[2mms[22m[39m
+         [32m✓[39m should group array by specified key[32m 11[2mms[22m[39m
+         [32m✓[39m should handle empty array[32m 2[2mms[22m[39m
+         [32m✓[39m should sort by single key ascending[32m 1[2mms[22m[39m
+         [32m✓[39m should sort by single key descending[32m 0[2mms[22m[39m
+         [32m✓[39m should sort by multiple keys[32m 1[2mms[22m[39m
+         [32m✓[39m should remove duplicate primitives[32m 0[2mms[22m[39m
+         [32m✓[39m should remove duplicates by key[32m 1[2mms[22m[39m
+         [32m✓[39m should split array into chunks[32m 0[2mms[22m[39m
+         [32m✓[39m should handle empty array[32m 0[2mms[22m[39m
+         [32m✓[39m should handle chunk size larger than array[32m 0[2mms[22m[39m
+         [32m✓[39m should find items matching criteria[32m 1[2mms[22m[39m
+         [32m✓[39m should find items matching multiple criteria[32m 2[2mms[22m[39m
+         [32m✓[39m should return empty array when no matches[32m 0[2mms[22m[39m
+         [32m✓[39m should clone simple object[32m 1[2mms[22m[39m
+         [32m✓[39m should clone nested object[32m 0[2mms[22m[39m
+         [32m✓[39m should clone arrays[32m 1[2mms[22m[39m
+         [32m✓[39m should clone dates[32m 0[2mms[22m[39m
+         [32m✓[39m should handle null and primitives[32m 0[2mms[22m[39m
+         [32m✓[39m should merge simple objects[32m 0[2mms[22m[39m
+         [32m✓[39m should merge nested objects[32m 0[2mms[22m[39m
+         [32m✓[39m should overwrite arrays[32m 0[2mms[22m[39m
+         [32m✓[39m should return true for plain objects[32m 0[2mms[22m[39m
+[31m         [31m×[31m should return false for non-objects[39m[32m 16[2mms[22m[39m
+         [32m✓[39m should get nested value by path[32m 0[2mms[22m[39m
+         [32m✓[39m should return undefined for missing path[32m 1[2mms[22m[39m
+         [32m✓[39m should return default value when path missing[32m 0[2mms[22m[39m
+         [32m✓[39m should handle array indices[32m 3[2mms[22m[39m
+         [32m✓[39m should set nested value by path[32m 1[2mms[22m[39m
+         [32m✓[39m should create nested path if not exists[32m 0[2mms[22m[39m
+         [32m✓[39m should return today range[32m 15[2mms[22m[39m
+[31m         [31m×[31m should return week range[39m[32m 3[2mms[22m[39m
+[31m         [31m×[31m should return month range[39m[32m 2[2mms[22m[39m
+         [32m✓[39m should return true if date is in range[32m 0[2mms[22m[39m
+         [32m✓[39m should return false if date is outside range[32m 1[2mms[22m[39m
+         [32m✓[39m should handle null range boundaries[32m 1[2mms[22m[39m
+         [32m✓[39m should calculate month difference[32m 1[2mms[22m[39m
+         [32m✓[39m should handle same month[32m 1[2mms[22m[39m
+[31m         [31m×[31m should return correct days for January[39m[32m 5[2mms[22m[39m
+[31m         [31m×[31m should return correct days for February (leap year)[39m[32m 1[2mms[22m[39m
+[31m         [31m×[31m should return correct days for February (non-leap year)[39m[32m 1[2mms[22m[39m
+         [32m✓[39m should return true for today[32m 1[2mms[22m[39m
+         [32m✓[39m should return false for yesterday[32m 1[2mms[22m[39m
+         [32m✓[39m should return false for tomorrow[32m 1[2mms[22m[39m
+         [32m✓[39m should generate string of default length[32m 1[2mms[22m[39m
+         [32m✓[39m should generate string of custom length[32m 1[2mms[22m[39m
+         [32m✓[39m should generate different strings[32m 0[2mms[22m[39m
+         [32m✓[39m should convert to lowercase with hyphens[32m 1[2mms[22m[39m
+         [32m✓[39m should remove special characters[32m 2[2mms[22m[39m
+         [32m✓[39m should handle multiple spaces[32m 1[2mms[22m[39m
+         [32m✓[39m should escape HTML special characters[32m 1[2mms[22m[39m
+         [32m✓[39m should escape ampersands[32m 1[2mms[22m[39m
+         [32m✓[39m should round to 2 decimals by default[32m 27[2mms[22m[39m
+         [32m✓[39m should round to custom decimals[32m 1[2mms[22m[39m
+         [32m✓[39m should handle integers[32m 1[2mms[22m[39m
+         [32m✓[39m should calculate percentage correctly[32m 0[2mms[22m[39m
+         [32m✓[39m should handle zero total[32m 0[2mms[22m[39m
+         [32m✓[39m should round to 2 decimals[32m 0[2mms[22m[39m
+         [32m✓[39m should calculate positive change[32m 0[2mms[22m[39m
+         [32m✓[39m should calculate negative change[32m 0[2mms[22m[39m
+[31m         [31m×[31m should handle zero old value[39m[32m 8[2mms[22m[39m
+         [32m✓[39m should clamp value to min[32m 1[2mms[22m[39m
+         [32m✓[39m should clamp value to max[32m 0[2mms[22m[39m
+         [32m✓[39m should return value if within range[32m 1[2mms[22m[39m
+[31m         [31m×[31m should generate range with step 1[39m[32m 5[2mms[22m[39m
+[31m         [31m×[31m should generate range with custom step[39m[32m 3[2mms[22m[39m
+[31m         [31m×[31m should handle negative range[39m[32m 12[2mms[22m[39m
+         [32m✓[39m should get value from storage[32m 2[2mms[22m[39m
+         [32m✓[39m should return default value if key not found[32m 4[2mms[22m[39m
+         [32m✓[39m should return null for invalid JSON[32m 1[2mms[22m[39m
+         [32m✓[39m should save value to storage[32m 5[2mms[22m[39m
+         [32m✓[39m should return true on success[32m 0[2mms[22m[39m
+         [32m✓[39m should remove value from storage[32m 0[2mms[22m[39m
+         [32m✓[39m should return true on success[32m 0[2mms[22m[39m
+         [32m✓[39m should clear all app-related storage[32m 1[2mms[22m[39m
+         [32m✓[39m should build query string from object[32m 2[2mms[22m[39m
+         [32m✓[39m should skip null and undefined values[32m 0[2mms[22m[39m
+         [32m✓[39m should parse query string to object[32m 1[2mms[22m[39m
+         [32m✓[39m should handle empty query string[32m 0[2mms[22m[39m
+         [32m✓[39m should validate allowed file types[32m 1[2mms[22m[39m
+         [32m✓[39m should reject disallowed file types[32m 0[2mms[22m[39m
+         [32m✓[39m should validate file size within limit[32m 0[2mms[22m[39m
+         [32m✓[39m should reject file size exceeding limit[32m 0[2mms[22m[39m
+         [32m✓[39m should read file as text[32m 12[2mms[22m[39m
+         [32m✓[39m should debounce function calls[32m 23[2mms[22m[39m
+         [32m✓[39m should throttle function calls[32m 6[2mms[22m[39m
+         [32m✓[39m should delay execution[32m 126[2mms[22m[39m
+ [31m❯[39m src/utils/__tests__/formatters.spec.ts [2m([22m[2m94 tests[22m[2m | [22m[31m61 failed[39m[2m)[22m[33m 445[2mms[22m[39m
+       [32m✓[39m should format USD currency correctly[32m 155[2mms[22m[39m
+[31m       [31m×[31m should format EUR currency correctly[39m[32m 37[2mms[22m[39m
+       [32m✓[39m should format GBP currency correctly[32m 0[2mms[22m[39m
+       [32m✓[39m should handle zero amount[32m 1[2mms[22m[39m
+       [32m✓[39m should handle negative amounts[32m 0[2mms[22m[39m
+       [32m✓[39m should respect custom options[32m 0[2mms[22m[39m
+       [32m✓[39m should handle very large numbers[32m 1[2mms[22m[39m
+       [32m✓[39m should handle very small decimal numbers[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format date with default format[39m[32m 22[2mms[22m[39m
+       [32m✓[39m should format date string[32m 1[2mms[22m[39m
+       [32m✓[39m should format timestamp[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle invalid date[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should handle null date[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should use custom locale[32m 4[2mms[22m[39m
+       [32m✓[39m should format time in 12-hour format[32m 1[2mms[22m[39m
+       [32m✓[39m should format time in 24-hour format[32m 1[2mms[22m[39m
+       [32m✓[39m should handle midnight correctly[32m 1[2mms[22m[39m
+       [32m✓[39m should handle noon correctly[32m 1[2mms[22m[39m
+       [32m✓[39m should format date and time together[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle invalid datetime[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should format time from a few seconds ago[39m[32m 13[2mms[22m[39m
+       [32m✓[39m should format time from minutes ago[32m 1[2mms[22m[39m
+       [32m✓[39m should format time from hours ago[32m 1[2mms[22m[39m
+       [32m✓[39m should format time from days ago[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format time from months ago[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should format time from years ago[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should handle future dates[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should format number with default locale[32m 1[2mms[22m[39m
+       [32m✓[39m should format number with custom locale[32m 13[2mms[22m[39m
+       [32m✓[39m should handle zero[32m 1[2mms[22m[39m
+       [32m✓[39m should handle negative numbers[32m 2[2mms[22m[39m
+       [32m✓[39m should respect custom decimal places[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format percentage correctly[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should format 100%[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should format 0%[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m should handle negative percentages[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should respect custom decimal places[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format small numbers without notation[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format thousands with K[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should format millions with M[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should format billions with B[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should handle zero[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle negative numbers[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format bytes[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format kilobytes[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format megabytes[39m[32m 5[2mms[22m[39m
+[31m       [31m×[31m should format gigabytes[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle zero[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should handle custom decimal places[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format seconds only[39m[32m 35[2mms[22m[39m
+[31m       [31m×[31m should format minutes and seconds[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should format hours, minutes, and seconds[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle zero[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not truncate short text[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should truncate long text with default ellipsis[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should truncate with custom ellipsis[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle exact length match[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should capitalize first letter[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle already capitalized text[39m[32m 9[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m should handle single character[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not affect rest of string[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should capitalize all words[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle single word[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should handle multiple spaces[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should convert to lowercase and replace spaces[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should remove special characters[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle multiple spaces[39m[32m 15[2mms[22m[39m
+[31m       [31m×[31m should trim leading/trailing dashes[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle numbers[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should format 10-digit US phone number[32m 0[2mms[22m[39m
+       [32m✓[39m should handle already formatted number[32m 0[2mms[22m[39m
+       [32m✓[39m should return original for invalid length[32m 0[2mms[22m[39m
+       [32m✓[39m should strip non-numeric characters before formatting[32m 0[2mms[22m[39m
+       [32m✓[39m should format 16-digit credit card[32m 1[2mms[22m[39m
+       [32m✓[39m should handle already formatted card[32m 0[2mms[22m[39m
+       [32m✓[39m should return original for invalid length[32m 0[2mms[22m[39m
+[31m       [31m×[31m should parse USD formatted currency[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should parse negative amounts[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should parse number without formatting[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle invalid input[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should handle empty string[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should format currency values[32m 3[2mms[22m[39m
+[31m       [31m×[31m should format percentage values[39m[32m 5[2mms[22m[39m
+       [32m✓[39m should format number values[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format month labels[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format day labels[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format year labels[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle string dates[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m should format tooltip with label and currency value[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should format tooltip with percentage[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should format tooltip with number[39m[32m 1[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/constants.spec.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/stores/__tests__/auth.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/stores/__tests__/transactions.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 128 [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCurrency[2m > [22mshould format EUR currency correctly
+[31m[1mAssertionError[22m: expected '1.234,56 €' to be '1.234,56 €' // Object.is equality[39m
+
+Expected: [32m"1.234,56[7m [27m€"[39m
+Received: [31m"1.234,56[7m [27m€"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m33:55[22m[39m
+    [90m 31| [39m
+    [90m 32| [39m    [34mit[39m([32m'should format EUR currency correctly'[39m[33m,[39m () [33m=>[39m {
+    [90m 33| [39m      expect(formatCurrency(1234.56, 'EUR', 'de-DE')).toBe('1.234,56 €…
+    [90m   | [39m                                                      [31m^[39m
+    [90m 34| [39m    })
+    [90m 35| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDate[2m > [22mshould format date with default format
+[31m[1mAssertionError[22m: expected '1/15/2024' to match /Jan/[39m
+
+[32m- Expected:[39m 
+/Jan/
+
+[31m+ Received:[39m 
+"1/15/2024"
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m69:22[22m[39m
+    [90m 67| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2024-01-15T12:00:00Z'[39m)
+    [90m 68| [39m      [35mconst[39m result [33m=[39m [34mformatDate[39m(date)
+    [90m 69| [39m      [34mexpect[39m(result)[33m.[39m[34mtoMatch[39m([36m/Jan/[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m 70| [39m      [34mexpect[39m(result)[33m.[39m[34mtoMatch[39m([36m/15/[39m)
+    [90m 71| [39m      [34mexpect[39m(result)[33m.[39m[34mtoMatch[39m([36m/2024/[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDate[2m > [22mshould handle invalid date
+[31m[1mAssertionError[22m: expected '' to be 'Invalid Date' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Invalid Date[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m86:37[22m[39m
+    [90m 84| [39m
+    [90m 85| [39m    [34mit[39m([32m'should handle invalid date'[39m[33m,[39m () [33m=>[39m {
+    [90m 86| [39m      [34mexpect[39m([34mformatDate[39m([32m'invalid'[39m))[33m.[39m[34mtoBe[39m([32m'Invalid Date'[39m)
+    [90m   | [39m                                    [31m^[39m
+    [90m 87| [39m    })
+    [90m 88| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDate[2m > [22mshould handle null date
+[31m[1mAssertionError[22m: expected '' to be 'Invalid Date' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Invalid Date[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m90:39[22m[39m
+    [90m 88| [39m
+    [90m 89| [39m    [34mit[39m([32m'should handle null date'[39m[33m,[39m () [33m=>[39m {
+    [90m 90| [39m      [34mexpect[39m([34mformatDate[39m([35mnull[39m [35mas[39m any))[33m.[39m[34mtoBe[39m([32m'Invalid Date'[39m)
+    [90m   | [39m                                      [31m^[39m
+    [90m 91| [39m    })
+    [90m 92| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDateTime[2m > [22mshould handle invalid datetime
+[31m[1mAssertionError[22m: expected ' ' to be 'Invalid Date' // Object.is equality[39m
+
+Expected: [32m"Invalid Date"[39m
+Received: [31m" "[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m140:41[22m[39m
+    [90m138| [39m
+    [90m139| [39m    [34mit[39m([32m'should handle invalid datetime'[39m[33m,[39m () [33m=>[39m {
+    [90m140| [39m      [34mexpect[39m([34mformatDateTime[39m([32m'invalid'[39m))[33m.[39m[34mtoBe[39m([32m'Invalid Date'[39m)
+    [90m   | [39m                                        [31m^[39m
+    [90m141| [39m    })
+    [90m142| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatRelativeTime[2m > [22mshould format time from a few seconds ago
+[31m[1mAssertionError[22m: expected 'this minute' to be 'just now' // Object.is equality[39m
+
+Expected: [32m"just now"[39m
+Received: [31m"this minute"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m152:40[22m[39m
+    [90m150| [39m    [34mit[39m([32m'should format time from a few seconds ago'[39m[33m,[39m () [33m=>[39m {
+    [90m151| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2024-01-15T11:59:30'[39m)
+    [90m152| [39m      [34mexpect[39m([34mformatRelativeTime[39m(date))[33m.[39m[34mtoBe[39m([32m'just now'[39m)
+    [90m   | [39m                                       [31m^[39m
+    [90m153| [39m    })
+    [90m154| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatRelativeTime[2m > [22mshould format time from months ago
+[31m[1mAssertionError[22m: expected '61 days ago' to be '2 months ago' // Object.is equality[39m
+
+Expected: [32m"[7m2 month[27ms ago"[39m
+Received: [31m"[7m61 day[27ms ago"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m172:40[22m[39m
+    [90m170| [39m    [34mit[39m([32m'should format time from months ago'[39m[33m,[39m () [33m=>[39m {
+    [90m171| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2023-11-15T12:00:00'[39m)
+    [90m172| [39m      [34mexpect[39m([34mformatRelativeTime[39m(date))[33m.[39m[34mtoBe[39m([32m'2 months ago'[39m)
+    [90m   | [39m                                       [31m^[39m
+    [90m173| [39m    })
+    [90m174| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatRelativeTime[2m > [22mshould format time from years ago
+[31m[1mAssertionError[22m: expected '730 days ago' to be '2 years ago' // Object.is equality[39m
+
+Expected: [32m"[7m2 year[27ms ago"[39m
+Received: [31m"[7m730 day[27ms ago"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m177:40[22m[39m
+    [90m175| [39m    [34mit[39m([32m'should format time from years ago'[39m[33m,[39m () [33m=>[39m {
+    [90m176| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2022-01-15T12:00:00'[39m)
+    [90m177| [39m      [34mexpect[39m([34mformatRelativeTime[39m(date))[33m.[39m[34mtoBe[39m([32m'2 years ago'[39m)
+    [90m   | [39m                                       [31m^[39m
+    [90m178| [39m    })
+    [90m179| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatRelativeTime[2m > [22mshould handle future dates
+[31m[1mAssertionError[22m: expected 'tomorrow' to be 'in 1 hour' // Object.is equality[39m
+
+Expected: [32m"in 1 hour"[39m
+Received: [31m"tomorrow"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m182:40[22m[39m
+    [90m180| [39m    [34mit[39m([32m'should handle future dates'[39m[33m,[39m () [33m=>[39m {
+    [90m181| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2024-01-15T13:00:00'[39m)
+    [90m182| [39m      [34mexpect[39m([34mformatRelativeTime[39m(date))[33m.[39m[34mtoBe[39m([32m'in 1 hour'[39m)
+    [90m   | [39m                                       [31m^[39m
+    [90m183| [39m    })
+    [90m184| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatPercentage[2m > [22mshould format percentage correctly
+[31m[1mAssertionError[22m: expected '0.1%' to be '12.34%' // Object.is equality[39m
+
+Expected: [32m"[7m12.34[27m%"[39m
+Received: [31m"[7m0.1[27m%"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m217:40[22m[39m
+    [90m215| [39m  [34mdescribe[39m([32m'formatPercentage'[39m[33m,[39m () [33m=>[39m {
+    [90m216| [39m    [34mit[39m([32m'should format percentage correctly'[39m[33m,[39m () [33m=>[39m {
+    [90m217| [39m      [34mexpect[39m([34mformatPercentage[39m([34m0.1234[39m))[33m.[39m[34mtoBe[39m([32m'12.34%'[39m)
+    [90m   | [39m                                       [31m^[39m
+    [90m218| [39m    })
+    [90m219| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatPercentage[2m > [22mshould format 100%
+[31m[1mAssertionError[22m: expected '1.0%' to be '100.00%' // Object.is equality[39m
+
+Expected: [32m"1[7m00.0[27m0%"[39m
+Received: [31m"1[7m.[27m0%"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m221:35[22m[39m
+    [90m219| [39m
+    [90m220| [39m    [34mit[39m([32m'should format 100%'[39m[33m,[39m () [33m=>[39m {
+    [90m221| [39m      [34mexpect[39m([34mformatPercentage[39m([34m1[39m))[33m.[39m[34mtoBe[39m([32m'100.00%'[39m)
+    [90m   | [39m                                  [31m^[39m
+    [90m222| [39m    })
+    [90m223| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatPercentage[2m > [22mshould format 0%
+[31m[1mAssertionError[22m: expected '0.0%' to be '0.00%' // Object.is equality[39m
+
+Expected: [32m"0.0[7m0[27m%"[39m
+Received: [31m"0.0%"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m225:35[22m[39m
+    [90m223| [39m
+    [90m224| [39m    [34mit[39m([32m'should format 0%'[39m[33m,[39m () [33m=>[39m {
+    [90m225| [39m      [34mexpect[39m([34mformatPercentage[39m([34m0[39m))[33m.[39m[34mtoBe[39m([32m'0.00%'[39m)
+    [90m   | [39m                                  [31m^[39m
+    [90m226| [39m    })
+    [90m227| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatPercentage[2m > [22mshould handle negative percentages
+[31m[1mAssertionError[22m: expected '-0.2%' to be '-15.00%' // Object.is equality[39m
+
+Expected: [32m"-[7m15.00[27m%"[39m
+Received: [31m"-[7m0.2[27m%"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m229:39[22m[39m
+    [90m227| [39m
+    [90m228| [39m    [34mit[39m([32m'should handle negative percentages'[39m[33m,[39m () [33m=>[39m {
+    [90m229| [39m      [34mexpect[39m([34mformatPercentage[39m([33m-[39m[34m0.15[39m))[33m.[39m[34mtoBe[39m([32m'-15.00%'[39m)
+    [90m   | [39m                                      [31m^[39m
+    [90m230| [39m    })
+    [90m231| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatPercentage[2m > [22mshould respect custom decimal places
+[31m[1mAssertionError[22m: expected '0%' to be '12.3%' // Object.is equality[39m
+
+Expected: [32m"[7m12.3[27m%"[39m
+Received: [31m"[7m0[27m%"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m233:53[22m[39m
+    [90m231| [39m
+    [90m232| [39m    [34mit[39m([32m'should respect custom decimal places'[39m[33m,[39m () [33m=>[39m {
+    [90m233| [39m      [34mexpect[39m([34mformatPercentage[39m([34m0.12345[39m[33m,[39m [32m'en-US'[39m[33m,[39m [34m1[39m))[33m.[39m[34mtoBe[39m([32m'12.3%'[39m)
+    [90m   | [39m                                                    [31m^[39m
+    [90m234| [39m    })
+    [90m235| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCompactNumber[2m > [22mshould format small numbers without notation
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatCompactNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m239:14[22m[39m
+    [90m237| [39m  [34mdescribe[39m([32m'formatCompactNumber'[39m[33m,[39m () [33m=>[39m {
+    [90m238| [39m    [34mit[39m([32m'should format small numbers without notation'[39m[33m,[39m () [33m=>[39m {
+    [90m239| [39m      [34mexpect[39m([34mformatCompactNumber[39m([34m999[39m))[33m.[39m[34mtoBe[39m([32m'999'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m240| [39m    })
+    [90m241| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCompactNumber[2m > [22mshould format thousands with K
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatCompactNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m243:14[22m[39m
+    [90m241| [39m
+    [90m242| [39m    [34mit[39m([32m'should format thousands with K'[39m[33m,[39m () [33m=>[39m {
+    [90m243| [39m      [34mexpect[39m([34mformatCompactNumber[39m([34m1500[39m))[33m.[39m[34mtoMatch[39m([36m/1\.5K|1.5K/[39m)
+    [90m   | [39m             [31m^[39m
+    [90m244| [39m    })
+    [90m245| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCompactNumber[2m > [22mshould format millions with M
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatCompactNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m247:14[22m[39m
+    [90m245| [39m
+    [90m246| [39m    [34mit[39m([32m'should format millions with M'[39m[33m,[39m () [33m=>[39m {
+    [90m247| [39m      [34mexpect[39m([34mformatCompactNumber[39m([34m1500000[39m))[33m.[39m[34mtoMatch[39m([36m/1\.5M|1.5M/[39m)
+    [90m   | [39m             [31m^[39m
+    [90m248| [39m    })
+    [90m249| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCompactNumber[2m > [22mshould format billions with B
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatCompactNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m251:14[22m[39m
+    [90m249| [39m
+    [90m250| [39m    [34mit[39m([32m'should format billions with B'[39m[33m,[39m () [33m=>[39m {
+    [90m251| [39m      [34mexpect[39m([34mformatCompactNumber[39m([34m1500000000[39m))[33m.[39m[34mtoMatch[39m([36m/1\.5B|1.5B/[39m)
+    [90m   | [39m             [31m^[39m
+    [90m252| [39m    })
+    [90m253| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCompactNumber[2m > [22mshould handle zero
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatCompactNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m255:14[22m[39m
+    [90m253| [39m
+    [90m254| [39m    [34mit[39m([32m'should handle zero'[39m[33m,[39m () [33m=>[39m {
+    [90m255| [39m      [34mexpect[39m([34mformatCompactNumber[39m([34m0[39m))[33m.[39m[34mtoBe[39m([32m'0'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m256| [39m    })
+    [90m257| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatCompactNumber[2m > [22mshould handle negative numbers
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatCompactNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m259:22[22m[39m
+    [90m257| [39m
+    [90m258| [39m    [34mit[39m([32m'should handle negative numbers'[39m[33m,[39m () [33m=>[39m {
+    [90m259| [39m      [35mconst[39m result [33m=[39m [34mformatCompactNumber[39m([33m-[39m[34m1500[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m260| [39m      [34mexpect[39m(result)[33m.[39m[34mtoMatch[39m([36m/-1\.5K|-1.5K/[39m)
+    [90m261| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatFileSize[2m > [22mshould format bytes
+[31m[1mAssertionError[22m: expected '500 Bytes' to be '500 B' // Object.is equality[39m
+
+Expected: [32m"500 B"[39m
+Received: [31m"500 B[7mytes[27m"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m266:35[22m[39m
+    [90m264| [39m  [34mdescribe[39m([32m'formatFileSize'[39m[33m,[39m () [33m=>[39m {
+    [90m265| [39m    [34mit[39m([32m'should format bytes'[39m[33m,[39m () [33m=>[39m {
+    [90m266| [39m      [34mexpect[39m([34mformatFileSize[39m([34m500[39m))[33m.[39m[34mtoBe[39m([32m'500 B'[39m)
+    [90m   | [39m                                  [31m^[39m
+    [90m267| [39m    })
+    [90m268| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatFileSize[2m > [22mshould format kilobytes
+[31m[1mAssertionError[22m: expected '1 KB' to be '1.00 KB' // Object.is equality[39m
+
+Expected: [32m"1[7m.00[27m KB"[39m
+Received: [31m"1 KB"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m270:36[22m[39m
+    [90m268| [39m
+    [90m269| [39m    [34mit[39m([32m'should format kilobytes'[39m[33m,[39m () [33m=>[39m {
+    [90m270| [39m      [34mexpect[39m([34mformatFileSize[39m([34m1024[39m))[33m.[39m[34mtoBe[39m([32m'1.00 KB'[39m)
+    [90m   | [39m                                   [31m^[39m
+    [90m271| [39m    })
+    [90m272| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatFileSize[2m > [22mshould format megabytes
+[31m[1mAssertionError[22m: expected '1 MB' to be '1.00 MB' // Object.is equality[39m
+
+Expected: [32m"1[7m.00[27m MB"[39m
+Received: [31m"1 MB"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m274:39[22m[39m
+    [90m272| [39m
+    [90m273| [39m    [34mit[39m([32m'should format megabytes'[39m[33m,[39m () [33m=>[39m {
+    [90m274| [39m      [34mexpect[39m([34mformatFileSize[39m([34m1048576[39m))[33m.[39m[34mtoBe[39m([32m'1.00 MB'[39m)
+    [90m   | [39m                                      [31m^[39m
+    [90m275| [39m    })
+    [90m276| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatFileSize[2m > [22mshould format gigabytes
+[31m[1mAssertionError[22m: expected '1 GB' to be '1.00 GB' // Object.is equality[39m
+
+Expected: [32m"1[7m.00[27m GB"[39m
+Received: [31m"1 GB"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m278:42[22m[39m
+    [90m276| [39m
+    [90m277| [39m    [34mit[39m([32m'should format gigabytes'[39m[33m,[39m () [33m=>[39m {
+    [90m278| [39m      [34mexpect[39m([34mformatFileSize[39m([34m1073741824[39m))[33m.[39m[34mtoBe[39m([32m'1.00 GB'[39m)
+    [90m   | [39m                                         [31m^[39m
+    [90m279| [39m    })
+    [90m280| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatFileSize[2m > [22mshould handle zero
+[31m[1mAssertionError[22m: expected '0 Bytes' to be '0 B' // Object.is equality[39m
+
+Expected: [32m"0 B"[39m
+Received: [31m"0 B[7mytes[27m"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m282:33[22m[39m
+    [90m280| [39m
+    [90m281| [39m    [34mit[39m([32m'should handle zero'[39m[33m,[39m () [33m=>[39m {
+    [90m282| [39m      [34mexpect[39m([34mformatFileSize[39m([34m0[39m))[33m.[39m[34mtoBe[39m([32m'0 B'[39m)
+    [90m   | [39m                                [31m^[39m
+    [90m283| [39m    })
+    [90m284| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDuration[2m > [22mshould format seconds only
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatDuration) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m292:14[22m[39m
+    [90m290| [39m  [34mdescribe[39m([32m'formatDuration'[39m[33m,[39m () [33m=>[39m {
+    [90m291| [39m    [34mit[39m([32m'should format seconds only'[39m[33m,[39m () [33m=>[39m {
+    [90m292| [39m      [34mexpect[39m([34mformatDuration[39m([34m45[39m))[33m.[39m[34mtoBe[39m([32m'0:45'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m293| [39m    })
+    [90m294| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDuration[2m > [22mshould format minutes and seconds
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatDuration) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m296:14[22m[39m
+    [90m294| [39m
+    [90m295| [39m    [34mit[39m([32m'should format minutes and seconds'[39m[33m,[39m () [33m=>[39m {
+    [90m296| [39m      [34mexpect[39m([34mformatDuration[39m([34m125[39m))[33m.[39m[34mtoBe[39m([32m'2:05'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m297| [39m    })
+    [90m298| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDuration[2m > [22mshould format hours, minutes, and seconds
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatDuration) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m300:14[22m[39m
+    [90m298| [39m
+    [90m299| [39m    [34mit[39m([32m'should format hours, minutes, and seconds'[39m[33m,[39m () [33m=>[39m {
+    [90m300| [39m      [34mexpect[39m([34mformatDuration[39m([34m3665[39m))[33m.[39m[34mtoBe[39m([32m'1:01:05'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m301| [39m    })
+    [90m302| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatDuration[2m > [22mshould handle zero
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatDuration) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m304:14[22m[39m
+    [90m302| [39m
+    [90m303| [39m    [34mit[39m([32m'should handle zero'[39m[33m,[39m () [33m=>[39m {
+    [90m304| [39m      [34mexpect[39m([34mformatDuration[39m([34m0[39m))[33m.[39m[34mtoBe[39m([32m'0:00'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m305| [39m    })
+    [90m306| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mtruncateText[2m > [22mshould not truncate short text
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.truncateText) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m310:14[22m[39m
+    [90m308| [39m  [34mdescribe[39m([32m'truncateText'[39m[33m,[39m () [33m=>[39m {
+    [90m309| [39m    [34mit[39m([32m'should not truncate short text'[39m[33m,[39m () [33m=>[39m {
+    [90m310| [39m      [34mexpect[39m([34mtruncateText[39m([32m'Hello'[39m[33m,[39m [34m10[39m))[33m.[39m[34mtoBe[39m([32m'Hello'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m311| [39m    })
+    [90m312| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mtruncateText[2m > [22mshould truncate long text with default ellipsis
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.truncateText) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m314:14[22m[39m
+    [90m312| [39m
+    [90m313| [39m    [34mit[39m([32m'should truncate long text with default ellipsis'[39m[33m,[39m () [33m=>[39m {
+    [90m314| [39m      [34mexpect[39m([34mtruncateText[39m([32m'Hello World'[39m[33m,[39m [34m8[39m))[33m.[39m[34mtoBe[39m([32m'Hello...'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m315| [39m    })
+    [90m316| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mtruncateText[2m > [22mshould truncate with custom ellipsis
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.truncateText) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m318:14[22m[39m
+    [90m316| [39m
+    [90m317| [39m    [34mit[39m([32m'should truncate with custom ellipsis'[39m[33m,[39m () [33m=>[39m {
+    [90m318| [39m      [34mexpect[39m([34mtruncateText[39m([32m'Hello World'[39m[33m,[39m [34m8[39m[33m,[39m [32m'---'[39m))[33m.[39m[34mtoBe[39m([32m'Hello---'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m319| [39m    })
+    [90m320| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mtruncateText[2m > [22mshould handle empty string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.truncateText) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m322:14[22m[39m
+    [90m320| [39m
+    [90m321| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m322| [39m      [34mexpect[39m([34mtruncateText[39m([32m''[39m[33m,[39m [34m10[39m))[33m.[39m[34mtoBe[39m([32m''[39m)
+    [90m   | [39m             [31m^[39m
+    [90m323| [39m    })
+    [90m324| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mtruncateText[2m > [22mshould handle exact length match
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.truncateText) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m326:14[22m[39m
+    [90m324| [39m
+    [90m325| [39m    [34mit[39m([32m'should handle exact length match'[39m[33m,[39m () [33m=>[39m {
+    [90m326| [39m      [34mexpect[39m([34mtruncateText[39m([32m'Hello'[39m[33m,[39m [34m5[39m))[33m.[39m[34mtoBe[39m([32m'Hello'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m327| [39m    })
+    [90m328| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeFirst[2m > [22mshould capitalize first letter
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeFirst) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m332:14[22m[39m
+    [90m330| [39m  [34mdescribe[39m([32m'capitalizeFirst'[39m[33m,[39m () [33m=>[39m {
+    [90m331| [39m    [34mit[39m([32m'should capitalize first letter'[39m[33m,[39m () [33m=>[39m {
+    [90m332| [39m      [34mexpect[39m([34mcapitalizeFirst[39m([32m'hello'[39m))[33m.[39m[34mtoBe[39m([32m'Hello'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m333| [39m    })
+    [90m334| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeFirst[2m > [22mshould handle already capitalized text
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeFirst) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m336:14[22m[39m
+    [90m334| [39m
+    [90m335| [39m    [34mit[39m([32m'should handle already capitalized text'[39m[33m,[39m () [33m=>[39m {
+    [90m336| [39m      [34mexpect[39m([34mcapitalizeFirst[39m([32m'Hello'[39m))[33m.[39m[34mtoBe[39m([32m'Hello'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m337| [39m    })
+    [90m338| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeFirst[2m > [22mshould handle empty string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeFirst) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m340:14[22m[39m
+    [90m338| [39m
+    [90m339| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m340| [39m      [34mexpect[39m([34mcapitalizeFirst[39m([32m''[39m))[33m.[39m[34mtoBe[39m([32m''[39m)
+    [90m   | [39m             [31m^[39m
+    [90m341| [39m    })
+    [90m342| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeFirst[2m > [22mshould handle single character
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeFirst) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m344:14[22m[39m
+    [90m342| [39m
+    [90m343| [39m    [34mit[39m([32m'should handle single character'[39m[33m,[39m () [33m=>[39m {
+    [90m344| [39m      [34mexpect[39m([34mcapitalizeFirst[39m([32m'h'[39m))[33m.[39m[34mtoBe[39m([32m'H'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m345| [39m    })
+    [90m346| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeFirst[2m > [22mshould not affect rest of string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeFirst) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m348:14[22m[39m
+    [90m346| [39m
+    [90m347| [39m    [34mit[39m([32m'should not affect rest of string'[39m[33m,[39m () [33m=>[39m {
+    [90m348| [39m      [34mexpect[39m([34mcapitalizeFirst[39m([32m'hELLO'[39m))[33m.[39m[34mtoBe[39m([32m'HELLO'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m349| [39m    })
+    [90m350| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeWords[2m > [22mshould capitalize all words
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeWords) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m354:14[22m[39m
+    [90m352| [39m  [34mdescribe[39m([32m'capitalizeWords'[39m[33m,[39m () [33m=>[39m {
+    [90m353| [39m    [34mit[39m([32m'should capitalize all words'[39m[33m,[39m () [33m=>[39m {
+    [90m354| [39m      [34mexpect[39m([34mcapitalizeWords[39m([32m'hello world'[39m))[33m.[39m[34mtoBe[39m([32m'Hello World'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m355| [39m    })
+    [90m356| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[40/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeWords[2m > [22mshould handle single word
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeWords) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m358:14[22m[39m
+    [90m356| [39m
+    [90m357| [39m    [34mit[39m([32m'should handle single word'[39m[33m,[39m () [33m=>[39m {
+    [90m358| [39m      [34mexpect[39m([34mcapitalizeWords[39m([32m'hello'[39m))[33m.[39m[34mtoBe[39m([32m'Hello'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m359| [39m    })
+    [90m360| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[41/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeWords[2m > [22mshould handle multiple spaces
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeWords) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m362:14[22m[39m
+    [90m360| [39m
+    [90m361| [39m    [34mit[39m([32m'should handle multiple spaces'[39m[33m,[39m () [33m=>[39m {
+    [90m362| [39m      [34mexpect[39m([34mcapitalizeWords[39m([32m'hello  world'[39m))[33m.[39m[34mtoBe[39m([32m'Hello  World'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m363| [39m    })
+    [90m364| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[42/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mcapitalizeWords[2m > [22mshould handle empty string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.capitalizeWords) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m366:14[22m[39m
+    [90m364| [39m
+    [90m365| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m366| [39m      [34mexpect[39m([34mcapitalizeWords[39m([32m''[39m))[33m.[39m[34mtoBe[39m([32m''[39m)
+    [90m   | [39m             [31m^[39m
+    [90m367| [39m    })
+    [90m368| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[43/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mslugify[2m > [22mshould convert to lowercase and replace spaces
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.slugify) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m372:14[22m[39m
+    [90m370| [39m  [34mdescribe[39m([32m'slugify'[39m[33m,[39m () [33m=>[39m {
+    [90m371| [39m    [34mit[39m([32m'should convert to lowercase and replace spaces'[39m[33m,[39m () [33m=>[39m {
+    [90m372| [39m      [34mexpect[39m([34mslugify[39m([32m'Hello World'[39m))[33m.[39m[34mtoBe[39m([32m'hello-world'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m373| [39m    })
+    [90m374| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[44/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mslugify[2m > [22mshould remove special characters
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.slugify) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m376:14[22m[39m
+    [90m374| [39m
+    [90m375| [39m    [34mit[39m([32m'should remove special characters'[39m[33m,[39m () [33m=>[39m {
+    [90m376| [39m      [34mexpect[39m([34mslugify[39m([32m'Hello, World!'[39m))[33m.[39m[34mtoBe[39m([32m'hello-world'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m377| [39m    })
+    [90m378| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[45/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mslugify[2m > [22mshould handle multiple spaces
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.slugify) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m380:14[22m[39m
+    [90m378| [39m
+    [90m379| [39m    [34mit[39m([32m'should handle multiple spaces'[39m[33m,[39m () [33m=>[39m {
+    [90m380| [39m      [34mexpect[39m([34mslugify[39m([32m'Hello   World'[39m))[33m.[39m[34mtoBe[39m([32m'hello-world'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m381| [39m    })
+    [90m382| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[46/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mslugify[2m > [22mshould trim leading/trailing dashes
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.slugify) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m384:14[22m[39m
+    [90m382| [39m
+    [90m383| [39m    [34mit[39m([32m'should trim leading/trailing dashes'[39m[33m,[39m () [33m=>[39m {
+    [90m384| [39m      [34mexpect[39m([34mslugify[39m([32m'  Hello World  '[39m))[33m.[39m[34mtoBe[39m([32m'hello-world'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m385| [39m    })
+    [90m386| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[47/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mslugify[2m > [22mshould handle numbers
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.slugify) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m388:14[22m[39m
+    [90m386| [39m
+    [90m387| [39m    [34mit[39m([32m'should handle numbers'[39m[33m,[39m () [33m=>[39m {
+    [90m388| [39m      [34mexpect[39m([34mslugify[39m([32m'Test 123'[39m))[33m.[39m[34mtoBe[39m([32m'test-123'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m389| [39m    })
+    [90m390| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[48/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mparseFormattedCurrency[2m > [22mshould parse USD formatted currency
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.parseFormattedCurrency) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m426:14[22m[39m
+    [90m424| [39m  [34mdescribe[39m([32m'parseFormattedCurrency'[39m[33m,[39m () [33m=>[39m {
+    [90m425| [39m    [34mit[39m([32m'should parse USD formatted currency'[39m[33m,[39m () [33m=>[39m {
+    [90m426| [39m      [34mexpect[39m([34mparseFormattedCurrency[39m([32m'$1,234.56'[39m))[33m.[39m[34mtoBe[39m([34m1234.56[39m)
+    [90m   | [39m             [31m^[39m
+    [90m427| [39m    })
+    [90m428| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[49/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mparseFormattedCurrency[2m > [22mshould parse negative amounts
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.parseFormattedCurrency) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m430:14[22m[39m
+    [90m428| [39m
+    [90m429| [39m    [34mit[39m([32m'should parse negative amounts'[39m[33m,[39m () [33m=>[39m {
+    [90m430| [39m      [34mexpect[39m([34mparseFormattedCurrency[39m([32m'-$1,234.56'[39m))[33m.[39m[34mtoBe[39m([33m-[39m[34m1234.56[39m)
+    [90m   | [39m             [31m^[39m
+    [90m431| [39m    })
+    [90m432| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[50/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mparseFormattedCurrency[2m > [22mshould parse number without formatting
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.parseFormattedCurrency) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m434:14[22m[39m
+    [90m432| [39m
+    [90m433| [39m    [34mit[39m([32m'should parse number without formatting'[39m[33m,[39m () [33m=>[39m {
+    [90m434| [39m      [34mexpect[39m([34mparseFormattedCurrency[39m([32m'1234.56'[39m))[33m.[39m[34mtoBe[39m([34m1234.56[39m)
+    [90m   | [39m             [31m^[39m
+    [90m435| [39m    })
+    [90m436| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[51/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mparseFormattedCurrency[2m > [22mshould handle invalid input
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.parseFormattedCurrency) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m438:14[22m[39m
+    [90m436| [39m
+    [90m437| [39m    [34mit[39m([32m'should handle invalid input'[39m[33m,[39m () [33m=>[39m {
+    [90m438| [39m      [34mexpect[39m([34mparseFormattedCurrency[39m([32m'invalid'[39m))[33m.[39m[34mtoBe[39m([34m0[39m)
+    [90m   | [39m             [31m^[39m
+    [90m439| [39m    })
+    [90m440| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[52/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mparseFormattedCurrency[2m > [22mshould handle empty string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.parseFormattedCurrency) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m442:14[22m[39m
+    [90m440| [39m
+    [90m441| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m442| [39m      [34mexpect[39m([34mparseFormattedCurrency[39m([32m''[39m))[33m.[39m[34mtoBe[39m([34m0[39m)
+    [90m   | [39m             [31m^[39m
+    [90m443| [39m    })
+    [90m444| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[53/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartValue[2m > [22mshould format percentage values
+[31m[1mAssertionError[22m: expected '0.1%' to be '12.34%' // Object.is equality[39m
+
+Expected: [32m"[7m12.34[27m%"[39m
+Received: [31m"[7m0.1[27m%"[39m
+
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m452:54[22m[39m
+    [90m450| [39m
+    [90m451| [39m    [34mit[39m([32m'should format percentage values'[39m[33m,[39m () [33m=>[39m {
+    [90m452| [39m      [34mexpect[39m([34mformatChartValue[39m([34m0.1234[39m[33m,[39m [32m'percentage'[39m))[33m.[39m[34mtoBe[39m([32m'12.34%'[39m)
+    [90m   | [39m                                                     [31m^[39m
+    [90m453| [39m    })
+    [90m454| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[54/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartLabel[2m > [22mshould format month labels
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartLabel) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m463:14[22m[39m
+    [90m461| [39m    [34mit[39m([32m'should format month labels'[39m[33m,[39m () [33m=>[39m {
+    [90m462| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2024-01-15'[39m)
+    [90m463| [39m      [34mexpect[39m([34mformatChartLabel[39m(date[33m,[39m [32m'month'[39m))[33m.[39m[34mtoMatch[39m([36m/Jan/[39m)
+    [90m   | [39m             [31m^[39m
+    [90m464| [39m    })
+    [90m465| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[55/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartLabel[2m > [22mshould format day labels
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartLabel) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m468:22[22m[39m
+    [90m466| [39m    [34mit[39m([32m'should format day labels'[39m[33m,[39m () [33m=>[39m {
+    [90m467| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2024-01-15'[39m)
+    [90m468| [39m      [35mconst[39m result [33m=[39m [34mformatChartLabel[39m(date[33m,[39m [32m'day'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m469| [39m      [34mexpect[39m(result)[33m.[39m[34mtoMatch[39m([36m/15/[39m)
+    [90m470| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[56/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartLabel[2m > [22mshould format year labels
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartLabel) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m474:14[22m[39m
+    [90m472| [39m    [34mit[39m([32m'should format year labels'[39m[33m,[39m () [33m=>[39m {
+    [90m473| [39m      [35mconst[39m date [33m=[39m [35mnew[39m [33mDate[39m([32m'2024-01-15'[39m)
+    [90m474| [39m      [34mexpect[39m([34mformatChartLabel[39m(date[33m,[39m [32m'year'[39m))[33m.[39m[34mtoBe[39m([32m'2024'[39m)
+    [90m   | [39m             [31m^[39m
+    [90m475| [39m    })
+    [90m476| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[57/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartLabel[2m > [22mshould handle string dates
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartLabel) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m478:14[22m[39m
+    [90m476| [39m
+    [90m477| [39m    [34mit[39m([32m'should handle string dates'[39m[33m,[39m () [33m=>[39m {
+    [90m478| [39m      [34mexpect[39m([34mformatChartLabel[39m([32m'2024-01-15'[39m[33m,[39m [32m'month'[39m))[33m.[39m[34mtoMatch[39m([36m/Jan/[39m)
+    [90m   | [39m             [31m^[39m
+    [90m479| [39m    })
+    [90m480| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[58/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartTooltip[2m > [22mshould format tooltip with label and currency value
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartTooltip) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m484:22[22m[39m
+    [90m482| [39m  [34mdescribe[39m([32m'formatChartTooltip'[39m[33m,[39m () [33m=>[39m {
+    [90m483| [39m    [34mit[39m([32m'should format tooltip with label and currency value'[39m[33m,[39m () [33m=>[39m {
+    [90m484| [39m      [35mconst[39m result [33m=[39m [34mformatChartTooltip[39m([32m'January'[39m[33m,[39m [34m1234.56[39m[33m,[39m [32m'currency'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m485| [39m      [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'January'[39m)
+    [90m486| [39m      [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'$1,234.56'[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[59/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartTooltip[2m > [22mshould format tooltip with percentage
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartTooltip) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m490:22[22m[39m
+    [90m488| [39m
+    [90m489| [39m    [34mit[39m([32m'should format tooltip with percentage'[39m[33m,[39m () [33m=>[39m {
+    [90m490| [39m      [35mconst[39m result [33m=[39m [34mformatChartTooltip[39m([32m'Savings'[39m[33m,[39m [34m0.25[39m[33m,[39m [32m'percentage'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m491| [39m      [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'Savings'[39m)
+    [90m492| [39m      [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'25.00%'[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[60/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/formatters.spec.ts[2m > [22mformatters.ts[2m > [22mformatChartTooltip[2m > [22mshould format tooltip with number
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.formatChartTooltip) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/formatters.spec.ts:[2m496:22[22m[39m
+    [90m494| [39m
+    [90m495| [39m    [34mit[39m([32m'should format tooltip with number'[39m[33m,[39m () [33m=>[39m {
+    [90m496| [39m      [35mconst[39m result [33m=[39m [34mformatChartTooltip[39m([32m'Count'[39m[33m,[39m [34m42[39m[33m,[39m [32m'number'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m497| [39m      [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'Count'[39m)
+    [90m498| [39m      [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'42'[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[61/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mObject Utilities[2m > [22misObject[2m > [22mshould return false for non-objects
+[31m[1mAssertionError[22m: expected null to be false // Object.is equality[39m
+
+[32m- Expected:[39m 
+false
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m231:32[22m[39m
+    [90m229| [39m
+    [90m230| [39m      [34mit[39m([32m'should return false for non-objects'[39m[33m,[39m () [33m=>[39m {
+    [90m231| [39m        [34mexpect[39m([34misObject[39m([35mnull[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                               [31m^[39m
+    [90m232| [39m        [34mexpect[39m([34misObject[39m([]))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m233| [39m        [34mexpect[39m([34misObject[39m([32m'string'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[62/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mDate Utilities[2m > [22mgetDateRange[2m > [22mshould return week range
+[31m[1mAssertionError[22m: expected null to be an instance of ClockDate[39m
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m290:29[22m[39m
+    [90m288| [39m      [34mit[39m([32m'should return week range'[39m[33m,[39m () [33m=>[39m {
+    [90m289| [39m        [35mconst[39m range [33m=[39m [34mgetDateRange[39m([32m'week'[39m)
+    [90m290| [39m        [34mexpect[39m(range[33m.[39mstart)[33m.[39m[34mtoBeInstanceOf[39m([33mDate[39m)
+    [90m   | [39m                            [31m^[39m
+    [90m291| [39m        [34mexpect[39m(range[33m.[39mend)[33m.[39m[34mtoBeInstanceOf[39m([33mDate[39m)
+    [90m292| [39m      })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[63/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mDate Utilities[2m > [22mgetDateRange[2m > [22mshould return month range
+[31m[1mAssertionError[22m: expected null to be an instance of ClockDate[39m
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m296:29[22m[39m
+    [90m294| [39m      [34mit[39m([32m'should return month range'[39m[33m,[39m () [33m=>[39m {
+    [90m295| [39m        [35mconst[39m range [33m=[39m [34mgetDateRange[39m([32m'month'[39m)
+    [90m296| [39m        [34mexpect[39m(range[33m.[39mstart)[33m.[39m[34mtoBeInstanceOf[39m([33mDate[39m)
+    [90m   | [39m                            [31m^[39m
+    [90m297| [39m        [34mexpect[39m(range[33m.[39mend)[33m.[39m[34mtoBeInstanceOf[39m([33mDate[39m)
+    [90m298| [39m      })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[64/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mDate Utilities[2m > [22mgetDaysInMonth[2m > [22mshould return correct days for January
+[31m[1mAssertionError[22m: expected 29 to be 31 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 31[39m
+[31m+ 29[39m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m349:41[22m[39m
+    [90m347| [39m    [34mdescribe[39m([32m'getDaysInMonth'[39m[33m,[39m () [33m=>[39m {
+    [90m348| [39m      [34mit[39m([32m'should return correct days for January'[39m[33m,[39m () [33m=>[39m {
+    [90m349| [39m        [34mexpect[39m([34mgetDaysInMonth[39m([34m2024[39m[33m,[39m [34m1[39m))[33m.[39m[34mtoBe[39m([34m31[39m)
+    [90m   | [39m                                        [31m^[39m
+    [90m350| [39m      })
+    [90m351| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[65/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mDate Utilities[2m > [22mgetDaysInMonth[2m > [22mshould return correct days for February (leap year)
+[31m[1mAssertionError[22m: expected 31 to be 29 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 29[39m
+[31m+ 31[39m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m353:41[22m[39m
+    [90m351| [39m
+    [90m352| [39m      [34mit[39m([32m'should return correct days for February (leap year)'[39m[33m,[39m () [33m=>[39m {
+    [90m353| [39m        [34mexpect[39m([34mgetDaysInMonth[39m([34m2024[39m[33m,[39m [34m2[39m))[33m.[39m[34mtoBe[39m([34m29[39m)
+    [90m   | [39m                                        [31m^[39m
+    [90m354| [39m      })
+    [90m355| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[66/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mDate Utilities[2m > [22mgetDaysInMonth[2m > [22mshould return correct days for February (non-leap year)
+[31m[1mAssertionError[22m: expected 31 to be 28 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 28[39m
+[31m+ 31[39m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m357:41[22m[39m
+    [90m355| [39m
+    [90m356| [39m      it('should return correct days for February (non-leap year)', ()…
+    [90m357| [39m        [34mexpect[39m([34mgetDaysInMonth[39m([34m2023[39m[33m,[39m [34m2[39m))[33m.[39m[34mtoBe[39m([34m28[39m)
+    [90m   | [39m                                        [31m^[39m
+    [90m358| [39m      })
+    [90m359| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[67/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mMath Utilities[2m > [22mcalculatePercentageChange[2m > [22mshould handle zero old value
+[31m[1mAssertionError[22m: expected 100 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 100[39m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m469:51[22m[39m
+    [90m467| [39m
+    [90m468| [39m      [34mit[39m([32m'should handle zero old value'[39m[33m,[39m () [33m=>[39m {
+    [90m469| [39m        [34mexpect[39m([34mcalculatePercentageChange[39m([34m0[39m[33m,[39m [34m100[39m))[33m.[39m[34mtoBe[39m([34m0[39m)
+    [90m   | [39m                                                  [31m^[39m
+    [90m470| [39m      })
+    [90m471| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[68/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mMath Utilities[2m > [22mrange[2m > [22mshould generate range with step 1
+[31m[1mAssertionError[22m: expected [ +0, 1, 2, 3, 4, 5 ] to deeply equal [ +0, 1, 2, 3, 4 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -2,6 +2,7 @@[39m
+[2m    0,[22m
+[2m    1,[22m
+[2m    2,[22m
+[2m    3,[22m
+[2m    4,[22m
+[31m+   5,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m489:29[22m[39m
+    [90m487| [39m    [34mdescribe[39m([32m'range'[39m[33m,[39m () [33m=>[39m {
+    [90m488| [39m      [34mit[39m([32m'should generate range with step 1'[39m[33m,[39m () [33m=>[39m {
+    [90m489| [39m        [34mexpect[39m([34mrange[39m([34m0[39m[33m,[39m [34m5[39m))[33m.[39m[34mtoEqual[39m([[34m0[39m[33m,[39m [34m1[39m[33m,[39m [34m2[39m[33m,[39m [34m3[39m[33m,[39m [34m4[39m])
+    [90m   | [39m                            [31m^[39m
+    [90m490| [39m      })
+    [90m491| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[69/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mMath Utilities[2m > [22mrange[2m > [22mshould generate range with custom step
+[31m[1mAssertionError[22m: expected [ +0, 2, 4, 6, 8, 10 ] to deeply equal [ +0, 2, 4, 6, 8 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -2,6 +2,7 @@[39m
+[2m    0,[22m
+[2m    2,[22m
+[2m    4,[22m
+[2m    6,[22m
+[2m    8,[22m
+[31m+   10,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m493:33[22m[39m
+    [90m491| [39m
+    [90m492| [39m      [34mit[39m([32m'should generate range with custom step'[39m[33m,[39m () [33m=>[39m {
+    [90m493| [39m        [34mexpect[39m([34mrange[39m([34m0[39m[33m,[39m [34m10[39m[33m,[39m [34m2[39m))[33m.[39m[34mtoEqual[39m([[34m0[39m[33m,[39m [34m2[39m[33m,[39m [34m4[39m[33m,[39m [34m6[39m[33m,[39m [34m8[39m])
+    [90m   | [39m                                [31m^[39m
+    [90m494| [39m      })
+    [90m495| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[70/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/helpers.spec.ts[2m > [22mhelpers.ts[2m > [22mMath Utilities[2m > [22mrange[2m > [22mshould handle negative range
+[31m[1mAssertionError[22m: expected [] to deeply equal [ 5, 4, 3, 2, 1 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   5,[39m
+[32m-   4,[39m
+[32m-   3,[39m
+[32m-   2,[39m
+[32m-   1,[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m src/utils/__tests__/helpers.spec.ts:[2m497:33[22m[39m
+    [90m495| [39m
+    [90m496| [39m      [34mit[39m([32m'should handle negative range'[39m[33m,[39m () [33m=>[39m {
+    [90m497| [39m        [34mexpect[39m([34mrange[39m([34m5[39m[33m,[39m [34m0[39m[33m,[39m [33m-[39m[34m1[39m))[33m.[39m[34mtoEqual[39m([[34m5[39m[33m,[39m [34m4[39m[33m,[39m [34m3[39m[33m,[39m [34m2[39m[33m,[39m [34m1[39m])
+    [90m   | [39m                                [31m^[39m
+    [90m498| [39m      })
+    [90m499| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[71/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22memail[2m > [22mshould handle empty string
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m81:25[22m[39m
+    [90m 79| [39m
+    [90m 80| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m 81| [39m      [34mexpect[39m([34memail[39m([32m''[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m 82| [39m    })
+    [90m 83| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[72/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mminLength[2m > [22mshould return true when length meets minimum
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.minLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m87:25[22m[39m
+    [90m 85| [39m  [34mdescribe[39m([32m'minLength'[39m[33m,[39m () [33m=>[39m {
+    [90m 86| [39m    [34mit[39m([32m'should return true when length meets minimum'[39m[33m,[39m () [33m=>[39m {
+    [90m 87| [39m      [34mexpect[39m([34mminLength[39m([34m5[39m)([32m'hello'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m 88| [39m      [34mexpect[39m([34mminLength[39m([34m5[39m)([32m'hello world'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m 89| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[73/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mminLength[2m > [22mshould return false when length is below minimum
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.minLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m92:25[22m[39m
+    [90m 90| [39m
+    [90m 91| [39m    [34mit[39m([32m'should return false when length is below minimum'[39m[33m,[39m () [33m=>[39m {
+    [90m 92| [39m      [34mexpect[39m([34mminLength[39m([34m5[39m)([32m'hi'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m 93| [39m    })
+    [90m 94| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[74/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mminLength[2m > [22mshould handle exact match
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.minLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m96:25[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [34mit[39m([32m'should handle exact match'[39m[33m,[39m () [33m=>[39m {
+    [90m 96| [39m      [34mexpect[39m([34mminLength[39m([34m5[39m)([32m'hello'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m 97| [39m    })
+    [90m 98| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[75/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mminLength[2m > [22mshould handle empty string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.minLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m100:25[22m[39m
+    [90m 98| [39m
+    [90m 99| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m100| [39m      [34mexpect[39m([34mminLength[39m([34m1[39m)([32m''[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m101| [39m    })
+    [90m102| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[76/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmaxLength[2m > [22mshould return true when length is within maximum
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.maxLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m106:26[22m[39m
+    [90m104| [39m  [34mdescribe[39m([32m'maxLength'[39m[33m,[39m () [33m=>[39m {
+    [90m105| [39m    [34mit[39m([32m'should return true when length is within maximum'[39m[33m,[39m () [33m=>[39m {
+    [90m106| [39m      [34mexpect[39m([34mmaxLength[39m([34m10[39m)([32m'hello'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m                         [31m^[39m
+    [90m107| [39m    })
+    [90m108| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[77/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmaxLength[2m > [22mshould return false when length exceeds maximum
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.maxLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m110:25[22m[39m
+    [90m108| [39m
+    [90m109| [39m    [34mit[39m([32m'should return false when length exceeds maximum'[39m[33m,[39m () [33m=>[39m {
+    [90m110| [39m      [34mexpect[39m([34mmaxLength[39m([34m5[39m)([32m'hello world'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m111| [39m    })
+    [90m112| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[78/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmaxLength[2m > [22mshould handle exact match
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.maxLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m114:25[22m[39m
+    [90m112| [39m
+    [90m113| [39m    [34mit[39m([32m'should handle exact match'[39m[33m,[39m () [33m=>[39m {
+    [90m114| [39m      [34mexpect[39m([34mmaxLength[39m([34m5[39m)([32m'hello'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m115| [39m    })
+    [90m116| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[79/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmaxLength[2m > [22mshould handle empty string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.maxLength)(...) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m118:25[22m[39m
+    [90m116| [39m
+    [90m117| [39m    [34mit[39m([32m'should handle empty string'[39m[33m,[39m () [33m=>[39m {
+    [90m118| [39m      [34mexpect[39m([34mmaxLength[39m([34m5[39m)([32m''[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m                        [31m^[39m
+    [90m119| [39m    })
+    [90m120| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[80/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22malphanumeric[2m > [22mshould validate alphanumeric strings
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.alphanumeric) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m151:14[22m[39m
+    [90m149| [39m  [34mdescribe[39m([32m'alphanumeric'[39m[33m,[39m () [33m=>[39m {
+    [90m150| [39m    [34mit[39m([32m'should validate alphanumeric strings'[39m[33m,[39m () [33m=>[39m {
+    [90m151| [39m      [34mexpect[39m([34malphanumeric[39m([32m'abc123'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m152| [39m      [34mexpect[39m([34malphanumeric[39m([32m'ABC123'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m153| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[81/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22malphanumeric[2m > [22mshould validate letters only
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.alphanumeric) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m156:14[22m[39m
+    [90m154| [39m
+    [90m155| [39m    [34mit[39m([32m'should validate letters only'[39m[33m,[39m () [33m=>[39m {
+    [90m156| [39m      [34mexpect[39m([34malphanumeric[39m([32m'abc'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m157| [39m    })
+    [90m158| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[82/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22malphanumeric[2m > [22mshould validate numbers only
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.alphanumeric) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m160:14[22m[39m
+    [90m158| [39m
+    [90m159| [39m    [34mit[39m([32m'should validate numbers only'[39m[33m,[39m () [33m=>[39m {
+    [90m160| [39m      [34mexpect[39m([34malphanumeric[39m([32m'123'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m161| [39m    })
+    [90m162| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[83/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22malphanumeric[2m > [22mshould reject special characters
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.alphanumeric) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m164:14[22m[39m
+    [90m162| [39m
+    [90m163| [39m    [34mit[39m([32m'should reject special characters'[39m[33m,[39m () [33m=>[39m {
+    [90m164| [39m      [34mexpect[39m([34malphanumeric[39m([32m'abc@123'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m165| [39m      [34mexpect[39m([34malphanumeric[39m([32m'abc 123'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m166| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[84/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22murl[2m > [22mshould validate correct URLs
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.url) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m171:14[22m[39m
+    [90m169| [39m  [34mdescribe[39m([32m'url'[39m[33m,[39m () [33m=>[39m {
+    [90m170| [39m    [34mit[39m([32m'should validate correct URLs'[39m[33m,[39m () [33m=>[39m {
+    [90m171| [39m      [34mexpect[39m([34murl[39m([32m'https://example.com'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m172| [39m      [34mexpect[39m([34murl[39m([32m'http://example.com'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m173| [39m      [34mexpect[39m([34murl[39m([32m'https://www.example.com/path'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[85/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22murl[2m > [22mshould reject invalid URLs
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.url) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m177:14[22m[39m
+    [90m175| [39m
+    [90m176| [39m    [34mit[39m([32m'should reject invalid URLs'[39m[33m,[39m () [33m=>[39m {
+    [90m177| [39m      [34mexpect[39m([34murl[39m([32m'not a url'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m178| [39m      [34mexpect[39m([34murl[39m([32m'example.com'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m179| [39m      [34mexpect[39m([34murl[39m([32m'ftp://example.com'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[86/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mphoneNumber[2m > [22mshould validate 10-digit phone numbers
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.phoneNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m185:14[22m[39m
+    [90m183| [39m  [34mdescribe[39m([32m'phoneNumber'[39m[33m,[39m () [33m=>[39m {
+    [90m184| [39m    [34mit[39m([32m'should validate 10-digit phone numbers'[39m[33m,[39m () [33m=>[39m {
+    [90m185| [39m      [34mexpect[39m([34mphoneNumber[39m([32m'1234567890'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m186| [39m      [34mexpect[39m([34mphoneNumber[39m([32m'(123) 456-7890'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m187| [39m      [34mexpect[39m([34mphoneNumber[39m([32m'123-456-7890'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[87/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mphoneNumber[2m > [22mshould reject invalid phone numbers
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.phoneNumber) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m191:14[22m[39m
+    [90m189| [39m
+    [90m190| [39m    [34mit[39m([32m'should reject invalid phone numbers'[39m[33m,[39m () [33m=>[39m {
+    [90m191| [39m      [34mexpect[39m([34mphoneNumber[39m([32m'123'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m192| [39m      [34mexpect[39m([34mphoneNumber[39m([32m'abcdefghij'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m193| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[88/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mcreditCard[2m > [22mshould validate 16-digit card numbers
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.creditCard) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m198:14[22m[39m
+    [90m196| [39m  [34mdescribe[39m([32m'creditCard'[39m[33m,[39m () [33m=>[39m {
+    [90m197| [39m    [34mit[39m([32m'should validate 16-digit card numbers'[39m[33m,[39m () [33m=>[39m {
+    [90m198| [39m      [34mexpect[39m([34mcreditCard[39m([32m'1234567890123456'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m199| [39m      [34mexpect[39m([34mcreditCard[39m([32m'1234 5678 9012 3456'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m200| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[89/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mcreditCard[2m > [22mshould reject invalid card numbers
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.creditCard) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m203:14[22m[39m
+    [90m201| [39m
+    [90m202| [39m    [34mit[39m([32m'should reject invalid card numbers'[39m[33m,[39m () [33m=>[39m {
+    [90m203| [39m      [34mexpect[39m([34mcreditCard[39m([32m'1234'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m204| [39m      [34mexpect[39m([34mcreditCard[39m([32m'abcd1234efgh5678'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m205| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[90/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mzipCode[2m > [22mshould validate 5-digit US zip codes
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.zipCode) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m210:14[22m[39m
+    [90m208| [39m  [34mdescribe[39m([32m'zipCode'[39m[33m,[39m () [33m=>[39m {
+    [90m209| [39m    [34mit[39m([32m'should validate 5-digit US zip codes'[39m[33m,[39m () [33m=>[39m {
+    [90m210| [39m      [34mexpect[39m([34mzipCode[39m([32m'12345'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m211| [39m    })
+    [90m212| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[91/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mzipCode[2m > [22mshould validate ZIP+4 format
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.zipCode) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m214:14[22m[39m
+    [90m212| [39m
+    [90m213| [39m    [34mit[39m([32m'should validate ZIP+4 format'[39m[33m,[39m () [33m=>[39m {
+    [90m214| [39m      [34mexpect[39m([34mzipCode[39m([32m'12345-6789'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m215| [39m    })
+    [90m216| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[92/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mzipCode[2m > [22mshould reject invalid zip codes
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.zipCode) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m218:14[22m[39m
+    [90m216| [39m
+    [90m217| [39m    [34mit[39m([32m'should reject invalid zip codes'[39m[33m,[39m () [33m=>[39m {
+    [90m218| [39m      [34mexpect[39m([34mzipCode[39m([32m'123'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m219| [39m      [34mexpect[39m([34mzipCode[39m([32m'abcde'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m220| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[93/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mstrongPassword[2m > [22mshould reject weak passwords - too short
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m246:40[22m[39m
+    [90m244| [39m
+    [90m245| [39m    [34mit[39m([32m'should reject weak passwords - too short'[39m[33m,[39m () [33m=>[39m {
+    [90m246| [39m      [34mexpect[39m([34mstrongPassword[39m([32m'Pass1!'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                                       [31m^[39m
+    [90m247| [39m    })
+    [90m248| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[94/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmatchField[2m > [22mshould return true when fields match
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.matchField) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m252:14[22m[39m
+    [90m250| [39m  [34mdescribe[39m([32m'matchField'[39m[33m,[39m () [33m=>[39m {
+    [90m251| [39m    [34mit[39m([32m'should return true when fields match'[39m[33m,[39m () [33m=>[39m {
+    [90m252| [39m      [34mexpect[39m([34mmatchField[39m([32m'password123'[39m[33m,[39m [32m'password123'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m253| [39m    })
+    [90m254| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[95/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmatchField[2m > [22mshould return false when fields do not match
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.matchField) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m256:14[22m[39m
+    [90m254| [39m
+    [90m255| [39m    [34mit[39m([32m'should return false when fields do not match'[39m[33m,[39m () [33m=>[39m {
+    [90m256| [39m      [34mexpect[39m([34mmatchField[39m([32m'password123'[39m[33m,[39m [32m'different'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m257| [39m    })
+    [90m258| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[96/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mmatchField[2m > [22mshould handle empty strings
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.matchField) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m260:14[22m[39m
+    [90m258| [39m
+    [90m259| [39m    [34mit[39m([32m'should handle empty strings'[39m[33m,[39m () [33m=>[39m {
+    [90m260| [39m      [34mexpect[39m([34mmatchField[39m([32m''[39m[33m,[39m [32m''[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m261| [39m    })
+    [90m262| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[97/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mtransactionType[2m > [22mshould reject invalid types
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m275:41[22m[39m
+    [90m273| [39m    [34mit[39m([32m'should reject invalid types'[39m[33m,[39m () [33m=>[39m {
+    [90m274| [39m      [34mexpect[39m([34mtransactionType[39m([32m'INVALID'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m275| [39m      [34mexpect[39m([34mtransactionType[39m([32m'income'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                                        [31m^[39m
+    [90m276| [39m    })
+    [90m277| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[98/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mtransactionDate[2m > [22mshould reject invalid dates
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m306:44[22m[39m
+    [90m304| [39m    [34mit[39m([32m'should reject invalid dates'[39m[33m,[39m () [33m=>[39m {
+    [90m305| [39m      [34mexpect[39m([34mtransactionDate[39m([32m'invalid'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m306| [39m      [34mexpect[39m([34mtransactionDate[39m([35mnull[39m [35mas[39m any))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m                                           [31m^[39m
+    [90m307| [39m    })
+    [90m308| [39m  })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[99/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mtransactionCategory[2m > [22mshould validate non-empty category
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m312:43[22m[39m
+    [90m310| [39m  [34mdescribe[39m([32m'transactionCategory'[39m[33m,[39m () [33m=>[39m {
+    [90m311| [39m    [34mit[39m([32m'should validate non-empty category'[39m[33m,[39m () [33m=>[39m {
+    [90m312| [39m      [34mexpect[39m([34mtransactionCategory[39m([32m'Food'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m                                          [31m^[39m
+    [90m313| [39m    })
+    [90m314| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[100/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mbudgetAmount[2m > [22mshould validate positive budget amounts
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.budgetAmount) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m323:14[22m[39m
+    [90m321| [39m  [34mdescribe[39m([32m'budgetAmount'[39m[33m,[39m () [33m=>[39m {
+    [90m322| [39m    [34mit[39m([32m'should validate positive budget amounts'[39m[33m,[39m () [33m=>[39m {
+    [90m323| [39m      [34mexpect[39m([34mbudgetAmount[39m([34m1000[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m324| [39m      [34mexpect[39m([34mbudgetAmount[39m([34m0.01[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m325| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[101/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mbudgetAmount[2m > [22mshould reject zero or negative
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.budgetAmount) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m328:14[22m[39m
+    [90m326| [39m
+    [90m327| [39m    [34mit[39m([32m'should reject zero or negative'[39m[33m,[39m () [33m=>[39m {
+    [90m328| [39m      [34mexpect[39m([34mbudgetAmount[39m([34m0[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m329| [39m      [34mexpect[39m([34mbudgetAmount[39m([33m-[39m[34m100[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m330| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[102/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mbudgetPeriod[2m > [22mshould validate monthly period
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.budgetPeriod) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m335:14[22m[39m
+    [90m333| [39m  [34mdescribe[39m([32m'budgetPeriod'[39m[33m,[39m () [33m=>[39m {
+    [90m334| [39m    [34mit[39m([32m'should validate monthly period'[39m[33m,[39m () [33m=>[39m {
+    [90m335| [39m      [34mexpect[39m([34mbudgetPeriod[39m([32m'monthly'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m336| [39m    })
+    [90m337| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[103/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mbudgetPeriod[2m > [22mshould validate weekly period
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.budgetPeriod) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m339:14[22m[39m
+    [90m337| [39m
+    [90m338| [39m    [34mit[39m([32m'should validate weekly period'[39m[33m,[39m () [33m=>[39m {
+    [90m339| [39m      [34mexpect[39m([34mbudgetPeriod[39m([32m'weekly'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m340| [39m    })
+    [90m341| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[104/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mbudgetPeriod[2m > [22mshould validate yearly period
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.budgetPeriod) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m343:14[22m[39m
+    [90m341| [39m
+    [90m342| [39m    [34mit[39m([32m'should validate yearly period'[39m[33m,[39m () [33m=>[39m {
+    [90m343| [39m      [34mexpect[39m([34mbudgetPeriod[39m([32m'yearly'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m   | [39m             [31m^[39m
+    [90m344| [39m    })
+    [90m345| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[105/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mbudgetPeriod[2m > [22mshould reject invalid periods
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.budgetPeriod) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m347:14[22m[39m
+    [90m345| [39m
+    [90m346| [39m    [34mit[39m([32m'should reject invalid periods'[39m[33m,[39m () [33m=>[39m {
+    [90m347| [39m      [34mexpect[39m([34mbudgetPeriod[39m([32m'daily'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m   | [39m             [31m^[39m
+    [90m348| [39m      [34mexpect[39m([34mbudgetPeriod[39m([32m'MONTHLY'[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m349| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[106/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateBudget[2m > [22mshould validate valid budget
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateBudget) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m446:22[22m[39m
+    [90m444| [39m        period[33m:[39m [32m'monthly'[39m
+    [90m445| [39m      }
+    [90m446| [39m      [35mconst[39m result [33m=[39m [34mvalidateBudget[39m(budget)
+    [90m   | [39m                     [31m^[39m
+    [90m447| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m448| [39m      [34mexpect[39m([33mObject[39m[33m.[39m[34mkeys[39m(result[33m.[39merrors))[33m.[39m[34mtoHaveLength[39m([34m0[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[107/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateBudget[2m > [22mshould invalidate budget without category_id
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateBudget) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m456:22[22m[39m
+    [90m454| [39m        period[33m:[39m [32m'monthly'[39m
+    [90m455| [39m      }
+    [90m456| [39m      [35mconst[39m result [33m=[39m [34mvalidateBudget[39m(budget)
+    [90m   | [39m                     [31m^[39m
+    [90m457| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m458| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39mcategory_id)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[108/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateBudget[2m > [22mshould invalidate budget with zero amount
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateBudget) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m467:22[22m[39m
+    [90m465| [39m        period[33m:[39m [32m'monthly'[39m
+    [90m466| [39m      }
+    [90m467| [39m      [35mconst[39m result [33m=[39m [34mvalidateBudget[39m(budget)
+    [90m   | [39m                     [31m^[39m
+    [90m468| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m469| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39mamount)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[109/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateBudget[2m > [22mshould invalidate budget with invalid period
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateBudget) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m478:22[22m[39m
+    [90m476| [39m        period[33m:[39m [32m'daily'[39m
+    [90m477| [39m      }
+    [90m478| [39m      [35mconst[39m result [33m=[39m [34mvalidateBudget[39m(budget)
+    [90m   | [39m                     [31m^[39m
+    [90m479| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m480| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39mperiod)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[110/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateCategory[2m > [22mshould invalidate duplicate category name
+[31m[1mAssertionError[22m: expected 'Invalid or duplicate category name' to contain 'already exists'[39m
+
+Expected: [32m"already exists"[39m
+Received: [31m"Invalid or duplicate category name"[39m
+
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m518:34[22m[39m
+    [90m516| [39m      [35mconst[39m result [33m=[39m [34mvalidateCategory[39m(category[33m,[39m existing)
+    [90m517| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m518| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39mname)[33m.[39m[34mtoContain[39m([32m'already exists'[39m)
+    [90m   | [39m                                 [31m^[39m
+    [90m519| [39m    })
+    [90m520| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[111/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateUser[2m > [22mshould validate valid user
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateUser) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m542:22[22m[39m
+    [90m540| [39m        password[33m:[39m [32m'Password123!'[39m
+    [90m541| [39m      }
+    [90m542| [39m      [35mconst[39m result [33m=[39m [34mvalidateUser[39m(user)
+    [90m   | [39m                     [31m^[39m
+    [90m543| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m544| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[112/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateUser[2m > [22mshould invalidate user without firstName
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateUser) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m553:22[22m[39m
+    [90m551| [39m        password[33m:[39m [32m'Password123!'[39m
+    [90m552| [39m      }
+    [90m553| [39m      [35mconst[39m result [33m=[39m [34mvalidateUser[39m(user)
+    [90m   | [39m                     [31m^[39m
+    [90m554| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m555| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39mfirstName)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[113/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateUser[2m > [22mshould invalidate user with invalid email
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateUser) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m565:22[22m[39m
+    [90m563| [39m        password[33m:[39m [32m'Password123!'[39m
+    [90m564| [39m      }
+    [90m565| [39m      [35mconst[39m result [33m=[39m [34mvalidateUser[39m(user)
+    [90m   | [39m                     [31m^[39m
+    [90m566| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m567| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39memail)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[114/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateUser[2m > [22mshould invalidate user with weak password
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateUser) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m577:22[22m[39m
+    [90m575| [39m        password[33m:[39m [32m'weak'[39m
+    [90m576| [39m      }
+    [90m577| [39m      [35mconst[39m result [33m=[39m [34mvalidateUser[39m(user)
+    [90m   | [39m                     [31m^[39m
+    [90m578| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m579| [39m      [34mexpect[39m(result[33m.[39merrors[33m.[39mpassword)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[115/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateEmail[2m > [22mshould validate correct email
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateEmail) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m585:22[22m[39m
+    [90m583| [39m  [34mdescribe[39m([32m'validateEmail'[39m[33m,[39m () [33m=>[39m {
+    [90m584| [39m    [34mit[39m([32m'should validate correct email'[39m[33m,[39m () [33m=>[39m {
+    [90m585| [39m      [35mconst[39m result [33m=[39m [34mvalidateEmail[39m([32m'test@example.com'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m586| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m587| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[116/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateEmail[2m > [22mshould invalidate incorrect email
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateEmail) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m590:22[22m[39m
+    [90m588| [39m
+    [90m589| [39m    [34mit[39m([32m'should invalidate incorrect email'[39m[33m,[39m () [33m=>[39m {
+    [90m590| [39m      [35mconst[39m result [33m=[39m [34mvalidateEmail[39m([32m'invalid'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m591| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m592| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[117/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidatePassword[2m > [22mshould validate strong password
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validatePassword) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m598:22[22m[39m
+    [90m596| [39m  [34mdescribe[39m([32m'validatePassword'[39m[33m,[39m () [33m=>[39m {
+    [90m597| [39m    [34mit[39m([32m'should validate strong password'[39m[33m,[39m () [33m=>[39m {
+    [90m598| [39m      [35mconst[39m result [33m=[39m [34mvalidatePassword[39m([32m'Password123!'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m599| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m600| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[118/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidatePassword[2m > [22mshould invalidate weak password
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validatePassword) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m603:22[22m[39m
+    [90m601| [39m
+    [90m602| [39m    [34mit[39m([32m'should invalidate weak password'[39m[33m,[39m () [33m=>[39m {
+    [90m603| [39m      [35mconst[39m result [33m=[39m [34mvalidatePassword[39m([32m'weak'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m604| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m605| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[119/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateAmount[2m > [22mshould validate positive amount
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateAmount) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m611:22[22m[39m
+    [90m609| [39m  [34mdescribe[39m([32m'validateAmount'[39m[33m,[39m () [33m=>[39m {
+    [90m610| [39m    [34mit[39m([32m'should validate positive amount'[39m[33m,[39m () [33m=>[39m {
+    [90m611| [39m      [35mconst[39m result [33m=[39m [34mvalidateAmount[39m([34m100[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m612| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m613| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[120/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateAmount[2m > [22mshould invalidate zero amount
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateAmount) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m616:22[22m[39m
+    [90m614| [39m
+    [90m615| [39m    [34mit[39m([32m'should invalidate zero amount'[39m[33m,[39m () [33m=>[39m {
+    [90m616| [39m      [35mconst[39m result [33m=[39m [34mvalidateAmount[39m([34m0[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m617| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m618| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[121/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateAmount[2m > [22mshould invalidate negative amount
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateAmount) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m622:22[22m[39m
+    [90m620| [39m
+    [90m621| [39m    [34mit[39m([32m'should invalidate negative amount'[39m[33m,[39m () [33m=>[39m {
+    [90m622| [39m      [35mconst[39m result [33m=[39m [34mvalidateAmount[39m([33m-[39m[34m100[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m623| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m624| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[122/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateDate[2m > [22mshould validate valid date
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateDate) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m630:22[22m[39m
+    [90m628| [39m  [34mdescribe[39m([32m'validateDate'[39m[33m,[39m () [33m=>[39m {
+    [90m629| [39m    [34mit[39m([32m'should validate valid date'[39m[33m,[39m () [33m=>[39m {
+    [90m630| [39m      [35mconst[39m result [33m=[39m [34mvalidateDate[39m([35mnew[39m [33mDate[39m())
+    [90m   | [39m                     [31m^[39m
+    [90m631| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m632| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[123/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateDate[2m > [22mshould validate date string
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateDate) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m635:22[22m[39m
+    [90m633| [39m
+    [90m634| [39m    [34mit[39m([32m'should validate date string'[39m[33m,[39m () [33m=>[39m {
+    [90m635| [39m      [35mconst[39m result [33m=[39m [34mvalidateDate[39m([32m'2024-01-15'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m636| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m637| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[124/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mvalidateDate[2m > [22mshould invalidate invalid date
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.validateDate) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m640:22[22m[39m
+    [90m638| [39m
+    [90m639| [39m    [34mit[39m([32m'should invalidate invalid date'[39m[33m,[39m () [33m=>[39m {
+    [90m640| [39m      [35mconst[39m result [33m=[39m [34mvalidateDate[39m([32m'invalid'[39m)
+    [90m   | [39m                     [31m^[39m
+    [90m641| [39m      [34mexpect[39m(result[33m.[39misValid)[33m.[39m[34mtoBe[39m([35mfalse[39m)
+    [90m642| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoBeDefined[39m()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[125/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mcomposite[2m > [22mshould validate when all validators pass
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.composite) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m648:25[22m[39m
+    [90m646| [39m  [34mdescribe[39m([32m'composite'[39m[33m,[39m () [33m=>[39m {
+    [90m647| [39m    [34mit[39m([32m'should validate when all validators pass'[39m[33m,[39m () [33m=>[39m {
+    [90m648| [39m      [35mconst[39m validator [33m=[39m [34mcomposite[39m([
+    [90m   | [39m                        [31m^[39m
+    [90m649| [39m        required[33m,[39m
+    [90m650| [39m        [34mminLength[39m([34m3[39m)[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[126/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mcomposite[2m > [22mshould fail when any validator fails
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.composite) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m657:25[22m[39m
+    [90m655| [39m
+    [90m656| [39m    [34mit[39m([32m'should fail when any validator fails'[39m[33m,[39m () [33m=>[39m {
+    [90m657| [39m      [35mconst[39m validator [33m=[39m [34mcomposite[39m([
+    [90m   | [39m                        [31m^[39m
+    [90m658| [39m        required[33m,[39m
+    [90m659| [39m        [34mminLength[39m([34m10[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[127/128]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/utils/__tests__/validators.spec.ts[2m > [22mvalidators.ts[2m > [22mcomposite[2m > [22mshould handle empty validators array
+[31m[1mTypeError[22m: (0 , __vite_ssr_import_1__.composite) is not a function[39m
+[36m [2m❯[22m src/utils/__tests__/validators.spec.ts:[2m665:25[22m[39m
+    [90m663| [39m
+    [90m664| [39m    [34mit[39m([32m'should handle empty validators array'[39m[33m,[39m () [33m=>[39m {
+    [90m665| [39m      [35mconst[39m validator [33m=[39m [34mcomposite[39m([])
+    [90m   | [39m                        [31m^[39m
+    [90m666| [39m      [34mexpect[39m([34mvalidator[39m([32m'anything'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)
+    [90m667| [39m    })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[128/128]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m128 failed[39m[22m[2m | [22m[1m[32m216 passed[39m[22m[90m (344)[39m
+[2m   Start at [22m 22:01:43
+[2m   Duration [22m 7.41s[2m (transform 1.57s, setup 272ms, import 2.16s, tests 1.07s, environment 10.75s)[22m
+

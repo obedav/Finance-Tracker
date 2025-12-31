@@ -12,6 +12,7 @@ export interface User {
   name: string
   email: string
   email_verified_at: string | null
+  two_factor_enabled?: boolean
   created_at: string
   updated_at: string
 }
@@ -142,6 +143,72 @@ export interface BudgetProgress {
   remaining_amount: number
   percentage_used: number
   is_exceeded: boolean
+}
+
+// ============================================================================
+// Goal Types
+// ============================================================================
+
+export interface Goal {
+  id: number
+  user_id: number
+  name: string
+  description: string | null
+  type: 'savings' | 'debt_payoff' | 'investment' | 'emergency_fund' | 'vacation' | 'purchase' | 'other'
+  target_amount: number
+  current_amount: number
+  target_date: string | null
+  start_date: string
+  status: 'active' | 'completed' | 'abandoned' | 'paused'
+  priority: 'low' | 'medium' | 'high'
+  is_recurring: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface GoalFormData {
+  name: string
+  description?: string | null
+  type: 'savings' | 'debt_payoff' | 'investment' | 'emergency_fund' | 'vacation' | 'purchase' | 'other'
+  target_amount: number
+  current_amount?: number
+  target_date?: string | null
+  start_date: string
+  priority?: 'low' | 'medium' | 'high'
+  is_recurring?: boolean
+}
+
+export interface GoalProgress {
+  goal_id: number
+  goal_name: string
+  target_amount: number
+  current_amount: number
+  remaining_amount: number
+  percentage_completed: number
+  is_completed: boolean
+  days_remaining: number | null
+  projected_completion_date: string | null
+}
+
+export interface GoalContribution {
+  id: number
+  goal_id: number
+  amount: number
+  description: string | null
+  contribution_date: string
+  created_at: string
+  updated_at: string
+}
+
+export interface GoalStats {
+  total_goals: number
+  active_goals: number
+  completed_goals: number
+  total_target_amount: number
+  total_current_amount: number
+  overall_progress_percentage: number
+  goals_on_track: number
+  goals_behind: number
 }
 
 // ============================================================================
@@ -310,6 +377,15 @@ export interface BudgetState {
   budgets: Budget[]
   currentBudget: Budget | null
   progress: BudgetProgress[]
+  isLoading: boolean
+  error: string | null
+}
+
+export interface GoalState {
+  goals: Goal[]
+  currentGoal: Goal | null
+  progress: GoalProgress[]
+  stats: GoalStats | null
   isLoading: boolean
   error: string | null
 }

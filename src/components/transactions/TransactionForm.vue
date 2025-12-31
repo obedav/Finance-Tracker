@@ -10,18 +10,19 @@
         @click="$emit('close')"
         class="text-[#334155]/60 hover:text-[#334155] transition-colors"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
 
     <!-- Error Alert -->
-    <div 
-      v-if="generalError" 
+    <div
+      v-if="generalError"
       class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3"
+      role="alert"
     >
-      <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
       <div>
@@ -32,20 +33,22 @@
 
     <form @submit.prevent="handleSubmit" class="space-y-6">
       <!-- Transaction Type -->
-      <div>
-        <label class="block text-sm font-medium text-[#334155] mb-3">Transaction Type</label>
-        <div class="grid grid-cols-2 gap-4">
+      <fieldset>
+        <legend class="block text-sm font-medium text-[#334155] mb-3">Transaction Type</legend>
+        <div class="grid grid-cols-2 gap-4" role="group" aria-label="Transaction type selection">
           <button
             type="button"
             @click="setTransactionType('income')"
+            :aria-pressed="form.type === 'income'"
+            aria-label="Income transaction"
             :class="[
               'py-4 px-6 rounded-lg border-2 font-medium transition-all duration-200 flex items-center justify-center space-x-2',
-              form.type === 'income' 
-                ? 'border-[#10B981] bg-[#10B981]/10 text-[#10B981] shadow-md' 
+              form.type === 'income'
+                ? 'border-[#10B981] bg-[#10B981]/10 text-[#10B981] shadow-md'
                 : 'border-[#E5E7EB] text-[#334155]/70 hover:border-[#10B981]/50 hover:bg-[#FAF9F6]'
             ]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
             </svg>
             <span>Income</span>
@@ -53,38 +56,43 @@
           <button
             type="button"
             @click="setTransactionType('expense')"
+            :aria-pressed="form.type === 'expense'"
+            aria-label="Expense transaction"
             :class="[
               'py-4 px-6 rounded-lg border-2 font-medium transition-all duration-200 flex items-center justify-center space-x-2',
-              form.type === 'expense' 
-                ? 'border-[#F59E0B] bg-[#F59E0B]/10 text-[#F59E0B] shadow-md' 
+              form.type === 'expense'
+                ? 'border-[#F59E0B] bg-[#F59E0B]/10 text-[#F59E0B] shadow-md'
                 : 'border-[#E5E7EB] text-[#334155]/70 hover:border-[#F59E0B]/50 hover:bg-[#FAF9F6]'
             ]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
             </svg>
             <span>Expense</span>
           </button>
         </div>
-      </div>
+      </fieldset>
 
       <!-- Amount -->
       <div>
-        <label class="block text-sm font-medium text-[#334155] mb-2">
+        <label for="transaction-amount" class="block text-sm font-medium text-[#334155] mb-2">
           Amount *
           <span class="text-xs text-[#334155]/60 font-normal ml-1">(USD)</span>
         </label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <span class="text-[#334155]/70 font-medium">$</span>
+            <span class="text-[#334155]/70 font-medium" aria-hidden="true">$</span>
           </div>
           <input
+            id="transaction-amount"
             v-model="form.amount"
             type="number"
             step="0.01"
             min="0"
             max="999999999.99"
             required
+            :aria-invalid="!!errors.amount"
+            :aria-describedby="errors.amount ? 'amount-error' : undefined"
             :class="[
               'w-full pl-10 pr-4 py-3 border rounded-lg transition-all duration-200 text-[#334155] font-medium',
               errors.amount
@@ -96,16 +104,19 @@
             @input="clearAmountError"
           />
         </div>
-        <p v-if="errors.amount" class="mt-1 text-sm text-red-600">{{ errors.amount }}</p>
+        <p v-if="errors.amount" id="amount-error" class="mt-1 text-sm text-red-600" role="alert">{{ errors.amount }}</p>
       </div>
 
       <!-- Category -->
       <div>
-        <label class="block text-sm font-medium text-[#334155] mb-2">Category *</label>
+        <label for="transaction-category" class="block text-sm font-medium text-[#334155] mb-2">Category *</label>
         <div class="relative">
           <select
+            id="transaction-category"
             v-model="form.category"
             required
+            :aria-invalid="!!errors.category"
+            :aria-describedby="errors.category ? 'category-error' : undefined"
             :class="[
               'w-full px-4 py-3 border rounded-lg transition-all duration-200 text-[#334155] appearance-none bg-white',
               errors.category
@@ -115,30 +126,31 @@
             @change="validateCategory"
           >
             <option value="">Select a category</option>
-            <option 
-              v-for="category in currentCategories" 
-              :key="category" 
+            <option
+              v-for="category in currentCategories"
+              :key="category"
               :value="category"
             >
               {{ category }}
             </option>
           </select>
           <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-            <svg class="w-4 h-4 text-[#334155]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-[#334155]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
         </div>
-        <p v-if="errors.category" class="mt-1 text-sm text-red-600">{{ errors.category }}</p>
-        
+        <p v-if="errors.category" id="category-error" class="mt-1 text-sm text-red-600" role="alert">{{ errors.category }}</p>
+
         <!-- Add Category Button -->
         <button
           v-if="showAddCategory"
           type="button"
           @click="$emit('add-category', form.type)"
           class="mt-2 text-sm text-[#10B981] hover:text-[#10B981]/80 font-medium transition-colors flex items-center space-x-1"
+          :aria-label="`Add new ${form.type} category`"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
           <span>Add new {{ form.type }} category</span>
@@ -179,13 +191,16 @@
 
       <!-- Date -->
       <div>
-        <label class="block text-sm font-medium text-[#334155] mb-2">Date *</label>
+        <label for="transaction-date" class="block text-sm font-medium text-[#334155] mb-2">Date *</label>
         <input
+          id="transaction-date"
           v-model="form.date"
           type="date"
           required
           :max="maxDate"
           :min="minDate"
+          :aria-invalid="!!errors.date"
+          :aria-describedby="errors.date ? 'date-error' : undefined"
           :class="[
             'w-full px-4 py-3 border rounded-lg transition-all duration-200 text-[#334155]',
             errors.date
@@ -194,7 +209,7 @@
           ]"
           @change="validateDate"
         />
-        <p v-if="errors.date" class="mt-1 text-sm text-red-600">{{ errors.date }}</p>
+        <p v-if="errors.date" id="date-error" class="mt-1 text-sm text-red-600" role="alert">{{ errors.date }}</p>
         
         <!-- Quick Date Options -->
         <div class="mt-2 flex flex-wrap gap-2">

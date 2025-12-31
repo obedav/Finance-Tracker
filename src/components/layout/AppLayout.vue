@@ -79,10 +79,12 @@
             v-if="isLoading"
             class="absolute inset-0 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm flex items-center justify-center z-40 p-4 transition-colors"
             role="status"
-            aria-label="Loading"
+            aria-live="polite"
+            aria-busy="true"
+            :aria-label="loadingMessage"
           >
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 text-center sm:text-left">
-              <div class="loading-spinner"></div>
+              <div class="loading-spinner" aria-hidden="true"></div>
               <span class="text-slate-700 dark:text-slate-200 font-medium text-sm sm:text-base">{{ loadingMessage }}</span>
             </div>
           </div>

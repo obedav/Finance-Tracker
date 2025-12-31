@@ -424,63 +424,11 @@
           </form>
         </div>
 
-        <!-- Two-Factor Authentication (only show if feature is enabled) -->
-        <div v-if="FEATURES.TWO_FACTOR_AUTH" class="dashboard-card">
-          <div class="flex items-center mb-6">
-            <div class="category-icon category-icon-income mr-4">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-slate-700">Two-Factor Authentication</h3>
-              <p class="text-slate-500">Add an extra layer of security to your account</p>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between p-6 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200 hover:shadow-lg transition-all duration-300 group">
-            <div class="flex items-center">
-              <div class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-slate-700 text-lg">Enable 2FA</h4>
-                <p class="text-sm text-slate-500">Use an authenticator app for additional security</p>
-              </div>
-            </div>
-            <button
-              @click="toggle2FA"
-              :class="[
-                'btn hover-lift',
-                twoFactorEnabled ? 'btn-secondary' : 'btn-primary'
-              ]"
-            >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="twoFactorEnabled ? 'M6 18L18 6M6 6l12 12' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'"></path>
-              </svg>
-              {{ twoFactorEnabled ? 'Disable' : 'Enable' }}
-            </button>
-          </div>
-        </div>
-
-        <!-- Coming Soon: Planned Security Features -->
-        <div v-if="!FEATURES.TWO_FACTOR_AUTH" class="dashboard-card bg-gradient-to-r from-amber-50 to-amber-100 border-2 border-dashed border-amber-300">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <div class="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center mr-4">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-lg font-bold text-amber-800">Additional Security Features Coming Soon</h3>
-                <p class="text-sm text-amber-700">Two-factor authentication and advanced security options will be available in a future update</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Two-Factor Authentication -->
+        <TwoFactorSetup
+          :enabled="twoFactorEnabled"
+          @updated="handle2FAUpdate"
+        />
       </div>
 
       <!-- Data & Privacy Settings -->
@@ -669,6 +617,7 @@ import { useToast } from '@/composables/useToast'
 import userService from '@/services/userService'
 import settingsService from '@/services/settingsService'
 import { FEATURES } from '@/utils/constants'
+import TwoFactorSetup from '@/components/settings/TwoFactorSetup.vue'
 
 
 // Initialize stores and composables
@@ -774,8 +723,11 @@ onMounted(async () => {
         email: userStore.user.email || '',
         phone: userStore.user.phone || ''
       }
+
+      // Update 2FA status from user object
+      twoFactorEnabled.value = userStore.user.two_factor_enabled || false
     }
-    
+
     // Update preferences form
     preferencesForm.value = {
       currency: settingsStore.preferences.currency || 'USD',
@@ -784,7 +736,7 @@ onMounted(async () => {
       language: settingsStore.preferences.language || 'en',
       timezone: settingsStore.preferences.timezone || 'America/New_York'
     }
-    
+
     // Update notifications form
     notificationsForm.value = {
       email: settingsStore.notifications.email || false,
@@ -794,10 +746,7 @@ onMounted(async () => {
       transactionReminders: settingsStore.notifications.transactionReminders || false,
       lowBalanceAlerts: settingsStore.notifications.lowBalanceAlerts || false
     }
-    
-    // Update security settings
-    twoFactorEnabled.value = settingsStore.security.twoFactorEnabled || false
-    
+
     // Update data settings
     dataForm.value.autoBackup = settingsStore.data.autoBackup || false
     
@@ -887,30 +836,12 @@ const changePassword = async () => {
   }
 }
 
-// Toggle two-factor authentication
-const toggle2FA = async () => {
-  try {
-    loading.value.security = true
-    const newState = !twoFactorEnabled.value
-    
-    if (newState) {
-      // Enable 2FA
-      await userService.enable2FA()
-    } else {
-      // Disable 2FA
-      await userService.disable2FA()
-    }
-    
-    twoFactorEnabled.value = newState
-    
-    // Update the store
-    settingsStore.security.twoFactorEnabled = newState
-    
-    showToast(`Two-factor authentication ${newState ? 'enabled' : 'disabled'}`, 'success')
-  } catch (error) {
-    showToast(`Failed to ${twoFactorEnabled.value ? 'disable' : 'enable'} two-factor authentication`, 'error')
-  } finally {
-    loading.value.security = false
+// Handle 2FA update from TwoFactorSetup component
+const handle2FAUpdate = (enabled) => {
+  twoFactorEnabled.value = enabled
+  // Update the store
+  if (settingsStore.security) {
+    settingsStore.security.twoFactorEnabled = enabled
   }
 }
 

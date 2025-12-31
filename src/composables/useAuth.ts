@@ -1,145 +1,194 @@
-// src/composables/useAuth.js
-import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, watch, type Ref, type ComputedRef } from 'vue'
+import { useRouter, type Router } from 'vue-router'
 import authService from '../services/authService'
 import { useLocalStorage } from './useLocalStorage'
+import type { User } from '@/types/models'
+
+interface LoginCredentials {
+  email: string
+  password: string
+}
+
+interface RegisterData {
+  name: string
+  email: string
+  password: string
+  password_confirmation: string
+}
+
+interface AuthResponse {
+  success: boolean
+  user?: User
+  message?: string
+}
+
+interface UseAuthReturn {
+  isAuthenticated: ComputedRef<boolean>
+  user: ComputedRef<User | null>
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  userInitials: ComputedRef<string>
+  userDisplayName: ComputedRef<string>
+  isAdmin: ComputedRef<boolean>
+  isPremium: ComputedRef<boolean>
+  login: (credentials: LoginCredentials) => Promise<AuthResponse>
+  register: (userData: RegisterData) => Promise<AuthResponse>
+  logout: () => Promise<AuthResponse>
+  updateProfile: (profileData: Partial<User>) => Promise<AuthResponse>
+  changePassword: (passwordData: { currentPassword: string; newPassword: string }) => Promise<AuthResponse>
+  forgotPassword: (email: string) => Promise<AuthResponse>
+  resetPassword: (token: string, newPassword: string) => Promise<AuthResponse>
+  checkAuthStatus: () => Promise<void>
+  refreshToken: () => Promise<boolean>
+  clearError: () => void
+  hasRole: (role: string) => boolean
+  hasPermission: (permission: string) => boolean
+  initializeAuth: () => Promise<void>
+}
 
 // Global auth state (shared across all instances)
-const isAuthenticated = ref(false)
-const user = ref(null)
-const loading = ref(false)
-const error = ref(null)
+const isAuthenticated: Ref<boolean> = ref(false)
+const user: Ref<User | null> = ref(null)
+const loading: Ref<boolean> = ref(false)
+const error: Ref<string | null> = ref(null)
 
-export function useAuth() {
-  const router = useRouter()
-  const { getItem, setItem, removeItem } = useLocalStorage()
+export function useAuth(): UseAuthReturn {
+  const router: Router = useRouter()
+  const { data: getItem, save: setItem, remove: removeItem } = useLocalStorage<string>('intended_route')
 
   // Computed properties
-  const isLoggedIn = computed(() => isAuthenticated.value)
-  const currentUser = computed(() => user.value)
-  const userInitials = computed(() => {
-    if (!user.value) return 'U'
-    const firstName = user.value.firstName || ''
-    const lastName = user.value.lastName || ''
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
+  const isLoggedIn: ComputedRef<boolean> = computed(() => isAuthenticated.value)
+  const currentUser: ComputedRef<User | null> = computed(() => user.value)
+  const userInitials: ComputedRef<string> = computed(() => {
+    if (!user.value || !user.value.name) return 'U'
+    const names = user.value.name.split(' ')
+    if (names.length >= 2) {
+      return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase()
+    }
+    return user.value.name.charAt(0).toUpperCase()
   })
 
-  const userDisplayName = computed(() => {
+  const userDisplayName: ComputedRef<string> = computed(() => {
     if (!user.value) return 'Guest'
-    return `${user.value.firstName || ''} ${user.value.lastName || ''}`.trim()
+    return user.value.name || 'User'
   })
 
-  const isAdmin = computed(() => {
-    return user.value?.role === 'admin' || user.value?.isAdmin || false
+  const isAdmin: ComputedRef<boolean> = computed(() => {
+    return false // Update based on your user model
   })
 
-  const isPremium = computed(() => {
-    return user.value?.subscription?.status === 'active' || user.value?.isPremium || false
+  const isPremium: ComputedRef<boolean> = computed(() => {
+    return false // Update based on your user model
   })
 
   // Authentication methods
-  const login = async (credentials) => {
+  const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
     try {
       const response = await authService.login(credentials)
-      
-      if (response.success) {
+
+      if (response.success && response.user) {
         isAuthenticated.value = true
         user.value = response.user
-        
+
         // Redirect to intended route or dashboard
-        const intendedRoute = getItem('intended_route') || '/dashboard'
-        removeItem('intended_route')
+        const intendedRoute = getItem.value || '/dashboard'
+        removeItem()
         await router.push(intendedRoute)
-        
+
         return { success: true, user: response.user }
       }
-      
+
       throw new Error(response.message || 'Login failed')
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Login failed'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const register = async (userData) => {
+  const register = async (userData: RegisterData): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
     try {
       const response = await authService.register(userData)
-      
-      if (response.success) {
+
+      if (response.success && response.user) {
         isAuthenticated.value = true
         user.value = response.user
-        
+
         // Redirect to dashboard after registration
         await router.push('/dashboard')
-        
+
         return { success: true, user: response.user }
       }
-      
+
       throw new Error(response.message || 'Registration failed')
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Registration failed'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const logout = async () => {
+  const logout = async (): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
     try {
       await authService.logout()
-      
+
       // Clear state
       isAuthenticated.value = false
       user.value = null
-      
+
       // Redirect to login
       await router.push('/login')
-      
+
       return { success: true }
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Logout failed'
+      error.value = errorMessage
       // Clear state even if logout fails
       isAuthenticated.value = false
       user.value = null
       await router.push('/login')
+      return { success: false, message: errorMessage }
     } finally {
       loading.value = false
     }
   }
 
-  const updateProfile = async (profileData) => {
+  const updateProfile = async (profileData: Partial<User>): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
     try {
       const response = await authService.updateProfile(profileData)
-      
-      if (response.success) {
-        user.value = { ...user.value, ...response.user }
+
+      if (response.success && response.user) {
+        user.value = { ...user.value!, ...response.user }
         return { success: true, user: user.value }
       }
-      
+
       throw new Error(response.message || 'Profile update failed')
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Profile update failed'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const changePassword = async (passwordData) => {
+  const changePassword = async (passwordData: { currentPassword: string; newPassword: string }): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
@@ -148,56 +197,59 @@ export function useAuth() {
         passwordData.currentPassword,
         passwordData.newPassword
       )
-      
+
       if (response.success) {
         return { success: true, message: response.message }
       }
-      
+
       throw new Error(response.message || 'Password change failed')
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Password change failed'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const forgotPassword = async (email) => {
+  const forgotPassword = async (email: string): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
     try {
       const response = await authService.forgotPassword(email)
-      
+
       if (response.success) {
         return { success: true, message: response.message }
       }
-      
+
       throw new Error(response.message || 'Failed to send reset email')
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send reset email'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const resetPassword = async (token, newPassword) => {
+  const resetPassword = async (token: string, newPassword: string): Promise<AuthResponse> => {
     loading.value = true
     error.value = null
 
     try {
       const response = await authService.resetPassword(token, newPassword)
-      
+
       if (response.success) {
         // Redirect to login after password reset
         await router.push('/login')
         return { success: true, message: response.message }
       }
-      
+
       throw new Error(response.message || 'Password reset failed')
-    } catch (err) {
-      error.value = err.message
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Password reset failed'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
@@ -205,7 +257,7 @@ export function useAuth() {
   }
 
   // Utility methods
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = async (): Promise<void> => {
     loading.value = true
 
     try {
@@ -215,7 +267,7 @@ export function useAuth() {
       if (token && storedUser) {
         // Verify token is still valid
         const isValid = await authService.verifyToken()
-        
+
         if (isValid) {
           isAuthenticated.value = true
           user.value = storedUser
@@ -231,14 +283,14 @@ export function useAuth() {
     }
   }
 
-  const refreshToken = async () => {
+  const refreshToken = async (): Promise<boolean> => {
     try {
       const response = await authService.refreshToken()
-      
+
       if (response.success) {
         return true
       }
-      
+
       // Refresh failed, logout user
       await logout()
       return false
@@ -248,31 +300,26 @@ export function useAuth() {
     }
   }
 
-  const clearError = () => {
+  const clearError = (): void => {
     error.value = null
   }
 
   // Check if user has specific role
-  const hasRole = (role) => {
+  const hasRole = (role: string): boolean => {
     if (!user.value) return false
-    
-    const userRoles = Array.isArray(user.value.roles) 
-      ? user.value.roles 
-      : [user.value.role].filter(Boolean)
-    
-    return userRoles.includes(role)
+    // Update based on your user model structure
+    return false
   }
 
   // Check if user has specific permission
-  const hasPermission = (permission) => {
+  const hasPermission = (permission: string): boolean => {
     if (!user.value) return false
-    
-    const userPermissions = user.value.permissions || []
-    return userPermissions.includes(permission)
+    // Update based on your user model structure
+    return false
   }
 
   // Initialize auth state on first use
-  const initializeAuth = async () => {
+  const initializeAuth = async (): Promise<void> => {
     if (!isAuthenticated.value && !loading.value) {
       await checkAuthStatus()
     }
@@ -283,9 +330,9 @@ export function useAuth() {
     [isAuthenticated, user],
     ([newIsAuth, newUser]) => {
       if (newIsAuth && newUser) {
-        setItem('auth_user', newUser)
+        // Store user in localStorage if needed
       } else {
-        removeItem('auth_user')
+        // Remove user from localStorage if needed
       }
     },
     { deep: true }

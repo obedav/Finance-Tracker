@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\GoalController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\TransactionExportController;
@@ -26,6 +27,7 @@ Route::prefix('auth')->middleware('rate.limit:auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/request-reset', [AuthController::class, 'requestReset']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/2fa/verify', [AuthController::class, 'verify2FA']);
 });
 
 // Protected routes with rate limiting
@@ -47,6 +49,13 @@ Route::middleware(['auth:sanctum', 'rate.limit:api'])->group(function () {
             ->middleware('rate.limit:auth');
         Route::post('/email/verify', [AuthController::class, 'verifyEmail']);
         Route::get('/email/verification-status', [AuthController::class, 'checkVerificationStatus']);
+
+        // Two-factor authentication routes
+        Route::post('/2fa/enable', [AuthController::class, 'enable2FA']);
+        Route::post('/2fa/confirm', [AuthController::class, 'confirm2FA']);
+        Route::post('/2fa/disable', [AuthController::class, 'disable2FA']);
+        Route::post('/2fa/recovery-codes', [AuthController::class, 'regenerateRecoveryCodes']);
+        Route::post('/2fa/email-recovery-codes', [AuthController::class, 'emailRecoveryCodes']);
     });
 
     // Transaction routes
@@ -90,6 +99,20 @@ Route::middleware(['auth:sanctum', 'rate.limit:api'])->group(function () {
         Route::get('/{id}', [BudgetController::class, 'show']);
         Route::put('/{id}', [BudgetController::class, 'update']);
         Route::delete('/{id}', [BudgetController::class, 'destroy']);
+    });
+
+    // Goal routes
+    Route::prefix('goals')->group(function () {
+        Route::get('/', [GoalController::class, 'index']);
+        Route::post('/', [GoalController::class, 'store']);
+        Route::get('/progress', [GoalController::class, 'progress']);
+        Route::get('/statistics', [GoalController::class, 'statistics']);
+        Route::post('/contributions', [GoalController::class, 'addContribution']);
+        Route::get('/{id}', [GoalController::class, 'show']);
+        Route::put('/{id}', [GoalController::class, 'update']);
+        Route::delete('/{id}', [GoalController::class, 'destroy']);
+        Route::get('/{id}/progress', [GoalController::class, 'progress']);
+        Route::get('/{id}/contributions', [GoalController::class, 'getContributions']);
     });
 
     // Report routes

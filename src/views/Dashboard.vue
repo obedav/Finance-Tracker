@@ -35,6 +35,9 @@
         </div>
       </div>
 
+      <!-- Email Verification Banner -->
+      <EmailVerificationBanner />
+
       <!-- Mobile-First Summary Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
         <!-- Total Income Card -->
@@ -359,6 +362,7 @@ import { useRouter } from 'vue-router'
 import { useTransactionStore } from '../stores/transactions'
 import { useCategoriesStore } from '../stores/categories'
 import DashboardModal from '../components/DashboardModal.vue'
+import EmailVerificationBanner from '../components/auth/EmailVerificationBanner.vue'
 import { useFormatters } from '@/composables/useFormatters'
 
 const router = useRouter()

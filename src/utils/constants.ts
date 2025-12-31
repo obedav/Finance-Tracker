@@ -353,9 +353,15 @@ export const API_ENDPOINTS = {
     CHANGE_PASSWORD: '/auth/change-password',
     REQUEST_RESET: '/auth/request-reset',
     RESET_PASSWORD: '/auth/reset-password',
-    ENABLE_2FA: '/auth/enable-2fa',
-    DISABLE_2FA: '/auth/disable-2fa',
-    VERIFY_2FA: '/auth/verify-2fa'
+    ENABLE_2FA: '/auth/2fa/enable',
+    CONFIRM_2FA: '/auth/2fa/confirm',
+    DISABLE_2FA: '/auth/2fa/disable',
+    VERIFY_2FA: '/auth/2fa/verify',
+    REGENERATE_RECOVERY_CODES: '/auth/2fa/recovery-codes',
+    EMAIL_RECOVERY_CODES: '/auth/2fa/email-recovery-codes',
+    VERIFY_EMAIL: '/auth/email/verify',
+    RESEND_VERIFICATION: '/auth/email/verification-notification',
+    CHECK_VERIFICATION: '/auth/email/verification-status'
   },
 
   SETTINGS: {
@@ -406,6 +412,21 @@ export const API_ENDPOINTS = {
     GET: '/budgets/:id',
     UPDATE: '/budgets/:id',
     DELETE: '/budgets/:id'
+  },
+
+  // Goal Endpoints
+  GOALS: {
+    BASE: '/goals',
+    LIST: '/goals',
+    CREATE: '/goals',
+    GET: '/goals/:id',
+    UPDATE: '/goals/:id',
+    DELETE: '/goals/:id',
+    PROGRESS: '/goals/:id/progress',
+    PROGRESS_ALL: '/goals/progress',
+    STATS: '/goals/statistics',
+    ADD_CONTRIBUTION: '/goals/contributions',
+    GET_CONTRIBUTIONS: '/goals/:id/contributions'
   },
 
   // Report Endpoints
@@ -554,9 +575,9 @@ export const FEATURES = {
   IMPORT_CSV: true,
   EXPORT_CSV: true,
   EXPORT_PDF: true,
+  GOAL_TRACKING: true,
 
   // ❌ Not Implemented
-  GOAL_TRACKING: false,
   MULTI_CURRENCY: false,
   RECEIPT_UPLOAD: false,
   TWO_FACTOR_AUTH: false,

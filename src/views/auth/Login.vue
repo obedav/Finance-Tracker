@@ -154,37 +154,44 @@
           </p>
         </div>
       </form>
+
+      <!-- Two-Factor Authentication Modal -->
+      <TwoFactorVerification
+        ref="twoFactorModalRef"
+        :show="show2FAModal"
+        :userId="twoFactorUserId || 0"
+        @verify="handle2FAVerify"
+        @close="handle2FAClose"
+      />
     </div>
   </div>
 </template>
 
-// Replace the script section in your Login.vue with this:
-
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import authService from '@/services/authService' // Fix: Remove the destructuring
-// Remove the toast import if you don't have vue-toastification installed
-// import { useToast } from 'vue-toastification'
+import authService from '@/services/authService'
+import TwoFactorVerification from '@/components/auth/TwoFactorVerification.vue'
+import { checkRateLimit, RateLimitConfigs, getResetTimeString } from '@/utils/rateLimiter'
 
 const router = useRouter()
-// const toast = useToast() // Comment this out if not installed
 
 const form = reactive({
-  email: 'demo@example.com', // Pre-fill for demo
-  password: 'password123',   // Pre-fill for demo
+  email: 'demo@example.com',
+  password: 'password123',
   rememberMe: false
 })
 
 const errors = reactive({})
 const loading = ref(false)
 const showPassword = ref(false)
+const show2FAModal = ref(false)
+const twoFactorUserId = ref<number | null>(null)
+const twoFactorModalRef = ref<InstanceType<typeof TwoFactorVerification> | null>(null)
 
 const handleLogin = async () => {
-  // Clear previous errors
   Object.keys(errors).forEach(key => delete errors[key])
-  
-  // Basic validation
+
   if (!form.email) {
     errors.email = 'Email is required'
     return
@@ -194,10 +201,19 @@ const handleLogin = async () => {
     return
   }
 
+  // Check rate limit
+  const rateLimitKey = `login:${form.email}`
+  const rateLimit = checkRateLimit(rateLimitKey, RateLimitConfigs.LOGIN)
+
+  if (!rateLimit.allowed) {
+    const resetTime = getResetTimeString(rateLimit.resetIn)
+    errors.general = `Too many login attempts. Please try again in ${resetTime}.`
+    return
+  }
+
   loading.value = true
 
   try {
-    // Use the authService to login
     const response = await authService.login({
       email: form.email,
       password: form.password,
@@ -205,35 +221,53 @@ const handleLogin = async () => {
     })
 
     if (response.success) {
-      // Show success message if toast is available
-      // toast?.success('Login successful!')
-
-      // Wait for next tick to ensure localStorage is written
-      await nextTick()
-
-      // Small delay to ensure cookies are set
-      await new Promise(resolve => setTimeout(resolve, 100))
-
-      // Get the redirect URL
-      const redirectUrl = authService.getRedirectAfterLogin()
-
-      // Redirect to dashboard or intended route
-      await router.push(redirectUrl)
+      // Check if 2FA is required
+      if (response.requires_2fa && response.user_id) {
+        twoFactorUserId.value = response.user_id
+        show2FAModal.value = true
+      } else {
+        await nextTick()
+        await new Promise(resolve => setTimeout(resolve, 100))
+        const redirectUrl = authService.getRedirectAfterLogin()
+        await router.push(redirectUrl)
+      }
     } else {
-      // Handle unsuccessful login
       errors.general = response.message || 'Login failed'
     }
-  } catch (error) {
+  } catch (error: any) {
     errors.general = error.message || 'An error occurred during login'
-    
-    // Show error message if toast is available
-    // toast?.error(errors.general)
   } finally {
     loading.value = false
   }
 }
 
-// Focus on email input when component mounts
+const handle2FAVerify = async (code: string) => {
+  if (!twoFactorUserId.value) return
+
+  try {
+    twoFactorModalRef.value?.setLoading(true)
+
+    const response = await authService.verify2FA(twoFactorUserId.value, code)
+
+    if (response.success) {
+      show2FAModal.value = false
+      await nextTick()
+      await new Promise(resolve => setTimeout(resolve, 100))
+      const redirectUrl = authService.getRedirectAfterLogin()
+      await router.push(redirectUrl)
+    }
+  } catch (error: any) {
+    twoFactorModalRef.value?.setError(error.message || 'Invalid verification code')
+  } finally {
+    twoFactorModalRef.value?.setLoading(false)
+  }
+}
+
+const handle2FAClose = () => {
+  show2FAModal.value = false
+  twoFactorUserId.value = null
+}
+
 onMounted(() => {
   nextTick(() => {
     document.getElementById('email')?.focus()

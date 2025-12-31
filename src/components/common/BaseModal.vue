@@ -207,6 +207,7 @@ const emit = defineEmits(['update:modelValue', 'close', 'open'])
 
 // Refs
 const modalRef = ref(null)
+const previouslyFocusedElement = ref(null)
 
 // Computed
 const sizeClasses = computed(() => {
@@ -291,10 +292,12 @@ const handleKeydown = (event) => {
 // Watchers
 watch(() => props.modelValue, (newVal) => {
   if (newVal) {
-    // Modal opened
+    // Modal opened - store currently focused element
+    previouslyFocusedElement.value = document.activeElement
+
     nextTick(() => {
       lockScroll()
-      
+
       // Focus first focusable element
       if (modalRef.value) {
         const focusableElement = modalRef.value.querySelector(
@@ -304,12 +307,19 @@ watch(() => props.modelValue, (newVal) => {
           focusableElement.focus()
         }
       }
-      
+
       emit('open')
     })
   } else {
-    // Modal closed
+    // Modal closed - restore focus to previously focused element
     unlockScroll()
+
+    nextTick(() => {
+      if (previouslyFocusedElement.value && typeof previouslyFocusedElement.value.focus === 'function') {
+        previouslyFocusedElement.value.focus()
+      }
+      previouslyFocusedElement.value = null
+    })
   }
 })
 

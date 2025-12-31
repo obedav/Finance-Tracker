@@ -1,14 +1,40 @@
-// src/composables/useFormatters.js
-import { computed } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 import { useSettingsStore } from '@/stores/settingsStore'
 
-export function useFormatters() {
+type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'CAD' | 'AUD' | 'JPY'
+type DateFormat = 'MM/DD/YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD' | 'DD MMM YYYY' | 'MMM DD, YYYY'
+
+interface CurrencyOptions {
+  minimumFractionDigits?: number
+  maximumFractionDigits?: number
+}
+
+interface DateOptions {
+  year?: 'numeric' | '2-digit'
+  month?: 'numeric' | '2-digit' | 'short' | 'long'
+  day?: 'numeric' | '2-digit'
+}
+
+interface NumberOptions {
+  minimumFractionDigits?: number
+  maximumFractionDigits?: number
+}
+
+interface UseFormattersReturn {
+  formatCurrency: ComputedRef<(amount: number, options?: CurrencyOptions) => string>
+  formatDate: ComputedRef<(date: string | Date, options?: DateOptions) => string>
+  formatNumber: ComputedRef<(number: number, options?: NumberOptions) => string>
+  currentCurrency: ComputedRef<CurrencyCode>
+  currentDateFormat: ComputedRef<DateFormat>
+}
+
+export function useFormatters(): UseFormattersReturn {
   const settingsStore = useSettingsStore()
 
   // Currency symbols mapping
-  const currencySymbols = {
+  const currencySymbols: Record<CurrencyCode, string> = {
     USD: '$',
-    EUR: '€', 
+    EUR: '€',
     GBP: '£',
     CAD: 'C$',
     AUD: 'A$',
@@ -17,12 +43,12 @@ export function useFormatters() {
 
   // Reactive currency formatting
   const formatCurrency = computed(() => {
-    return (amount, options = {}) => {
-      const currency = settingsStore.preferences.currency || 'USD'
+    return (amount: number, options: CurrencyOptions = {}): string => {
+      const currency = (settingsStore.preferences.currency || 'USD') as CurrencyCode
       const symbol = currencySymbols[currency] || '$'
-      
+
       // Default formatting options
-      const defaultOptions = {
+      const defaultOptions: CurrencyOptions = {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
         ...options
@@ -35,7 +61,7 @@ export function useFormatters() {
           currency: currency,
           ...defaultOptions
         })
-        
+
         return formatter.format(amount)
       } catch (error) {
         // Fallback if currency is not supported
@@ -47,19 +73,19 @@ export function useFormatters() {
 
   // Date formatting based on user preference
   const formatDate = computed(() => {
-    return (date, options = {}) => {
-      const dateFormat = settingsStore.preferences.dateFormat || 'MM/DD/YYYY'
+    return (date: string | Date, options: DateOptions = {}): string => {
+      const dateFormat = (settingsStore.preferences.dateFormat || 'MM/DD/YYYY') as DateFormat
       const dateObj = new Date(date)
-      
+
       if (isNaN(dateObj.getTime())) {
         return 'Invalid Date'
       }
 
       try {
         // Convert custom format to Intl options
-        let intlOptions = {
+        const intlOptions: Intl.DateTimeFormatOptions = {
           year: 'numeric',
-          month: '2-digit', 
+          month: '2-digit',
           day: '2-digit',
           ...options
         }
@@ -92,7 +118,7 @@ export function useFormatters() {
 
   // Number formatting
   const formatNumber = computed(() => {
-    return (number, options = {}) => {
+    return (number: number, options: NumberOptions = {}): string => {
       try {
         const formatter = new Intl.NumberFormat('en-US', {
           minimumFractionDigits: 0,
@@ -110,7 +136,7 @@ export function useFormatters() {
     formatCurrency,
     formatDate,
     formatNumber,
-    currentCurrency: computed(() => settingsStore.preferences.currency || 'USD'),
-    currentDateFormat: computed(() => settingsStore.preferences.dateFormat || 'MM/DD/YYYY')
+    currentCurrency: computed(() => (settingsStore.preferences.currency || 'USD') as CurrencyCode),
+    currentDateFormat: computed(() => (settingsStore.preferences.dateFormat || 'MM/DD/YYYY') as DateFormat)
   }
 }

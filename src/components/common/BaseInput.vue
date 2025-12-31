@@ -1,7 +1,5 @@
-I'll create a comprehensive implementation for BaseInput.vue that follows modern Vue 3 practices and provides a flexible, reusable input component for your finance tracker application.
 
-**File: c:\Users\obeda\Desktop\obe-finance-tracker\src\components\common\BaseInput.vue**
-```vue
+
 <!-- src/components/common/BaseInput.vue -->
 <template>
   <div :class="['base-input-wrapper', { 'w-full': fullWidth }]">

@@ -214,8 +214,9 @@
                   </svg>
                 </div>
                 <span class="truncate">{{ item.name }}</span>
-                <div v-if="item.status" class="ml-auto">
-                  <div class="w-2 h-2 rounded-full" :class="item.status === 'active' ? 'bg-green-400' : 'bg-yellow-400'"></div>
+                <div v-if="item.status" class="ml-auto flex items-center gap-1">
+                  <div class="w-2 h-2 rounded-full" :class="item.status === 'active' ? 'bg-green-400' : 'bg-yellow-400'" aria-hidden="true"></div>
+                  <span class="sr-only">{{ item.status === 'active' ? 'Active' : item.status }}</span>
                 </div>
               </router-link>
             </div>
@@ -312,7 +313,7 @@
                 {{ user?.email || 'user@example.com' }}
               </p>
               <div class="flex items-center mt-1">
-                <div class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></div>
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse" aria-hidden="true"></div>
                 <span class="text-xs text-green-600">Active</span>
               </div>
             </div>

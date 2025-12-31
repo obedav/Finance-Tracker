@@ -36,12 +36,13 @@
           <!-- Notifications Button -->
           <button
             @click="toggleNotifications"
-            class="p-2 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-400 dark:hover:text-emerald-400 dark:hover:bg-emerald-900/20 transition-colors relative"
+            class="p-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-300 dark:hover:text-emerald-400 dark:hover:bg-emerald-900/20 transition-colors relative"
+            aria-label="Notifications, 3 unread"
           >
-            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-4-4V8a6 6 0 10-12 0v5l-4 4h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
             </svg>
-            <span class="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+            <span class="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center" aria-hidden="true">3</span>
           </button>
 
           <!-- Dark Mode Toggle -->
@@ -54,13 +55,16 @@
               @click="toggleUserMenu"
               class="flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
               type="button"
+              :aria-label="`User menu for ${userDisplayName}`"
+              aria-haspopup="true"
+              :aria-expanded="showUserMenu"
             >
-              <div class="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500 rounded-full flex items-center justify-center" aria-hidden="true">
                 <span class="text-white text-xs sm:text-sm font-medium">{{ userInitials }}</span>
               </div>
               <!-- Hide user name on mobile -->
               <span class="hidden sm:block text-sm font-medium text-slate-700 dark:text-slate-200 max-w-32 truncate">{{ userDisplayName }}</span>
-              <svg class="w-3 h-3 sm:w-4 sm:h-4 text-slate-400 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 sm:w-4 sm:h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </button>

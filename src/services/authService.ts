@@ -35,6 +35,8 @@ export interface AuthServiceResponse {
   user?: User
   token?: string
   expiresIn?: number
+  requires_2fa?: boolean
+  user_id?: number
 }
 
 export interface MockUser {
@@ -650,6 +652,67 @@ class AuthService {
   }
 
   /**
+   * Email Verification
+   */
+
+  // Verify email address
+  async verifyEmail(id: string, hash: string): Promise<AuthServiceResponse> {
+    try {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.VERIFY_EMAIL, {
+        id,
+        hash
+      })
+
+      return {
+        success: true,
+        message: response.message || 'Email verified successfully'
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.message || 'Email verification failed'
+      }
+    }
+  }
+
+  // Resend verification email
+  async resendVerificationEmail(): Promise<AuthServiceResponse> {
+    try {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.RESEND_VERIFICATION, {})
+
+      return {
+        success: true,
+        message: response.message || 'Verification email sent'
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.message || 'Failed to resend verification email'
+      }
+    }
+  }
+
+  // Check email verification status
+  async checkVerificationStatus(): Promise<{ success: boolean; is_verified: boolean; email?: string }> {
+    try {
+      const response = await apiHelpers.get<{ is_verified: boolean; email: string }>(
+        API_ENDPOINTS.AUTH.CHECK_VERIFICATION
+      )
+
+      return {
+        success: true,
+        is_verified: response.is_verified,
+        email: response.email
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        is_verified: false
+      }
+    }
+  }
+
+  /**
    * Token Verification
    */
 
@@ -671,6 +734,134 @@ class AuthService {
       return response.valid === true
     } catch (error) {
       return false
+    }
+  }
+
+  /**
+   * Two-Factor Authentication
+   */
+
+  // Enable 2FA
+  async enable2FA(): Promise<{ secret: string; qr_code: string; recovery_codes: Array<{ code: string; used: boolean }> }> {
+    try {
+      const response = await apiHelpers.post<{
+        secret: string
+        qr_code: string
+        recovery_codes: Array<{ code: string; used: boolean }>
+      }>(API_ENDPOINTS.AUTH.ENABLE_2FA)
+
+      return response
+    } catch (error: any) {
+      throw {
+        success: false,
+        message: error.message || 'Failed to enable 2FA',
+        code: error.code || 'ENABLE_2FA_ERROR'
+      }
+    }
+  }
+
+  // Confirm 2FA
+  async confirm2FA(code: string): Promise<AuthServiceResponse> {
+    try {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.CONFIRM_2FA, {
+        code
+      })
+
+      return {
+        success: true,
+        message: response.message || '2FA enabled successfully'
+      }
+    } catch (error: any) {
+      throw {
+        success: false,
+        message: error.message || 'Invalid verification code',
+        code: error.code || 'CONFIRM_2FA_ERROR'
+      }
+    }
+  }
+
+  // Disable 2FA
+  async disable2FA(password: string): Promise<AuthServiceResponse> {
+    try {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.DISABLE_2FA, {
+        password
+      })
+
+      return {
+        success: true,
+        message: response.message || '2FA disabled successfully'
+      }
+    } catch (error: any) {
+      throw {
+        success: false,
+        message: error.message || 'Failed to disable 2FA',
+        code: error.code || 'DISABLE_2FA_ERROR'
+      }
+    }
+  }
+
+  // Verify 2FA code during login
+  async verify2FA(userId: number, code: string): Promise<AuthServiceResponse> {
+    try {
+      const response = await apiHelpers.post<AuthResponse>(API_ENDPOINTS.AUTH.VERIFY_2FA, {
+        user_id: userId,
+        code
+      })
+
+      // httpOnly cookie authentication - token is in cookie, not response
+      if (response.success && response.user) {
+        this.currentUser = response.user
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user))
+
+        return {
+          success: true,
+          user: response.user,
+          message: response.message || '2FA verification successful'
+        }
+      }
+
+      throw new Error(response.message || 'Invalid response from server')
+    } catch (error: any) {
+      throw {
+        success: false,
+        message: error.message || '2FA verification failed',
+        code: error.code || 'VERIFY_2FA_ERROR'
+      }
+    }
+  }
+
+  // Regenerate recovery codes
+  async regenerateRecoveryCodes(): Promise<{ recovery_codes: Array<{ code: string; used: boolean }> }> {
+    try {
+      const response = await apiHelpers.post<{
+        recovery_codes: Array<{ code: string; used: boolean }>
+      }>(API_ENDPOINTS.AUTH.REGENERATE_RECOVERY_CODES)
+
+      return response
+    } catch (error: any) {
+      throw {
+        success: false,
+        message: error.message || 'Failed to regenerate recovery codes',
+        code: error.code || 'REGENERATE_CODES_ERROR'
+      }
+    }
+  }
+
+  // Email recovery codes
+  async emailRecoveryCodes(): Promise<AuthServiceResponse> {
+    try {
+      const response = await apiHelpers.post<{ message?: string }>(API_ENDPOINTS.AUTH.EMAIL_RECOVERY_CODES)
+
+      return {
+        success: true,
+        message: response.message || 'Recovery codes sent to your email'
+      }
+    } catch (error: any) {
+      throw {
+        success: false,
+        message: error.message || 'Failed to email recovery codes',
+        code: error.code || 'EMAIL_RECOVERY_CODES_ERROR'
+      }
     }
   }
 }
